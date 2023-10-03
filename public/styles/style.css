@@ -4,7 +4,10 @@
   --black-color: #000000;
   --white-color: #ffffff;
   --text-light-color: #8d8d8d;
+  --text-light-color-2: #808080;
   --link-text-color: #4285f4;
+  --bg-color-1: rgba(255, 255, 255, 0.75);
+  --bg-color-2: #e9f1ff;
 }
 
 * {
@@ -46,8 +49,9 @@ main {
 
 section.registration {
   width: 87%;
+  max-width: 539px;
   min-height: 741px;
-  background-color: var(--white-color);
+  background-color: var(--bg-color-1);
   border-radius: 40px;
   display: flex;
   flex-direction: column;
@@ -55,8 +59,11 @@ section.registration {
   justify-content: space-around;
 }
 
-section.registration > .title-wrapper {
+section.registration > div {
   width: 83%;
+}
+
+section.registration > .title-wrapper {
   height: 90px;
   display: flex;
   flex-direction: column;
@@ -90,16 +97,40 @@ section.registration > .title-wrapper {
 
 .title {
   font-size: 40px;
+  font-weight: 300;
 }
 
 .api-signup-wrapper {
-  width: 83%;
   height: 56px;
-  background-color: yellow;
+  /* width: 272px !important; */
+  display: flex;
+  justify-content: space-between;
+  /* background-color: yellow; */
+}
+
+.api-signup-btn {
+  width: 13%;
+  height: 100%;
+  border-radius: 9px;
+  border: none;
+  background-color: var(--white-color);
+}
+
+.api-signup-btn.google {
+  width: 66%;
+  background-color: var(--bg-color-2);
+  color: var(--link-text-color);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 12px;
+}
+
+.api-signup-btn > img {
+  width: 18px;
 }
 
 .registration-form-wrapper {
-  width: 83%;
   min-height: 352px;
   /* background-color: #27ae60; */
 }
@@ -135,6 +166,13 @@ label {
   padding: 0 15px;
   border: 1px solid #adadad;
   border-radius: 9px;
+  outline-color: var(--link-text-color);
+}
+
+.form-sections > input::placeholder {
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--text-light-color-2);
 }
 
 #forgot-password {
