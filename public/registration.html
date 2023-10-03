@@ -15,13 +15,17 @@
   </head>
   <body>
     <main>
+      <div class="app-response-box dp-no">
+        <p class="app-response-message"></p>
+      </div>
+      <div id="loading-spinner dp-no"></div>
       <a href="registration.html" class="logo">Chatz</a>
       <section class="registration">
         <div class="title-wrapper">
           <div class="wrapper">
             <p>Welcome to <span class="highlight">Chatz</span></p>
             <button id="form-switch" type="button">
-              No Account?<br />Sign Up
+              No Account?<br /><span class="clr-green">Sign Up</span>
             </button>
           </div>
           <h1 class="title">Sign In</h1>
@@ -47,6 +51,18 @@
                 name="email"
                 id="email"
                 placeholder="Email address"
+                required
+              />
+            </div>
+            <div class="form-sections dp-no form-contact">
+              <label for="email">Contact Number</label>
+              <input
+                type="tel"
+                name="phone"
+                id="phone"
+                placeholder="Contact Number"
+                required
+                disabled
               />
             </div>
             <div class="form-sections">
@@ -56,6 +72,7 @@
                 name="password"
                 id="password"
                 placeholder="Password"
+                required
               />
               <button id="forgot-password" type="button">
                 Forgot Password
@@ -67,4 +84,46 @@
       </section>
     </main>
   </body>
+
+  <script>
+    const formSwitchBtn = qrySlct("button#form-switch");
+    const title = qrySlct(".title");
+    const apiSignUpWrapper = qrySlct(".api-signup-wrapper");
+    const formContactSection = qrySlct(".form-sections.form-contact");
+    const phoneInput = qrySlct("#phone");
+    const loadingSpinner = qrySlct("#loading-spinner");
+
+    let registrationFromStatus = "signin";
+
+    formSwitchBtn.addEventListener("click", switchForm);
+
+    function toggleLoader(element) {
+      loadingSpinner.classList.toggle("dp-no");
+    }
+    function switchForm() {
+      if (registrationFromStatus === "signin") {
+        title.textContent = "Sign Up";
+        formSwitchBtn.innerHTML =
+          "Have an Account?<br><span class='clr-green'>Sign In</span>";
+        registrationFromStatus = "signup";
+      } else if (registrationFromStatus === "signup") {
+        title.textContent = "Sign In";
+        formSwitchBtn.innerHTML =
+          "No Account?<br><span class='clr-green'>Sign Up</span>";
+        registrationFromStatus = "signin";
+      }
+      apiSignUpWrapper.classList.toggle("dp-no");
+      formContactSection.classList.toggle("dp-no");
+      phoneInput.toggleAttribute("disabled");
+    }
+
+    /////// UTILITY FUNCTIONS STARTS ///////
+
+    // Function to return element using document.querySelector method to avoid repeatation of code
+    function qrySlct(query) {
+      return document.querySelector(query);
+    }
+
+    /////// UTILITY FUNCTIONS ENDS ///////
+  </script>
 </html>

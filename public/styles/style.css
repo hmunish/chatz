@@ -1,6 +1,7 @@
 :root {
   --primary-font: "Poppins", sans-serif;
   --green-color: #27ae60;
+  --red-color: #eb4335;
   --black-color: #000000;
   --white-color: #ffffff;
   --text-light-color: #8d8d8d;
@@ -19,14 +20,50 @@
 
 /* Mobile styles starts*/
 
+@keyframes preloader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+#loading-spinner {
+  width: 25px;
+  height: 25px;
+  position: fixed;
+  top: 3%;
+  right: 3%;
+  border-radius: 50%;
+  border: 1px solid;
+  border-left: none;
+  border-bottom: none;
+  animation: preloader 1s linear 0s infinite normal forwards;
+}
+
+/* App response-box starts */
+
+.app-response-box {
+  position: fixed;
+  top: 3%;
+  right: 3%;
+  background-color: var(--bg-color-1);
+  padding: 15px 50px;
+  border-radius: 11px;
+  font-size: 13px;
+}
+
+/* App response-box ends */
+
 /* Main section starts */
 
 main {
   width: 100%;
-  max-width: 1440px;
   min-height: 876px;
   margin: auto;
   background: var(--white-color) url(../assets/home-bg-min.jpg) no-repeat left;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,11 +73,11 @@ main {
 /* Logo starts here */
 
 .logo {
-  width: 87%;
+  margin-left: 42px;
+  align-self: flex-start;
   font-weight: 700;
   font-size: 18px;
   text-decoration: none;
-  text-align: left;
   color: var(--black-color);
 }
 /* Logo ends here */
@@ -113,6 +150,7 @@ section.registration > .title-wrapper {
   height: 100%;
   border-radius: 9px;
   border: none;
+  font-size: 12px;
   background-color: var(--white-color);
 }
 
@@ -123,7 +161,6 @@ section.registration > .title-wrapper {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  font-size: 12px;
 }
 
 .api-signup-btn > img {
@@ -189,11 +226,83 @@ label {
   border: none;
   background-color: var(--green-color);
   color: var(--white-color);
-  font-weight: 700;
+  font-weight: 300;
   font-size: 16px;
+  cursor: pointer;
 }
 /* Registration section ends */
 
 /* Main section ends  */
 
 /* Mobile styles ends */
+
+/* Desktop styles starts */
+
+/* Changing registration section at 1024px as required by the design */
+@media screen and (min-width: 1024px) {
+  section.registration {
+    align-self: flex-end;
+    margin-right: 118px;
+  }
+}
+
+/* Changing form styles at 539px as required by the design */
+@media screen and (min-width: 539px) {
+  .title-wrapper > .wrapper > p {
+    font-size: 21px;
+  }
+
+  section.registration > .title-wrapper {
+    height: 116px;
+  }
+
+  .title {
+    font-size: 55px;
+    font-weight: 500;
+  }
+
+  .api-signup-btn {
+    font-size: 16px;
+  }
+
+  .api-signup-btn > img {
+    width: 29px;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  .form-sections > input::placeholder {
+    font-size: 14px;
+  }
+
+  #forgot-password {
+    font-size: 13px;
+  }
+
+  .submit {
+    width: 236px;
+  }
+}
+/* Desktop styles ends */
+
+/* Global styles starts */
+
+.dp-no {
+  display: none;
+}
+
+.clr-green {
+  color: var(--green-color);
+}
+
+.clr-red {
+  color: var(--red-color);
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Global styles ends */
