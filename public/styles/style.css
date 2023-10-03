@@ -1,6 +1,8 @@
 :root {
   --primary-font: "Poppins", sans-serif;
   --green-color: #27ae60;
+  --black-color: #000000;
+  --white-color: #ffffff;
 }
 
 * {
@@ -19,8 +21,18 @@ main {
   max-width: 1440px;
   min-height: 876px;
   margin: auto;
-  background: #ffffff url(../assets/home-bg-min.jpg) no-repeat left;
+  background: var(--white-color) url(../assets/home-bg-min.jpg) no-repeat left;
 }
+
+/* Logo starts here */
+
+.logo {
+  font-weight: 700;
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--black-color);
+}
+/* Logo ends here */
 
 /* Main section ends  */
 
