@@ -16,7 +16,48 @@
   <body>
     <main>
       <a href="registration.html" class="logo">Chatz</a>
-      <section class="registration"></section>
+      <section class="registration">
+        <div class="title-wrapper">
+          <div class="wrapper">
+            <p>Welcome to <span class="highlight">Chatz</span></p>
+            <button id="form-switch" type="button">
+              No Account?<br />Sign Up
+            </button>
+          </div>
+          <h1 class="title">Sign In</h1>
+        </div>
+        <div class="api-signup-wrapper">
+          <button></button>
+          <button></button>
+          <button></button>
+        </div>
+        <div class="registration-form-wrapper">
+          <form id="registration-form">
+            <div class="form-sections">
+              <label for="email">Enter your username or email address</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email address"
+              />
+            </div>
+            <div class="form-sections">
+              <label for="password">Enter your password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+              />
+              <button id="forgot-password" type="button">
+                Forgot Password
+              </button>
+            </div>
+            <input type="submit" class="submit" />
+          </form>
+        </div>
+      </section>
     </main>
   </body>
 </html>
