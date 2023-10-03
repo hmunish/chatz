@@ -12,11 +12,13 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/style.css" />
+
+    <script src="./scripts/registration.js" defer></script>
   </head>
   <body>
     <main>
-      <div class="app-response-box dp-no">
-        <p class="app-response-message"></p>
+      <div id="app-response-box" class="dp-no">
+        <p id="app-response-message"></p>
       </div>
       <div id="loading-spinner dp-no"></div>
       <a href="registration.html" class="logo">Chatz</a>
@@ -36,10 +38,10 @@
             Sign up with Google
           </button>
           <button class="api-signup-btn">
-            <img src="./assets/facebook.png" alt="facebook" />
+            <img src="./assets/facebook.png" alt="Facebook" />
           </button>
           <button class="api-signup-btn">
-            <img src="./assets/apple.png" alt="" />
+            <img src="./assets/apple.png" alt="Apple" />
           </button>
         </div>
         <div class="registration-form-wrapper">
@@ -84,46 +86,4 @@
       </section>
     </main>
   </body>
-
-  <script>
-    const formSwitchBtn = qrySlct("button#form-switch");
-    const title = qrySlct(".title");
-    const apiSignUpWrapper = qrySlct(".api-signup-wrapper");
-    const formContactSection = qrySlct(".form-sections.form-contact");
-    const phoneInput = qrySlct("#phone");
-    const loadingSpinner = qrySlct("#loading-spinner");
-
-    let registrationFromStatus = "signin";
-
-    formSwitchBtn.addEventListener("click", switchForm);
-
-    function toggleLoader(element) {
-      loadingSpinner.classList.toggle("dp-no");
-    }
-    function switchForm() {
-      if (registrationFromStatus === "signin") {
-        title.textContent = "Sign Up";
-        formSwitchBtn.innerHTML =
-          "Have an Account?<br><span class='clr-green'>Sign In</span>";
-        registrationFromStatus = "signup";
-      } else if (registrationFromStatus === "signup") {
-        title.textContent = "Sign In";
-        formSwitchBtn.innerHTML =
-          "No Account?<br><span class='clr-green'>Sign Up</span>";
-        registrationFromStatus = "signin";
-      }
-      apiSignUpWrapper.classList.toggle("dp-no");
-      formContactSection.classList.toggle("dp-no");
-      phoneInput.toggleAttribute("disabled");
-    }
-
-    /////// UTILITY FUNCTIONS STARTS ///////
-
-    // Function to return element using document.querySelector method to avoid repeatation of code
-    function qrySlct(query) {
-      return document.querySelector(query);
-    }
-
-    /////// UTILITY FUNCTIONS ENDS ///////
-  </script>
 </html>

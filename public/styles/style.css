@@ -44,7 +44,7 @@
 
 /* App response-box starts */
 
-.app-response-box {
+#app-response-box {
   position: fixed;
   top: 3%;
   right: 3%;
@@ -94,6 +94,7 @@ section.registration {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  transition: all 1s;
 }
 
 section.registration > div {
