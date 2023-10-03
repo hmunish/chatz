@@ -2,8 +2,8 @@
   --primary-font: "Poppins", sans-serif;
   --green-color: #27ae60;
   --red-color: #eb4335;
-  --black-color: #000000;
-  --white-color: #ffffff;
+  --black-color: #000;
+  --white-color: #fff;
   --text-light-color: #8d8d8d;
   --text-light-color-2: #808080;
   --link-text-color: #4285f4;
@@ -18,12 +18,13 @@
   font-family: var(--primary-font);
 }
 
-/* Mobile styles starts*/
+/* Mobile styles starts */
 
 @keyframes preloader {
   from {
     transform: rotate(0);
   }
+
   to {
     transform: rotateZ(360deg);
   }
@@ -80,6 +81,7 @@ main {
   text-decoration: none;
   color: var(--black-color);
 }
+
 /* Logo ends here */
 
 /* Registration section starts */
@@ -140,9 +142,11 @@ section.registration > .title-wrapper {
 
 .api-signup-wrapper {
   height: 56px;
+
   /* width: 272px !important; */
   display: flex;
   justify-content: space-between;
+
   /* background-color: yellow; */
 }
 
@@ -170,6 +174,7 @@ section.registration > .title-wrapper {
 
 .registration-form-wrapper {
   min-height: 352px;
+
   /* background-color: #27ae60; */
 }
 
@@ -231,6 +236,7 @@ label {
   font-size: 16px;
   cursor: pointer;
 }
+
 /* Registration section ends */
 
 /* Main section ends  */
@@ -286,6 +292,7 @@ label {
     width: 236px;
   }
 }
+
 /* Desktop styles ends */
 
 /* Global styles starts */
