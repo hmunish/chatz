@@ -18,13 +18,31 @@ let registrationFormStatus = "signin";
 
 /// //// EVENT LISTENERS STARTS ///////
 
-formSwitchBtn.addEventListener("click", switchForm);
-
-registrationForm.addEventListener("submit", handleFormSubmit);
+document.addEventListener("DOMContentLoaded", async () => {
+  await isSignedIn();
+  formSwitchBtn.addEventListener("click", switchForm);
+  registrationForm.addEventListener("submit", handleFormSubmit);
+});
 
 /// //// EVENT LISTENERS ENDS ///////
 
 /// //// FUNCTIONS STARTS HERE ///////
+
+async function isSignedIn() {
+  try {
+    const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`, {
+      headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
+    });
+
+    if (response.status === 200) {
+      addAppResponse("Already signed in");
+      window.location.href = "/chats.html";
+    }
+  } catch (err) {
+    // Error can be avoided here as application requirement
+    return err;
+  }
+}
 
 async function handleFormSubmit(e) {
   try {
@@ -34,17 +52,22 @@ async function handleFormSubmit(e) {
     // Inputs will be validated on server-side as well
     const validInputs = isValidInputs(formDetails);
     if (!validInputs) return;
+
     if (validInputs.length === 3) {
       // should return array of all 3 user inputs if every user input is fine or else undefined
+
       const userData = {
         email: validInputs[0],
         password: validInputs[1],
         phone: validInputs[2],
       };
+
       // If user submitted sign-up form
+
       if (registrationFormStatus === "signup") {
         await signUp(userData);
       }
+
       // Else user submitted sign-in form
       else {
         await signIn(userData);
@@ -102,14 +125,12 @@ function isValidInputs(formDetails) {
     password = sanitizeUserInput(
       formDetails.get("password"),
       "Invalid Password"
+    ),
+    phone = sanitizeUserInput(
+      formDetails.get("phone") || "0",
+      "Invalid Phone Number"
     );
-  phone = sanitizeUserInput(
-    formDetails.get("phone") || "0",
-    "Invalid Phone Number"
-  );
-
   if (!email || !password || !phone) return;
-
   if (!validator.isEmail(email))
     return addAppResponse("Invalid Email Id", "clr-red");
   if (
@@ -150,15 +171,20 @@ function stopLoadingSpinner() {
 function switchForm() {
   if (registrationFormStatus === "signin") {
     title.textContent = "Sign Up";
+
     formSwitchBtn.innerHTML =
       "Have an Account?<br><span class='clr-green'>Sign In</span>";
+
     registrationFormStatus = "signup";
   } else if (registrationFormStatus === "signup") {
     title.textContent = "Sign In";
+
     formSwitchBtn.innerHTML =
       "No Account?<br><span class='clr-green'>Sign Up</span>";
+
     registrationFormStatus = "signin";
   }
+
   apiSignUpWrapper.classList.toggle("dp-no");
   formContactSection.classList.toggle("dp-no");
   phoneInput.toggleAttribute("disabled");
@@ -171,7 +197,9 @@ function sanitizeUserInput(input, errMsg) {
   let sanitizedInput = DOMPurify.sanitize(input);
   sanitizedInput = validator.escape(input);
   sanitizedInput = sanitizedInput.replace(/ /g, "");
+
   if (input === sanitizedInput) return sanitizedInput;
+
   addAppResponse(errMsg, "clr-red");
   return false;
 }

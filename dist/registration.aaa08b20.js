@@ -594,10 +594,29 @@ const formContactSection = qrySlct(".form-sections.form-contact");
 const phoneInput = qrySlct("#phone");
 let registrationFormStatus = "signin";
 /// //// EVENT LISTENERS STARTS ///////
-formSwitchBtn.addEventListener("click", switchForm);
-registrationForm.addEventListener("submit", handleFormSubmit);
+document.addEventListener("DOMContentLoaded", async ()=>{
+    await isSignedIn();
+    formSwitchBtn.addEventListener("click", switchForm);
+    registrationForm.addEventListener("submit", handleFormSubmit);
+});
 /// //// EVENT LISTENERS ENDS ///////
 /// //// FUNCTIONS STARTS HERE ///////
+async function isSignedIn() {
+    try {
+        const response = await (0, _axiosDefault.default).get(`${(0, _config.BACKEND_HOST_URL)}/users/isSignedIn`, {
+            headers: {
+                authKey: JSON.parse(localStorage.getItem("chatzSignIn"))
+            }
+        });
+        if (response.status === 200) {
+            addAppResponse("Already signed in");
+            window.location.href = "/chats.html";
+        }
+    } catch (err) {
+        // Error can be avoided here as application requirement
+        return err;
+    }
+}
 async function handleFormSubmit(e) {
     try {
         e.preventDefault();
