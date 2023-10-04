@@ -1,5 +1,7 @@
 import validator from "validator";
 import DOMPurify from "dompurify";
+import axios from "axios";
+import { BACKEND_HOST_URL } from "./config";
 
 const loadingSpinner = qrySlct("#loading-spinner");
 const appResponseBox = qrySlct("#app-response-box");
@@ -24,13 +26,74 @@ registrationForm.addEventListener("submit", handleFormSubmit);
 
 /// //// FUNCTIONS STARTS HERE ///////
 
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const formDetails = new FormData(e.target);
-  const validInputs = isValidInputs(formDetails);
-  if (!validInputs) return;
-  if (validInputs.length === 3) {
+async function handleFormSubmit(e) {
+  try {
+    e.preventDefault();
+    const formDetails = new FormData(e.target);
+    // Validating user inputs for security & better user interface
+    // Inputs will be validated on server-side as well
+    const validInputs = isValidInputs(formDetails);
+    if (!validInputs) return;
+    if (validInputs.length === 3) {
+      // should return array of all 3 user inputs if every user input is fine or else undefined
+      const userData = {
+        email: validInputs[0],
+        password: validInputs[1],
+        phone: validInputs[2],
+      };
+      // If user submitted sign-up form
+      if (registrationFormStatus === "signup") {
+        await signUp(userData);
+      }
+      // Else user submitted sign-in form
+      else {
+        await signIn(userData);
+      }
+    }
+  } catch (err) {
+    addAppResponse(err.message, "clr-red");
+  }
+}
+
+async function signUp(userData) {
+  try {
     startLoadingSpinner();
+    const response = await axios.post(
+      `${BACKEND_HOST_URL}/users/signup`,
+      userData
+    );
+    if (response.status !== 201) throw new Error(response.data.message);
+    addAppResponse(response.data.message);
+    await signIn(userData);
+    // If new user is created login the user
+  } catch (err) {
+    const errorMessage = err.response?.data.message || err.message;
+    addAppResponse(errorMessage, "clr-red");
+    throw err;
+  }
+}
+
+async function signIn(userData) {
+  try {
+    startLoadingSpinner();
+    const response = await axios.post(
+      `${BACKEND_HOST_URL}/users/signin`,
+      userData
+    );
+    if (response.status !== 200) throw new Error(response.data.message);
+    addAppResponse(response.data.message);
+    addAppResponse("Redirecting to dashboard");
+    startLoadingSpinner();
+
+    // Setting authentication token for current user
+    localStorage.setItem("chatzSignIn", JSON.stringify(response.data.authKey));
+
+    // Redirecting user to dashboard page
+    window.location.href = "/chats.html";
+  } catch (err) {
+    const errorMessage = err.response?.data.message || err.message;
+    addAppResponse(errorMessage, "clr-red");
+    throw err;
   }
 }
 
@@ -49,9 +112,12 @@ function isValidInputs(formDetails) {
 
   if (!validator.isEmail(email))
     return addAppResponse("Invalid Email Id", "clr-red");
-  if (!validator.isStrongPassword(password))
+  if (
+    !validator.isStrongPassword(password) &&
+    registrationFormStatus === "signup"
+  )
     return addAppResponse(
-      "Please enter strong password<br>Minimum Length: 8<br>One Lower Case<br>One Upper Case<br>One Special Symbol<br>",
+      "Please enter strong password<br>Password Requirements:- <br>Minimum Length: 8<br>One Lower Case<br>One Upper Case<br>One Special Symbol<br>",
       "clr-red"
     );
   if (registrationFormStatus === "signup" && !validator.isMobilePhone(phone))
