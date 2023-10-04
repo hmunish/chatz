@@ -1,4 +1,5 @@
 import validator from "validator";
+import DOMPurify from "dompurify";
 
 const loadingSpinner = qrySlct("#loading-spinner");
 const appResponseBox = qrySlct("#app-response-box");
@@ -26,16 +27,44 @@ registrationForm.addEventListener("submit", handleFormSubmit);
 function handleFormSubmit(e) {
   e.preventDefault();
   const formDetails = new FormData(e.target);
-  const email = formDetails.get("email"),
-    password = formDetails.get("password");
-  phone = formDetails.get("phone");
-  console.log(email, password, phone);
+  const validInputs = isValidInputs(formDetails);
+  if (!validInputs) return;
+  if (validInputs.length === 3) {
+    startLoadingSpinner();
+  }
+}
+
+function isValidInputs(formDetails) {
+  const email = sanitizeUserInput(formDetails.get("email"), "Invalid Email Id"),
+    password = sanitizeUserInput(
+      formDetails.get("password"),
+      "Invalid Password"
+    );
+  phone = sanitizeUserInput(
+    formDetails.get("phone") || "0",
+    "Invalid Phone Number"
+  );
+
+  if (!email || !password || !phone) return;
+
+  if (!validator.isEmail(email))
+    return addAppResponse("Invalid Email Id", "clr-red");
+  if (!validator.isStrongPassword(password))
+    return addAppResponse(
+      "Please enter strong password<br>Minimum Length: 8<br>One Lower Case<br>One Upper Case<br>One Special Symbol<br>",
+      "clr-red"
+    );
+  if (registrationFormStatus === "signup" && !validator.isMobilePhone(phone))
+    return addAppResponse("Invalid Phone Number", "clr-red");
+
+  return [email, password, phone];
 }
 
 function addAppResponse(message = "", statusClass = "clr-green") {
   appResponseBox.classList.remove("dp-no");
   appResponseMessage.classList = statusClass;
-  appResponseMessage.textContent += message;
+  appResponseMessage.innerHTML += `<br>${message}`;
+  stopLoadingSpinner();
   setTimeout(removeAppResponse, 3000);
 }
 
@@ -44,8 +73,12 @@ function removeAppResponse() {
   appResponseBox.classList.add("dp-no");
 }
 
-function toggleLoader() {
-  loadingSpinner.classList.toggle("dp-no");
+function startLoadingSpinner() {
+  loadingSpinner.classList.remove("dp-no");
+}
+
+function stopLoadingSpinner() {
+  loadingSpinner.classList.add("dp-no");
 }
 
 function switchForm() {
@@ -68,13 +101,14 @@ function switchForm() {
 /// //// UTILITY FUNCTIONS STARTS ///////
 
 // Function to sanitize user input using Validator library
-function sanitizeUserInput(input) {
-  console.log(validator.isEmail("munish@gmail.com"));
-  // return DOMPurify.sanitize(input);
-  return true;
+function sanitizeUserInput(input, errMsg) {
+  let sanitizedInput = DOMPurify.sanitize(input);
+  sanitizedInput = validator.escape(input);
+  sanitizedInput = sanitizedInput.replace(/ /g, "");
+  if (input === sanitizedInput) return sanitizedInput;
+  addAppResponse(errMsg, "clr-red");
+  return false;
 }
-
-console.log(sanitizeUserInput("munish*&(((    ***"));
 
 // Function to return element using document.querySelector method to avoid repeatation of code
 function qrySlct(query) {
