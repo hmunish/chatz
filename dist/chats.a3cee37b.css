@@ -11,6 +11,7 @@
   --bg-color-1: #ffffffbf;
   --bg-color-2: #e9f1ff;
   --bg-color-3: #eee;
+  --bg-color-4: #f4f4f7;
 }
 
 * {
@@ -136,6 +137,163 @@ option.contacts-sort {
 p.message-status {
   color: var(--green-color);
   text-align: right;
+}
+
+section.chats {
+  flex-direction: column;
+  align-items: center;
+  width: 92%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+}
+
+section.chats > .header {
+  width: 97%;
+  min-height: 42px;
+  display: flex;
+}
+
+section.chats > .header > img {
+  height: 100%;
+}
+
+.chat-contact-details {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-direction: column;
+  flex-basis: 80%;
+  justify-content: space-around;
+  margin-left: 2%;
+  margin-right: 8%;
+  display: flex;
+  overflow: hidden;
+}
+
+.chat-contact-details > h2 {
+  font-size: 16px;
+}
+
+.chat-contact-details > p {
+  color: var(--green-color);
+  font-size: 14px;
+}
+
+.chat-other-options {
+  justify-content: space-around;
+  align-items: center;
+  min-width: 84px;
+  display: flex;
+}
+
+.chat-other-options > .icon-options {
+  cursor: pointer;
+  width: 18px;
+}
+
+div.chat-box {
+  flex-direction: column;
+  flex-basis: 90%;
+  align-items: flex-start;
+  gap: 11px;
+  width: 92%;
+  padding: 5px 0;
+  display: flex;
+  overflow-y: scroll;
+}
+
+div.chat-box::-webkit-scrollbar {
+  background: none;
+  width: 5px;
+}
+
+div.chat-box::-webkit-scrollbar-thumb {
+  background-color: var(--green-color);
+  border-radius: 5px;
+  height: 15px;
+  margin-left: 15px;
+}
+
+.message-holder {
+  background-color: var(--bg-color-4);
+  border-radius: 16px;
+  width: auto;
+  max-width: 75%;
+  padding: 15px;
+}
+
+.own-message {
+  border-bottom-right-radius: 0;
+  align-self: flex-end;
+}
+
+.contact-message-wrapper {
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  display: flex;
+}
+
+.contact-message-wrapper > img {
+  height: 24px;
+}
+
+.contact-message {
+  border-top-left-radius: 0;
+}
+
+.message-holder > .message-time {
+  color: var(--text-light-color);
+  padding-top: 11px;
+  font-size: 12px;
+}
+
+.message-holder > .message-time > span {
+  color: var(--green-color);
+}
+
+.own-message > .message-time {
+  text-align: right;
+}
+
+.own-message > .message-time > span {
+  padding-right: 5px;
+}
+
+.contact-message > .message-time {
+  text-align: left;
+}
+
+form.send-message {
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  display: flex;
+}
+
+form.send-message > * {
+  height: 100%;
+}
+
+form.send-message > input[type="text"] {
+  border: none;
+  outline: none;
+  flex-basis: 93%;
+  padding: 0 15px;
+}
+
+form.send-message > input[type="submit"] {
+  color: var(--green-color);
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+img.attach-file {
+  height: 15px;
+  margin-left: 10px;
 }
 
 /*# sourceMappingURL=chats.a3cee37b.css.map */
