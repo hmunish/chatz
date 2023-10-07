@@ -16,10 +16,11 @@
     "eol-last": "off",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
+    "consistent-return": "off",
     "import/extensions": [
       1,
       {
-        "js": "always",
+        "js": "off",
         "json": "always"
       }
     ]
