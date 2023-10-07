@@ -1,0 +1,123 @@
+@import url(./global.css);
+
+#dashboard {
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  /* background-color: var(--green-color); */
+}
+
+section.contacts {
+  width: 92%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* background-color: aqua; */
+}
+
+section.contacts > .header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+h1.title {
+  font-weight: bold;
+}
+
+input[type="search"] {
+  height: 36px;
+  width: 100%;
+  background-color: var(--bg-color-3);
+  border: none;
+  border-radius: 12px;
+  padding: 0 15px;
+  outline: var(--link-text-color);
+  color: var(--text-light-color-2);
+}
+
+input[type="search"]::placeholder {
+  color: var(--text-light-color-2);
+  font-size: 14px;
+}
+
+div.contacts-sort {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+p.contacts-sort {
+  font-size: 12px;
+  color: var(--text-light-color);
+}
+
+select.contacts-sort {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-color-1);
+  font-size: 14px;
+}
+
+option.contacts-sort {
+  border: none;
+  background: none;
+}
+
+.contacts-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* overflow-y: scroll; */
+}
+
+.contact-details {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  /* background-color: brown; */
+}
+
+.contact-details > * {
+  height: 100%;
+}
+
+.contact-details > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.chat-details {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-basis: 80%;
+  margin: 0 10% 0 2%;
+  cursor: pointer;
+}
+
+.chat-details > * {
+  font-size: 14px;
+}
+
+.chat-details > p {
+  color: var(--text-light-color);
+}
+
+.message-details > p {
+  font-size: 12px;
+  color: var(--text-light-color-2);
+}
+
+p.message-status {
+  color: var(--green-color);
+  text-align: right;
+}

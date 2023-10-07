@@ -1,0 +1,141 @@
+:root {
+  --primary-font: "Poppins", sans-serif;
+  --green-color: #27ae60;
+  --red-color: #eb4335;
+  --black-color: #000;
+  --white-color: #fff;
+  --text-color-1: #2d9cdb;
+  --text-light-color: #8d8d8d;
+  --text-light-color-2: gray;
+  --link-text-color: #4285f4;
+  --bg-color-1: #ffffffbf;
+  --bg-color-2: #e9f1ff;
+  --bg-color-3: #eee;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: var(--primary-font);
+  margin: 0;
+  padding: 0;
+}
+
+#dashboard {
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+section.contacts {
+  flex-direction: column;
+  gap: 20px;
+  width: 92%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+}
+
+section.contacts > .header {
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  display: flex;
+}
+
+h1.title {
+  font-weight: bold;
+}
+
+input[type="search"] {
+  background-color: var(--bg-color-3);
+  outline: var(--link-text-color);
+  color: var(--text-light-color-2);
+  border: none;
+  border-radius: 12px;
+  width: 100%;
+  height: 36px;
+  padding: 0 15px;
+}
+
+input[type="search"]::placeholder {
+  color: var(--text-light-color-2);
+  font-size: 14px;
+}
+
+div.contacts-sort {
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  display: flex;
+}
+
+p.contacts-sort {
+  color: var(--text-light-color);
+  font-size: 12px;
+}
+
+select.contacts-sort {
+  color: var(--text-color-1);
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+option.contacts-sort {
+  background: none;
+  border: none;
+}
+
+.contacts-list {
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  display: flex;
+}
+
+.contact-details {
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  display: flex;
+}
+
+.contact-details > * {
+  height: 100%;
+}
+
+.contact-details > div {
+  flex-direction: column;
+  justify-content: space-around;
+  display: flex;
+}
+
+.chat-details {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  flex-basis: 80%;
+  margin: 0 10% 0 2%;
+  overflow: hidden;
+}
+
+.chat-details > * {
+  font-size: 14px;
+}
+
+.chat-details > p {
+  color: var(--text-light-color);
+}
+
+.message-details > p {
+  color: var(--text-light-color-2);
+  font-size: 12px;
+}
+
+p.message-status {
+  color: var(--green-color);
+  text-align: right;
+}
+
+/*# sourceMappingURL=chats.a3cee37b.css.map */

@@ -612,6 +612,7 @@ async function isSignedIn() {
             addAppResponse("Already signed in");
             window.location.href = "/chats.html";
         }
+        return;
     } catch (err) {
         // Error can be avoided here as application requirement
         return err;
@@ -634,7 +635,8 @@ async function handleFormSubmit(e) {
             };
             // If user submitted sign-up form
             if (registrationFormStatus === "signup") await signUp(userData);
-            else await signIn(userData);
+            else // Else user submitted sign-in form
+            await signIn(userData);
         }
     } catch (err) {
         addAppResponse(err.message, "clr-red");
@@ -673,8 +675,9 @@ async function signIn(userData) {
     }
 }
 function isValidInputs(formDetails) {
-    const email = sanitizeUserInput(formDetails.get("email"), "Invalid Email Id"), password = sanitizeUserInput(formDetails.get("password"), "Invalid Password");
-    phone = sanitizeUserInput(formDetails.get("phone") || "0", "Invalid Phone Number");
+    const email = sanitizeUserInput(formDetails.get("email"), "Invalid Email Id");
+    const password = sanitizeUserInput(formDetails.get("password"), "Invalid Password");
+    const phone = sanitizeUserInput(formDetails.get("phone") || "0", "Invalid Phone Number");
     if (!email || !password || !phone) return;
     if (!(0, _validatorDefault.default).isEmail(email)) return addAppResponse("Invalid Email Id", "clr-red");
     if (!(0, _validatorDefault.default).isStrongPassword(password) && registrationFormStatus === "signup") return addAppResponse("Please enter strong password<br>Password Requirements:- <br>Minimum Length: 8<br>One Lower Case<br>One Upper Case<br>One Special Symbol<br>", "clr-red");
