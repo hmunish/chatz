@@ -32,14 +32,16 @@
 }
 
 section.contacts {
+  z-index: 3;
   background-color: #fff;
   flex-direction: column;
   gap: 20px;
   width: 92%;
   height: 100%;
   margin: auto;
-  transition: transform 1s;
+  transition: transform .5s;
   display: flex;
+  position: relative;
 }
 
 section.contacts > .header {
@@ -119,7 +121,7 @@ option.contacts-sort {
   display: flex;
 }
 
-.chat-details {
+div.chat-details {
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
@@ -128,11 +130,11 @@ option.contacts-sort {
   overflow: hidden;
 }
 
-.chat-details > * {
+div.chat-details > * {
   font-size: 14px;
 }
 
-.chat-details > p {
+div.chat-details > p {
   color: var(--text-light-color);
 }
 
@@ -147,7 +149,6 @@ p.message-status {
 }
 
 section.chats {
-  z-index: -1;
   background-color: #fff;
   flex-direction: column;
   align-items: center;
@@ -338,6 +339,7 @@ img.attach-file {
   section.contacts {
     flex-basis: 33%;
     padding: 15px;
+    transform: translateX(0) !important;
   }
 
   section.chats {

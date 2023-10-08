@@ -14,7 +14,9 @@ section.contacts {
   flex-direction: column;
   gap: 20px;
   background-color: #ffffff;
-  transition: transform 1s;
+  transition: transform 0.5s;
+  position: relative;
+  z-index: 3;
 }
 
 section.contacts > .header {
@@ -95,7 +97,7 @@ option.contacts-sort {
   justify-content: space-around;
 }
 
-.chat-details {
+div.chat-details {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -104,11 +106,11 @@ option.contacts-sort {
   cursor: pointer;
 }
 
-.chat-details > * {
+div.chat-details > * {
   font-size: 14px;
 }
 
-.chat-details > p {
+div.chat-details > p {
   color: var(--text-light-color);
 }
 
@@ -136,7 +138,7 @@ section.chats {
   right: 0;
   left: 0;
   background-color: #ffffff;
-  z-index: -1;
+  /* z-index: -1; */
   padding: 15px 0;
 }
 
@@ -309,6 +311,7 @@ img.attach-file {
   section.contacts {
     flex-basis: 33%;
     padding: 15px;
+    transform: translateX(0) !important;
   }
   section.chats {
     flex-basis: 66%;
