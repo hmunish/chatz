@@ -14,7 +14,7 @@ section.contacts {
   flex-direction: column;
   gap: 20px;
   background-color: #ffffff;
-  transition: all 1s;
+  transition: transform 1s;
 }
 
 section.contacts > .header {
@@ -74,7 +74,7 @@ option.contacts-sort {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
 }
 
 .contact-details {
@@ -200,16 +200,17 @@ div.chat-box {
   padding: 5px 0;
 }
 
-div.chat-box::-webkit-scrollbar {
-  width: 5px;
+div.chat-box::-webkit-scrollbar,
+div.contacts-list::-webkit-scrollbar {
+  width: 2px;
   background: none;
 }
 
-div.chat-box::-webkit-scrollbar-thumb {
+div.chat-box::-webkit-scrollbar-thumb,
+div.contacts-list::-webkit-scrollbar-thumb {
   background-color: var(--green-color);
   height: 15px;
   border-radius: 5px;
-  margin-left: 15px;
 }
 
 .message-holder {
@@ -223,6 +224,11 @@ div.chat-box::-webkit-scrollbar-thumb {
 .own-message {
   align-self: flex-end;
   border-bottom-right-radius: 0;
+}
+
+.message-details,
+.own-message {
+  margin-right: 2%;
 }
 
 .contact-message-wrapper {
@@ -293,3 +299,24 @@ img.attach-file {
   margin-left: 10px;
 }
 /* Chat section ends */
+
+/* Desktop version starts */
+
+@media screen and (min-width: 1000px) {
+  #dashboard {
+    display: flex;
+  }
+  section.contacts {
+    flex-basis: 33%;
+    padding: 15px;
+  }
+  section.chats {
+    flex-basis: 66%;
+    position: relative;
+    z-index: 1;
+  }
+  .back-arrow {
+    display: none;
+  }
+}
+/* Desktop version ends */

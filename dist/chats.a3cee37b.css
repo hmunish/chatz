@@ -38,7 +38,7 @@ section.contacts {
   width: 92%;
   height: 100%;
   margin: auto;
-  transition: all 1s;
+  transition: transform 1s;
   display: flex;
 }
 
@@ -99,6 +99,7 @@ option.contacts-sort {
   gap: 16px;
   width: 100%;
   display: flex;
+  overflow-y: scroll;
 }
 
 .contact-details {
@@ -223,14 +224,24 @@ div.chat-box {
 
 div.chat-box::-webkit-scrollbar {
   background: none;
-  width: 5px;
+  width: 2px;
+}
+
+div.contacts-list::-webkit-scrollbar {
+  background: none;
+  width: 2px;
 }
 
 div.chat-box::-webkit-scrollbar-thumb {
   background-color: var(--green-color);
   border-radius: 5px;
   height: 15px;
-  margin-left: 15px;
+}
+
+div.contacts-list::-webkit-scrollbar-thumb {
+  background-color: var(--green-color);
+  border-radius: 5px;
+  height: 15px;
 }
 
 .message-holder {
@@ -244,6 +255,10 @@ div.chat-box::-webkit-scrollbar-thumb {
 .own-message {
   border-bottom-right-radius: 0;
   align-self: flex-end;
+}
+
+.message-details, .own-message {
+  margin-right: 2%;
 }
 
 .contact-message-wrapper {
@@ -313,6 +328,27 @@ form.send-message > input[type="submit"] {
 img.attach-file {
   height: 15px;
   margin-left: 10px;
+}
+
+@media screen and (width >= 1000px) {
+  #dashboard {
+    display: flex;
+  }
+
+  section.contacts {
+    flex-basis: 33%;
+    padding: 15px;
+  }
+
+  section.chats {
+    z-index: 1;
+    flex-basis: 66%;
+    position: relative;
+  }
+
+  .back-arrow {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=chats.a3cee37b.css.map */
