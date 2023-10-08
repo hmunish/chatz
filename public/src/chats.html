@@ -4,10 +4,96 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <link rel="stylesheet" href="styles/dashboard.css" />
+
+    <script src="./scripts/dashboard.js" defer></script>
   </head>
   <body>
-    <main>
-      <section class="registration"></section>
+    <main id="dashboard">
+      <section class="contacts">
+        <section class="sidebar"></section>
+        <div class="header">
+          <h1 class="title">Messages</h1>
+          <input type="search" name="contactSearch" placeholder="Search" />
+          <div class="contacts-sort">
+            <p class="contacts-sort">Sort by</p>
+            <select name="sortContacts" class="contacts-sort">
+              <option class="contacts-sort">Newest</option>
+            </select>
+          </div>
+        </div>
+        <div class="contacts-list">
+          <div class="contact-details">
+            <img src="./assets/contact-1.png" alt="" />
+            <div class="chat-details">
+              <h2>Travis Barker</h2>
+              <p>Travis Barker is a very nice & humble man</p>
+            </div>
+            <div class="message-details">
+              <p class="message-time">16:45</p>
+              <p class="message-status">&check;</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="chats">
+        <div class="header">
+          <img src="./assets/back-arrow.png" alt="Back" class="back-arrow" />
+          <img src="./assets/contact-1.png" alt="DP" />
+          <div class="chat-contact-details">
+            <h2>Travis Barker</h2>
+            <p>Online</p>
+          </div>
+          <div class="chat-other-options">
+            <img
+              src="./assets/video-call.png"
+              id="video-call"
+              alt="Video Call"
+              class="icon-options"
+            />
+            <img
+              src="./assets/contact-details.png"
+              id="details-contact"
+              alt="Details"
+              class="icon-options"
+            />
+          </div>
+        </div>
+        <div class="chat-box">
+          <div class="contact-message-wrapper">
+            <img src="./assets/contact-1.png" alt="" />
+            <div class="message-holder contact-message">
+              <p>My message</p>
+              <p class="message-time">
+                <span class="message-status">&check;</span> 16:45
+              </p>
+            </div>
+          </div>
+          <div class="message-holder own-message">
+            <p>My message</p>
+            <p class="message-time">
+              <span class="message-status">&check;</span> 16:45
+            </p>
+          </div>
+        </div>
+        <form class="send-message">
+          <input type="file" hidden class="attach-file" />
+          <img
+            src="./assets/attach-file.png"
+            alt="Attach file"
+            class="attach-file"
+            name="attachedFile"
+          />
+          <input
+            type="text"
+            placeholder="Type your message here..."
+            name="message"
+            autocomplete="off"
+          />
+          <input type="submit" value="Send" />
+        </form>
+      </section>
     </main>
   </body>
 </html>

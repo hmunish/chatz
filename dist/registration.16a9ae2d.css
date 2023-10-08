@@ -4,11 +4,14 @@
   --red-color: #eb4335;
   --black-color: #000;
   --white-color: #fff;
+  --text-color-1: #2d9cdb;
   --text-light-color: #8d8d8d;
   --text-light-color-2: gray;
   --link-text-color: #4285f4;
   --bg-color-1: #ffffffbf;
   --bg-color-2: #e9f1ff;
+  --bg-color-3: #eee;
+  --bg-color-4: #f4f4f7;
 }
 
 * {
@@ -16,6 +19,10 @@
   font-family: var(--primary-font);
   margin: 0;
   padding: 0;
+}
+
+.dp-no {
+  display: none !important;
 }
 
 @keyframes preloader {
@@ -215,6 +222,13 @@ label {
   height: 54px;
   font-size: 16px;
   font-weight: 300;
+}
+
+#dashboard {
+  background-color: #27ae60;
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
 }
 
 @media screen and (width >= 1024px) {
