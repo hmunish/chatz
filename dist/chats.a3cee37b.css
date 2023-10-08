@@ -21,6 +21,10 @@
   padding: 0;
 }
 
+.dp-no {
+  display: none !important;
+}
+
 #dashboard {
   width: 100%;
   height: 100vh;
@@ -28,11 +32,13 @@
 }
 
 section.contacts {
+  background-color: #fff;
   flex-direction: column;
   gap: 20px;
   width: 92%;
   height: 100%;
   margin: auto;
+  transition: all 1s;
   display: flex;
 }
 
@@ -140,12 +146,19 @@ p.message-status {
 }
 
 section.chats {
+  z-index: -1;
+  background-color: #fff;
   flex-direction: column;
   align-items: center;
   width: 92%;
   height: 100%;
   margin: auto;
+  padding: 15px 0;
   display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 section.chats > .header {
@@ -156,6 +169,12 @@ section.chats > .header {
 
 section.chats > .header > img {
   height: 100%;
+}
+
+img.back-arrow {
+  cursor: pointer;
+  padding-right: 25px;
+  height: 50% !important;
 }
 
 .chat-contact-details {

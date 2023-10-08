@@ -4,7 +4,6 @@
   width: 100%;
   height: 100vh;
   max-height: 100vh;
-  /* background-color: var(--green-color); */
 }
 
 section.contacts {
@@ -14,7 +13,8 @@ section.contacts {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* background-color: aqua; */
+  background-color: #ffffff;
+  transition: all 1s;
 }
 
 section.contacts > .header {
@@ -131,6 +131,13 @@ section.chats {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: #ffffff;
+  z-index: -1;
+  padding: 15px 0;
 }
 
 section.chats > .header {
@@ -141,6 +148,12 @@ section.chats > .header {
 
 section.chats > .header > img {
   height: 100%;
+}
+
+img.back-arrow {
+  height: 50% !important;
+  padding-right: 25px;
+  cursor: pointer;
 }
 
 .chat-contact-details {

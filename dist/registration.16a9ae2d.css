@@ -21,6 +21,10 @@
   padding: 0;
 }
 
+.dp-no {
+  display: none !important;
+}
+
 @keyframes preloader {
   from {
     transform: rotate(0);

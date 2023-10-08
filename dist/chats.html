@@ -37,7 +37,8 @@
       </section>
       <section class="chats">
         <div class="header">
-          <img src="/contact-1.cb578c13.png" alt="">
+          <img src="/back-arrow.76075b64.png" alt="Back" class="back-arrow">
+          <img src="/contact-1.cb578c13.png" alt="DP">
           <div class="chat-contact-details">
             <h2>Travis Barker</h2>
             <p>Online</p>
@@ -72,5 +73,18 @@
         </form>
       </section>
     </main>
+
+    <script>const contact = document.querySelector(".chat-details");
+const backArrow = document.querySelector(".back-arrow");
+backArrow.addEventListener("click", (e)=>{
+    document.querySelector("section.contacts").style.transform = "translateX(0%)";
+    document.querySelector("section.chats").style.zIndex = "-1";
+});
+contact.addEventListener("click", (e)=>{
+    document.querySelector("section.contacts").style.transform = "translateX(-150%)";
+    document.querySelector("section.chats").style.zIndex = "0";
+});
+
+</script>
   <script src="/chats.070cb94c.js"></script></body>
 </html>
