@@ -7,7 +7,9 @@
     "start": "node app/app.js",
     "dev": "nodemon app/app.js",
     "build": "parcel build public/src/*.html",
-    "parcel-dev": "parcel public/src/*.html"
+    "parcel-dev": "parcel public/src/*.html",
+    "fix-style-errors": "stylelint '**/*.{css,scss}' --fix",
+    "fix-script-errors": "eslint . --fix"
   },
   "author": "Munish Hanief Halai",
   "license": "ISC",

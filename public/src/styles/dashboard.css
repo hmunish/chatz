@@ -13,7 +13,7 @@ section.contacts {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: #ffffff;
+  background-color: #fff;
   transition: transform 0.5s;
   position: relative;
   z-index: 3;
@@ -84,6 +84,7 @@ option.contacts-sort {
   height: 36px;
   display: flex;
   align-items: center;
+
   /* background-color: brown; */
 }
 
@@ -137,7 +138,8 @@ section.chats {
   top: 0;
   right: 0;
   left: 0;
-  background-color: #ffffff;
+  background-color: #fff;
+
   /* z-index: -1; */
   padding: 15px 0;
 }
@@ -243,6 +245,7 @@ div.contacts-list::-webkit-scrollbar-thumb {
 .contact-message-wrapper > img {
   height: 24px;
 }
+
 .contact-message {
   border-top-left-radius: 0;
 }
@@ -300,6 +303,7 @@ img.attach-file {
   height: 15px;
   margin-left: 10px;
 }
+
 /* Chat section ends */
 
 /* Desktop version starts */
@@ -308,18 +312,22 @@ img.attach-file {
   #dashboard {
     display: flex;
   }
+
   section.contacts {
     flex-basis: 33%;
     padding: 15px;
     transform: translateX(0) !important;
   }
+
   section.chats {
     flex-basis: 66%;
     position: relative;
     z-index: 1;
   }
+
   .back-arrow {
     display: none;
   }
 }
+
 /* Desktop version ends */
