@@ -1,10 +1,12 @@
-import View from "./view";
-import { isSignedIn, isValidInputs, signIn, signUp } from "./model";
+import View from './view';
+import {
+  isSignedIn, isValidInputs, signIn, signUp,
+} from './model';
 
 async function handleIsUserSignedIn() {
   const res = await isSignedIn();
   if (res) {
-    View.addAppResponse("Already signed in");
+    View.addAppResponse('Already signed in');
     View.redirectToDashboard();
   }
 }
@@ -29,7 +31,7 @@ async function handleFormSubmit(e) {
 
       // If user submitted sign-up form
 
-      if (View.registrationFormStatus === "signup") {
+      if (View.registrationFormStatus === 'signup') {
         await handleSignUp(userData);
       } else {
         // Else user submitted sign-in form
@@ -37,7 +39,7 @@ async function handleFormSubmit(e) {
       }
     }
   } catch (err) {
-    View.addAppResponse(err.message, "clr-red");
+    View.addAppResponse(err.message, 'clr-red');
   }
 }
 
@@ -50,7 +52,7 @@ async function handleSignUp(userData) {
     // If new user is created login the user
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, "clr-red");
+    View.addAppResponse(errorMessage, 'clr-red');
     throw err;
   }
 }
@@ -60,17 +62,17 @@ async function handleSignIn(userData) {
     View.startLoadingSpinner();
     const response = await signIn(userData);
     View.addAppResponse(response.data.message);
-    View.addAppResponse("Redirecting to dashboard");
+    View.addAppResponse('Redirecting to dashboard');
     View.startLoadingSpinner();
 
     // Setting authentication token for current user
-    localStorage.setItem("chatzSignIn", JSON.stringify(response.data.authKey));
+    localStorage.setItem('chatzSignIn', JSON.stringify(response.data.authKey));
 
     // Redirecting user to dashboard page
-    window.location.href = "/dashboard.html";
+    window.location.href = '/dashboard.html';
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, "clr-red");
+    View.addAppResponse(errorMessage, 'clr-red');
     throw err;
   }
 }

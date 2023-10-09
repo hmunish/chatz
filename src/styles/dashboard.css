@@ -1,3 +1,5 @@
+/* stylelint-disable  no-descending-specificity */
+
 @import url(./global.css);
 
 #dashboard {
@@ -111,13 +113,13 @@ div.chat-details > * {
   font-size: 14px;
 }
 
-div.chat-details > p {
-  color: var(--text-light-color);
-}
-
 .message-details > p {
   font-size: 12px;
   color: var(--text-light-color-2);
+}
+
+div.chat-details > p {
+  color: var(--text-light-color);
 }
 
 p.message-status {
@@ -331,3 +333,5 @@ img.attach-file {
 }
 
 /* Desktop version ends */
+
+/* stylelint-enable  no-descending-specificity */

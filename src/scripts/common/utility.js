@@ -1,17 +1,17 @@
-import validator from "validator";
-import DOMPurify from "dompurify";
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
-/////// UTILITY FUNCTIONS STARTS ///////
+/// //// UTILITY FUNCTIONS STARTS ///////
 
 // Function to sanitize user input using Validator library
 export function sanitizeUserInput(input, errMsg, instance) {
   let sanitizedInput = DOMPurify.sanitize(input);
   sanitizedInput = validator.escape(input);
-  sanitizedInput = sanitizedInput.replace(/ /g, "");
+  sanitizedInput = sanitizedInput.replace(/ /g, '');
 
   if (input === sanitizedInput) return sanitizedInput;
 
-  if (instance) instance.addAppResponse(errMsg, "clr-red");
+  if (instance) instance.addAppResponse(errMsg, 'clr-red');
   return false;
 }
 

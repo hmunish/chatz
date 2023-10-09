@@ -1,12 +1,14 @@
-import { qrySlct } from "./utility";
+import { qrySlct } from './utility';
 
 export default class GlobalView {
-  loadingSpinner = qrySlct("#loading-spinner");
-  appResponseBox = qrySlct("#app-response-box");
-  appResponseMessage = qrySlct("#app-response-message");
+  loadingSpinner = qrySlct('#loading-spinner');
 
-  addAppResponse(message = "", statusClass = "clr-green") {
-    this.appResponseBox.classList.remove("dp-no");
+  appResponseBox = qrySlct('#app-response-box');
+
+  appResponseMessage = qrySlct('#app-response-message');
+
+  addAppResponse(message = '', statusClass = 'clr-green') {
+    this.appResponseBox.classList.remove('dp-no');
     this.appResponseMessage.classList = statusClass;
     this.appResponseMessage.innerHTML += `<br>${message}`;
     this.stopLoadingSpinner();
@@ -14,15 +16,15 @@ export default class GlobalView {
   }
 
   removeAppResponse() {
-    this.appResponseMessage.textContent = "";
-    this.appResponseBox.classList.add("dp-no");
+    this.appResponseMessage.textContent = '';
+    this.appResponseBox.classList.add('dp-no');
   }
 
   startLoadingSpinner() {
-    this.loadingSpinner.classList.remove("dp-no");
+    this.loadingSpinner.classList.remove('dp-no');
   }
 
   stopLoadingSpinner() {
-    this.loadingSpinner.classList.add("dp-no");
+    this.loadingSpinner.classList.add('dp-no');
   }
 }

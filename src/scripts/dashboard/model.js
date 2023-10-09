@@ -1,6 +1,6 @@
-import { sanitizeUserInput } from "../common/utility";
-import axios from "axios";
-import { BACKEND_HOST_URL } from "../common/config";
+import axios from 'axios';
+import { sanitizeUserInput } from '../common/utility';
+import { BACKEND_HOST_URL } from '../common/config';
 
 export const state = {
   user: {},
@@ -8,14 +8,14 @@ export const state = {
 
 export async function isSignedIn() {
   try {
-    const authKey = localStorage.getItem("chatzSignIn");
+    const authKey = localStorage.getItem('chatzSignIn');
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`, {
-      headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
+      headers: { authKey: JSON.parse(localStorage.getItem('chatzSignIn')) },
     });
     if (response.status === 200) {
       return true;
-    } else return false;
+    } return false;
   } catch (err) {
     return false;
   }

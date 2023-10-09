@@ -1,13 +1,13 @@
-import GlobalView from "../common/global-view";
+import GlobalView from '../common/global-view';
 
 class DashboardView extends GlobalView {
-  contactSection = document.querySelector("section.contacts");
+  contactSection = document.querySelector('section.contacts');
 
-  contactList = document.querySelector(".contacts-list");
+  contactList = document.querySelector('.contacts-list');
 
-  chatSection = document.querySelector("section.chats");
+  chatSection = document.querySelector('section.chats');
 
-  backArrow = document.querySelector("img.back-arrow");
+  backArrow = document.querySelector('img.back-arrow');
 
   constructor() {
     super();
@@ -15,14 +15,14 @@ class DashboardView extends GlobalView {
   }
 
   _addHandlerSlideContactSection() {
-    this.contactList.addEventListener("click", (e) => {
-      if (!e.target.parentElement.classList.contains("chat-details")) return;
+    this.contactList.addEventListener('click', (e) => {
+      if (!e.target.parentElement.classList.contains('chat-details')) return;
       this.renderChat();
     });
   }
 
   _addHandlerChatBackArrow() {
-    this.backArrow.addEventListener("click", this.renderChat.bind(this));
+    this.backArrow.addEventListener('click', this.renderChat.bind(this));
   }
 
   _addAllHandlers() {
@@ -31,15 +31,15 @@ class DashboardView extends GlobalView {
   }
 
   getDashboardWidth() {
-    return document.querySelector("#dashboard").clientWidth;
+    return document.querySelector('#dashboard').clientWidth;
   }
 
   slideContactSection() {
     const transformProperty = this.contactSection.style.transform;
-    if (transformProperty === "translateX(-150%)") {
-      this.contactSection.style.transform = "translateX(0)";
+    if (transformProperty === 'translateX(-150%)') {
+      this.contactSection.style.transform = 'translateX(0)';
     } else {
-      this.contactSection.style.transform = "translateX(-150%)";
+      this.contactSection.style.transform = 'translateX(-150%)';
     }
   }
 
@@ -50,7 +50,7 @@ class DashboardView extends GlobalView {
   }
 
   redirectToLogin() {
-    window.location.href = "/registration.html";
+    window.location.href = '/registration.html';
   }
 }
 
