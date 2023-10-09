@@ -2,43 +2,6 @@
 
 /* Mobile styles starts */
 
-@keyframes preloader {
-  from {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotateZ(360deg);
-  }
-}
-
-#loading-spinner {
-  width: 25px;
-  height: 25px;
-  position: fixed;
-  top: 3%;
-  right: 3%;
-  border-radius: 50%;
-  border: 1px solid;
-  border-left: none;
-  border-bottom: none;
-  animation: preloader 1s linear 0s infinite normal forwards;
-}
-
-/* App response-box starts */
-
-#app-response-box {
-  position: fixed;
-  top: 3%;
-  right: 3%;
-  background-color: var(--bg-color-1);
-  padding: 15px 50px;
-  border-radius: 11px;
-  font-size: 13px;
-}
-
-/* App response-box ends */
-
 /* Main section starts */
 
 main {
@@ -286,23 +249,3 @@ label {
 }
 
 /* Desktop styles ends */
-
-/* Global styles starts */
-
-.dp-no {
-  display: none;
-}
-
-.clr-green {
-  color: var(--green-color);
-}
-
-.clr-red {
-  color: var(--red-color);
-}
-
-button {
-  cursor: pointer;
-}
-
-/* Global styles ends */

@@ -6,8 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app/app.js",
     "dev": "nodemon app/app.js",
-    "build": "parcel build public/src/*.html",
-    "parcel-dev": "parcel public/src/*.html",
+    "build": "parcel build src/*.html",
+    "parcel-dev": "parcel src/*.html",
     "fix-style-errors": "stylelint '**/*.{css,scss}' --fix",
     "fix-script-errors": "eslint . --fix"
   },
