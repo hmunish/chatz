@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Users = require('../models/users');
+const User = require('../models/user');
 const { isValidInputs } = require('../utility/input-validation');
 
 exports.authorization = async (req, res, next) => {
@@ -14,7 +14,7 @@ exports.authorization = async (req, res, next) => {
 
     const user = jwt.verify(token, process.env.JWT_PWD);
 
-    const isUser = await Users.findOne({ where: { email: user.email } });
+    const isUser = await User.findOne({ email: user.email });
 
     if (!isUser) {
       return res.status(401).send({ message: 'User not authorized' });

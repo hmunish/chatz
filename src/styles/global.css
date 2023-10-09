@@ -1,0 +1,77 @@
+:root {
+  --primary-font: "Poppins", sans-serif;
+  --green-color: #27ae60;
+  --red-color: #eb4335;
+  --black-color: #000;
+  --white-color: #fff;
+  --text-color-1: #2d9cdb;
+  --text-light-color: #8d8d8d;
+  --text-light-color-2: #808080;
+  --link-text-color: #4285f4;
+  --bg-color-1: rgba(255, 255, 255, 0.75);
+  --bg-color-2: #e9f1ff;
+  --bg-color-3: #eee;
+  --bg-color-4: #f4f4f7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--primary-font);
+}
+
+@keyframes preloader {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+#loading-spinner {
+  width: 25px;
+  height: 25px;
+  position: fixed;
+  top: 3%;
+  right: 3%;
+  border-radius: 50%;
+  border: 1px solid;
+  border-left: none;
+  border-bottom: none;
+  animation: preloader 1s linear 0s infinite normal forwards;
+  z-index: 25;
+}
+
+/* App response-box starts */
+
+#app-response-box {
+  position: fixed;
+  top: 3%;
+  right: 3%;
+  background-color: var(--bg-color-1);
+  padding: 15px 50px;
+  border-radius: 11px;
+  font-size: 13px;
+  z-index: 50;
+}
+
+/* App response-box ends */
+
+.dp-no {
+  display: none !important;
+}
+
+.clr-green {
+  color: var(--green-color);
+}
+
+.clr-red {
+  color: var(--red-color);
+}
+
+button {
+  cursor: pointer;
+}

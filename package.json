@@ -6,8 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app/app.js",
     "dev": "nodemon app/app.js",
-    "build": "parcel build public/src/*.html",
-    "parcel-dev": "parcel public/src/*.html"
+    "build": "parcel build src/*.html",
+    "parcel-dev": "parcel src/*.html",
+    "fix-style-errors": "stylelint '**/*.{css,scss}' --fix",
+    "fix-script-errors": "eslint . --fix"
   },
   "author": "Munish Hanief Halai",
   "license": "ISC",
@@ -33,6 +35,7 @@
     "express": "^4.18.2",
     "jsdom": "^22.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.6.0",
     "mysql2": "^3.6.1",
     "sequelize": "^6.33.0",
     "validator": "^13.11.0"
