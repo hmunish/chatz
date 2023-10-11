@@ -1,13 +1,13 @@
-import axios from 'axios';
-import validator from 'validator';
-import { BACKEND_HOST_URL } from '../common/config';
-import { sanitizeUserInput } from '../common/utility';
+import axios from "axios";
+import validator from "validator";
+import { BACKEND_HOST_URL } from "../common/config";
+import { sanitizeUserInput } from "../common/utility";
 
 export async function signUp(userData) {
   try {
     const response = await axios.post(
       `${BACKEND_HOST_URL}/users/signup`,
-      userData,
+      userData
     );
     if (response.status !== 201) throw new Error(response.data.message);
     return response;
@@ -20,7 +20,7 @@ export async function signIn(userData) {
   try {
     const response = await axios.post(
       `${BACKEND_HOST_URL}/users/signin`,
-      userData,
+      userData
     );
     if (response.status !== 200) throw new Error(response.data.message);
     return response;
@@ -31,33 +31,37 @@ export async function signIn(userData) {
 
 export function isValidInputs(formDetails, viewInstance) {
   const email = sanitizeUserInput(
-    formDetails.get('email'),
-    'Invalid Email Id',
-    viewInstance,
+    formDetails.get("email"),
+    "Invalid Email Id",
+    viewInstance
   );
   const password = sanitizeUserInput(
-    formDetails.get('password'),
-    'Invalid Password',
-    viewInstance,
+    formDetails.get("password"),
+    "Invalid Password",
+    viewInstance
   );
   const phone = sanitizeUserInput(
-    formDetails.get('phone') || '0',
-    'Invalid Phone Number',
-    viewInstance,
+    formDetails.get("phone") || "0",
+    "Invalid Phone Number",
+    viewInstance
   );
   if (!email || !password || !phone) return;
-  if (!validator.isEmail(email)) { return viewInstance.addAppResponse('Invalid Email Id', 'clr-red'); }
+  if (!validator.isEmail(email)) {
+    return viewInstance.addAppResponse("Invalid Email Id", "clr-red");
+  }
   if (
-    viewInstance.registrationFormStatus === 'signup'
-    && !validator.isMobilePhone(phone)
-  ) { return viewInstance.addAppResponse('Invalid Phone Number', 'clr-red'); }
+    viewInstance.registrationFormStatus === "signup" &&
+    !validator.isMobilePhone(phone)
+  ) {
+    return viewInstance.addAppResponse("Invalid Phone Number", "clr-red");
+  }
   if (
-    !validator.isStrongPassword(password)
-    && viewInstance.registrationFormStatus === 'signup'
+    !validator.isStrongPassword(password) &&
+    viewInstance.registrationFormStatus === "signup"
   ) {
     return viewInstance.addAppResponse(
-      'Please enter strong password<br>Password Requirements:- <br>Minimum Length: 8<br>One Lower Case<br>One Upper Case<br>One Special Symbol<br>',
-      'clr-red',
+      "Please enter strong password<br>Password Requirements:- <br>Minimum Length: 8<br>One Lower Case<br>One Upper Case<br>One Special Symbol<br>",
+      "clr-red"
     );
   }
 
@@ -66,7 +70,9 @@ export function isValidInputs(formDetails, viewInstance) {
 
 export async function isSignedIn() {
   try {
-    const authKey = localStorage.getItem('chatzSignIn');
+    const authKey = sanitizeUserInput(
+      JSON.parse(localStorage.getItem("chatzSignIn"))
+    );
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`, {
       headers: { authKey },
