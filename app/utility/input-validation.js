@@ -7,6 +7,7 @@ const validator = require('validator');
 
 const sanitizeUserInput = (input, errMsg) => {
   try {
+    if (!input) return false;
     let sanitizedInput = DOMPurify.sanitize(input);
     sanitizedInput = validator.escape(input);
     sanitizedInput = sanitizedInput.replace(/ /g, '');
@@ -18,7 +19,7 @@ const sanitizeUserInput = (input, errMsg) => {
   }
 };
 
-exports.isValidInputs = (userDetails, type) => {
+const isValidInputs = (userDetails, type) => {
   try {
     if (type === 'authKey') {
       const authKey = sanitizeUserInput(userDetails || '_', 'Invalid auth key');
@@ -27,7 +28,10 @@ exports.isValidInputs = (userDetails, type) => {
     }
 
     const email = sanitizeUserInput(userDetails.email, 'Invalid Email Id');
-    const password = sanitizeUserInput(userDetails.password, 'Invalid Password');
+    const password = sanitizeUserInput(
+      userDetails.password,
+      'Invalid Password',
+    );
     const phone = sanitizeUserInput(
       userDetails.phone || '0',
       'Invalid Phone Number',
@@ -41,3 +45,5 @@ exports.isValidInputs = (userDetails, type) => {
     throw new Error(err);
   }
 };
+
+module.exports = { isValidInputs, sanitizeUserInput };

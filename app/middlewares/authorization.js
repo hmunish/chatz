@@ -7,7 +7,6 @@ exports.authorization = async (req, res, next) => {
     if (!isValidInputs(req.header('authKey'), 'authKey')) {
       return res.status(400).send({ message: 'Invalid request made' });
     }
-
     const token = req.header('authKey');
 
     if (!token) return res.status(401).send({ message: 'User not authorized' });

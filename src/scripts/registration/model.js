@@ -46,11 +46,15 @@ export function isValidInputs(formDetails, viewInstance) {
     viewInstance,
   );
   if (!email || !password || !phone) return;
-  if (!validator.isEmail(email)) { return viewInstance.addAppResponse('Invalid Email Id', 'clr-red'); }
+  if (!validator.isEmail(email)) {
+    return viewInstance.addAppResponse('Invalid Email Id', 'clr-red');
+  }
   if (
     viewInstance.registrationFormStatus === 'signup'
     && !validator.isMobilePhone(phone)
-  ) { return viewInstance.addAppResponse('Invalid Phone Number', 'clr-red'); }
+  ) {
+    return viewInstance.addAppResponse('Invalid Phone Number', 'clr-red');
+  }
   if (
     !validator.isStrongPassword(password)
     && viewInstance.registrationFormStatus === 'signup'
@@ -66,7 +70,9 @@ export function isValidInputs(formDetails, viewInstance) {
 
 export async function isSignedIn() {
   try {
-    const authKey = localStorage.getItem('chatzSignIn');
+    const authKey = sanitizeUserInput(
+      JSON.parse(localStorage.getItem('chatzSignIn')),
+    );
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`, {
       headers: { authKey },

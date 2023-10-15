@@ -1,3 +1,14 @@
+::-webkit-scrollbar {
+  width: 2px;
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--green-color);
+  height: 15px;
+  border-radius: 5px;
+}
+
 :root {
   --primary-font: "Poppins", sans-serif;
   --green-color: #27ae60;
@@ -70,6 +81,10 @@
 
 .clr-red {
   color: var(--red-color);
+}
+
+.icon {
+  cursor: pointer;
 }
 
 button {

@@ -18,8 +18,42 @@
         <p id="app-response-message"></p>
       </div>
       <div id="loading-spinner" class="dp-no"></div>
+      <div class="start-chat">
+        <div id="start-chat-header-wrapper">
+          <p id="close-select-contact" class="icon">X</p>
+          <p>Select contact to start chat</p>
+        </div>
+        <input
+          type="search"
+          placeholder="Search Contacts"
+          id="start-chat-search-contacts"
+        />
+        <div class="start-chat-search-results">
+          <div>
+            <img src="./assets/contact-1.png" alt="" />
+            <div>
+              <h2>Travis Barker</h2>
+              <p>Busy</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="set-dp-name dp-no">
+        <div id="set-dp-name-header-wrapper">
+          <p id="close-set-dp-name" class="icon">X</p>
+          <p>Set display name</p>
+        </div>
+        <input
+          type="text"
+          placeholder="Please enter your display name"
+          id="set-dp-name-text-input"
+        />
+      </div>
+      <!-- <section class="sidebar">
+        <img class="sidebar" src="./assets/contact-1.png" alt="DP" />
+      </section> -->
       <section class="contacts">
-        <section class="sidebar"></section>
         <div class="header">
           <h1 class="title">Messages</h1>
           <input type="search" name="contactSearch" placeholder="Search" />
@@ -43,6 +77,7 @@
             </div>
           </div>
         </div>
+        <button type="button" class="start-chat">+</button>
       </section>
       <section class="chats">
         <div class="header">

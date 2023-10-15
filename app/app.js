@@ -1,10 +1,11 @@
+const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const userRouter = require('./routes/user.js');
+const chatRouter = require('./routes/chat.js');
 const sequelize = require('./utility/database.js');
 
 const app = express();
@@ -21,6 +22,9 @@ app.use(bodyParser.json());
 
 // Users router
 app.use('/users', userRouter);
+
+// Chats router
+app.use('/chats', chatRouter);
 
 // Responding with 404 not found error if no route matched by the request
 app.use('/', (req, res) => {

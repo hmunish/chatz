@@ -27,4 +27,8 @@ export default class GlobalView {
   stopLoadingSpinner() {
     this.loadingSpinner.classList.add('dp-no');
   }
+
+  renderNoResultsFound(element) {
+    element.innerHTML = "<p style='padding: 15px'>No results found</p>";
+  }
 }
