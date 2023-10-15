@@ -1,24 +1,24 @@
-import GlobalView from "../common/global-view";
+import GlobalView from '../common/global-view';
 
 class DashboardView extends GlobalView {
-  contactSection = document.querySelector("section.contacts");
+  contactSection = document.querySelector('section.contacts');
 
-  contactList = document.querySelector(".contacts-list");
+  contactList = document.querySelector('.contacts-list');
 
-  chatSection = document.querySelector("section.chats");
+  chatSection = document.querySelector('section.chats');
 
-  backArrow = document.querySelector("img.back-arrow");
+  backArrow = document.querySelector('img.back-arrow');
 
-  startChatBtn = document.querySelector("button.start-chat");
+  startChatBtn = document.querySelector('button.start-chat');
 
-  startChat = document.querySelector("div.start-chat");
+  startChat = document.querySelector('div.start-chat');
 
-  startChatCloseIcon = document.querySelector("#close-select-contact");
+  startChatCloseIcon = document.querySelector('#close-select-contact');
 
-  searchUserInput = document.querySelector("#start-chat-search-contacts");
+  searchUserInput = document.querySelector('#start-chat-search-contacts');
 
   startChatUserSearchResults = document.querySelector(
-    "div.start-chat-search-results"
+    'div.start-chat-search-results',
   );
 
   constructor() {
@@ -27,25 +27,25 @@ class DashboardView extends GlobalView {
   }
 
   _addHandlerSlideContactSection() {
-    this.contactList.addEventListener("click", (e) => {
-      if (!e.target.parentElement.classList.contains("chat-details")) return;
+    this.contactList.addEventListener('click', (e) => {
+      if (!e.target.parentElement.classList.contains('chat-details')) return;
       this.renderChat();
     });
   }
 
   _addHandlerChatBackArrow() {
-    this.backArrow.addEventListener("click", this.renderChat.bind(this));
+    this.backArrow.addEventListener('click', this.renderChat.bind(this));
   }
 
   _addHandlersStartChatToggle() {
     this.startChatBtn.addEventListener(
-      "click",
-      this.toggleStartChatBox.bind(this)
+      'click',
+      this.toggleStartChatBox.bind(this),
     );
 
     this.startChatCloseIcon.addEventListener(
-      "click",
-      this.toggleStartChatBox.bind(this)
+      'click',
+      this.toggleStartChatBox.bind(this),
     );
   }
 
@@ -57,15 +57,14 @@ class DashboardView extends GlobalView {
   }
 
   addHandlerUserSearch(handler) {
-    this.searchUserInput.addEventListener("keyup", (e) => {
+    this.searchUserInput.addEventListener('keyup', (e) => {
       handler(e.target.value);
     });
   }
 
   renderStartChatUserSearch(arr) {
-    if (arr.length === 0)
-      return this.renderNoResultsFound(this.startChatUserSearchResults);
-    let markup = ``;
+    if (arr.length === 0) { return this.renderNoResultsFound(this.startChatUserSearchResults); }
+    let markup = '';
     arr.forEach((i) => {
       markup += `
       <div>
@@ -82,18 +81,18 @@ class DashboardView extends GlobalView {
 
   addHandlerStartChat(handler) {
     this.startChatUserSearchResults.addEventListener(
-      "click",
+      'click',
       (e) => {
         if (
           e.target.parentElement.classList.contains(
-            "user-search-results-details-box"
+            'user-search-results-details-box',
           )
         ) {
           const { emailid, id } = e.target.parentElement.dataset;
           handler(emailid, id);
         }
       },
-      true
+      true,
     );
   }
 
@@ -111,11 +110,11 @@ class DashboardView extends GlobalView {
     </div>
   </div>
     `;
-    this.contactList.insertAdjacentHTML("afterbegin", markup);
+    this.contactList.insertAdjacentHTML('afterbegin', markup);
   }
 
   renderChatContacts(user) {
-    let markup = ``;
+    let markup = '';
 
     user.chats.forEach((chat) => {
       console.log(chat);
@@ -125,9 +124,9 @@ class DashboardView extends GlobalView {
     <div class="chat-details">
       <h2>${chat.users[0]}</h2>
       <p>${
-        chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0]
-          ?.message || ""
-      }</p>
+  chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0]
+    ?.message || ''
+}</p>
     </div>
     <div class="message-details">
       <p class="message-time">16:45</p>
@@ -141,19 +140,19 @@ class DashboardView extends GlobalView {
   }
 
   toggleStartChatBox() {
-    this.startChat.classList.toggle("dp-no");
+    this.startChat.classList.toggle('dp-no');
   }
 
   getDashboardWidth() {
-    return document.querySelector("#dashboard").clientWidth;
+    return document.querySelector('#dashboard').clientWidth;
   }
 
   slideContactSection() {
     const transformProperty = this.contactSection.style.transform;
-    if (transformProperty === "translateX(-150%)") {
-      this.contactSection.style.transform = "translateX(0)";
+    if (transformProperty === 'translateX(-150%)') {
+      this.contactSection.style.transform = 'translateX(0)';
     } else {
-      this.contactSection.style.transform = "translateX(-150%)";
+      this.contactSection.style.transform = 'translateX(-150%)';
     }
   }
 
@@ -164,7 +163,7 @@ class DashboardView extends GlobalView {
   }
 
   redirectToLogin() {
-    window.location.href = "/registration.html";
+    window.location.href = '/registration.html';
   }
 }
 

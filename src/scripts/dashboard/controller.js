@@ -1,10 +1,12 @@
-import View from "./view.js";
-import { state, isSignedIn, searchUsers, createChat } from "./model.js";
+import View from './view.js';
+import {
+  state, isSignedIn, searchUsers, createChat,
+} from './model.js';
 
 async function handleIsSignedIn() {
   try {
     const authorized = await isSignedIn();
-    if (!authorized) throw new Error("User not authorized");
+    if (!authorized) throw new Error('User not authorized');
     View.renderChatContacts(state.user);
   } catch (err) {
     View.redirectToLogin();
@@ -17,7 +19,7 @@ async function handleUserSearch(searchQuery) {
     const results = await searchUsers(searchQuery);
     View.renderStartChatUserSearch(results);
   } catch (err) {
-    View.addAppResponse(err.message, "clr-red");
+    View.addAppResponse(err.message, 'clr-red');
   }
 }
 
@@ -27,7 +29,7 @@ async function handleCreateChat(contactEmailId, contactId) {
     View.renderNewContact(results);
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, "clr-red");
+    View.addAppResponse(errorMessage, 'clr-red');
   }
 }
 
@@ -38,7 +40,7 @@ async function init() {
     View.addHandlerStartChat(handleCreateChat);
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, "clr-red");
+    View.addAppResponse(errorMessage, 'clr-red');
   }
 }
 

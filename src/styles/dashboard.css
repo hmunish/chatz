@@ -147,7 +147,7 @@ button.start-chat {
   border-radius: 50%;
   border: none;
   background-color: var(--green-color);
-  color: #ffffff;
+  color: #fff;
   font-size: 23px;
   margin-bottom: 15px;
 }
