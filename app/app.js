@@ -13,7 +13,14 @@ const userRouter = require("./routes/user.js");
 const chatRouter = require("./routes/chat.js");
 
 io.on("connection", (socket) => {
-  console.log("Socket connected");
+  socket.on("join-group", (groupId) => {
+    socket.join(groupId);
+  });
+});
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
 });
 
 // Serving static files from dist folder

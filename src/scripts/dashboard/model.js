@@ -1,6 +1,9 @@
-import axios from 'axios';
-import { sanitizeUserInput } from '../common/utility';
-import { BACKEND_HOST_URL } from '../common/config';
+import axios from "axios";
+import { sanitizeUserInput } from "../common/utility";
+import { BACKEND_HOST_URL } from "../common/config";
+import { io } from "socket.io-client";
+
+export const socket = io(`${BACKEND_HOST_URL}`);
 
 export const state = {
   user: {},
@@ -9,11 +12,11 @@ export const state = {
 export async function isSignedIn() {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
+      JSON.parse(localStorage.getItem("chatzSignIn"))
     );
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`, {
-      headers: { authKey: JSON.parse(localStorage.getItem('chatzSignIn')) },
+      headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
     });
     if (response.status === 200) {
       state.user = response.data.user;
@@ -28,17 +31,17 @@ export async function isSignedIn() {
 export async function searchUsers(searchQuery) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
+      JSON.parse(localStorage.getItem("chatzSignIn"))
     );
     searchQuery = sanitizeUserInput(searchQuery);
 
-    if (!authKey || !searchQuery) throw Error('Invalid inputs');
+    if (!authKey || !searchQuery) throw Error("Invalid inputs");
     const response = await axios.post(
       `${BACKEND_HOST_URL}/users/search`,
       { searchQuery },
       {
-        headers: { authKey: JSON.parse(localStorage.getItem('chatzSignIn')) },
-      },
+        headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
+      }
     );
     return response.data;
   } catch (err) {
@@ -49,19 +52,21 @@ export async function searchUsers(searchQuery) {
 export async function createChat(contactEmailId, contactId) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
+      JSON.parse(localStorage.getItem("chatzSignIn"))
     );
     contactEmailId = sanitizeUserInput(contactEmailId);
     contactId = sanitizeUserInput(contactId);
 
-    if (!authKey || !contactEmailId || !contactId) { throw Error('Invalid inputs'); }
+    if (!authKey || !contactEmailId || !contactId) {
+      throw Error("Invalid inputs");
+    }
 
     const res = await axios.post(
       `${BACKEND_HOST_URL}/chats/create`,
       { contactEmailId, contactId },
       {
         headers: { authKey },
-      },
+      }
     );
     return res.data;
   } catch (err) {
