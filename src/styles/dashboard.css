@@ -2,6 +2,19 @@
 
 @import url(./global.css);
 
+section.sidebar {
+  width: 54px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+}
+
+img.sidebar {
+  cursor: pointer;
+}
+
 #dashboard {
   width: 100%;
   height: 100vh;
@@ -139,7 +152,8 @@ button.start-chat {
   margin-bottom: 15px;
 }
 
-div.start-chat {
+div.start-chat,
+div.set-dp-name {
   width: 350px;
   height: 350px;
   border-radius: 11px;
@@ -157,7 +171,12 @@ div.start-chat {
   gap: 10px;
 }
 
-#start-chat-header-wrapper {
+div.set-dp-name {
+  height: 150px;
+}
+
+#start-chat-header-wrapper,
+#set-dp-name-header-wrapper {
   width: 100%;
   height: 50px;
   padding: 15px;
@@ -170,11 +189,13 @@ div.start-chat {
   border-top-left-radius: 11px;
 }
 
-#close-select-contact {
+#close-select-contact,
+#close-set-dp-name {
   font-weight: bolder;
 }
 
-#start-chat-search-contacts {
+#start-chat-search-contacts,
+#set-dp-name-text-input {
   width: 90%;
   background-color: var(--white-color);
   border: none;

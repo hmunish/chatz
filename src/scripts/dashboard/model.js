@@ -16,7 +16,7 @@ export async function isSignedIn() {
       headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
     });
     if (response.status === 200) {
-      console.log(response);
+      state.user = response.data.user;
       return true;
     }
     return false;
@@ -46,18 +46,21 @@ export async function searchUsers(searchQuery) {
   }
 }
 
-export async function createChat(contactId) {
+export async function createChat(contactEmailId, contactId) {
   try {
     const authKey = sanitizeUserInput(
       JSON.parse(localStorage.getItem("chatzSignIn"))
     );
+    console.log(contactId);
+    contactEmailId = sanitizeUserInput(contactEmailId);
     contactId = sanitizeUserInput(contactId);
 
-    if (!authKey || !contactId) throw Error("Invalid inputs");
+    if (!authKey || !contactEmailId || !contactId)
+      throw Error("Invalid inputs");
 
     const res = await axios.post(
       `${BACKEND_HOST_URL}/chats/create`,
-      { contactId },
+      { contactEmailId, contactId },
       {
         headers: { authKey },
       }

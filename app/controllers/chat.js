@@ -10,10 +10,16 @@ const addChatIdToUser = async (userId, chatId) => {
   }
 };
 
-const addUserIdToChatUsers = async (userId1, userId2) => {
+const addUserEmailIdToChatUsers = async (userEmailId1, userEmailId2) => {
   try {
-    await User.findByIdAndUpdate(userId1, { $push: { chatUsers: userId2 } });
-    await User.findByIdAndUpdate(userId2, { $push: { chatUsers: userId1 } });
+    await User.findOneAndUpdate(
+      { email: userEmailId1 },
+      { $push: { chatUsers: userEmailId2 } }
+    );
+    await User.findOneAndUpdate(
+      { email: userEmailId2 },
+      { $push: { chatUsers: userEmailId1 } }
+    );
   } catch (err) {
     throw err;
   }
@@ -21,32 +27,29 @@ const addUserIdToChatUsers = async (userId1, userId2) => {
 
 exports.createChat = async (req, res) => {
   try {
+    const contactEmailId = sanitizeUserInput(req.body.contactEmailId);
     const contactId = sanitizeUserInput(req.body.contactId);
-    if (!contactId)
+    if (!contactEmailId || !contactId)
       return res.status(400).send({ message: "Invalid request made" });
 
     // Check if the current user already has a chat with the requested user
-    // const existingChatUsers = await User.findById(req.user._id).select(
-    //   "chatUsers -_id"
-    // );
+    const existingChatUsers = await User.findById(req.user._id).select(
+      "chatUsers -_id"
+    );
 
     // if (existingChatUsers.chatUsers.find((id) => id == contactId))
     //   return res
     //     .status(409)
     //     .send({ message: "Chat with this user already exist" });
 
-    const newChat = new Chat({ users: [req.user._id, contactId] });
+    const newChat = new Chat({ users: [req.user.email, contactEmailId] });
 
     await newChat.save();
     await Promise.allSettled([
       addChatIdToUser(req.user._id, newChat._id),
       addChatIdToUser(contactId, newChat._id),
-      addUserIdToChatUsers(req.user._id, contactId),
+      addUserEmailIdToChatUsers(req.user.email, contactEmailId),
     ]);
-    // const newChatDetails = await Chat.findById(newChat._id).populate(
-    //   "users",
-    //   "email"
-    // );
     await newChat.populate("users", "email");
     res.send(newChat);
   } catch (err) {

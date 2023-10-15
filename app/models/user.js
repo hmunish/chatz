@@ -23,8 +23,8 @@ const userSchema = new Schema(
       default: [],
     },
     chatUsers: {
-      type: [Schema.Types.ObjectId],
-      ref: "user",
+      type: [String],
+      required: true,
       default: [],
     },
   },

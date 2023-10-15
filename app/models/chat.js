@@ -5,23 +5,21 @@ const { Schema } = mongoose;
 const chatSchema = new Schema(
   {
     users: {
-      type: [Schema.Types.ObjectId],
+      type: [String],
       required: true,
-      ref: "user",
     },
     messages: {
       type: [
         {
-          user: {
-            type: Schema.Types.ObjectId,
+          userEmail: {
+            type: String,
             required: true,
-            ref: "user",
           },
           message: {
             type: String,
             required: true,
           },
-          createdAt: {
+          messageSentAt: {
             type: Date,
             required: true,
             default: Date.now,

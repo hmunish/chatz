@@ -13,12 +13,7 @@ exports.authorization = async (req, res, next) => {
 
     const user = jwt.verify(token, process.env.JWT_PWD);
 
-    const isUser = await User.findOne({ email: user.email })
-      .select("email")
-      .populate({
-        path: "chats",
-        populate: { path: "users", select: "email" },
-      });
+    const isUser = await User.findOne({ email: user.email });
 
     if (!isUser) {
       return res.status(401).send({ message: "User not authorized" });

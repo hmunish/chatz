@@ -6,6 +6,7 @@ async function handleIsSignedIn() {
   try {
     const authorized = await isSignedIn();
     if (!authorized) throw new Error("User not authorized");
+    console.log(state);
   } catch (err) {
     View.redirectToLogin();
   }
@@ -21,9 +22,9 @@ async function handleUserSearch(searchQuery) {
   }
 }
 
-async function handleCreateChat(contactId) {
+async function handleCreateChat(contactEmailId, contactId) {
   try {
-    const results = await createChat(contactId);
+    const results = await createChat(contactEmailId, contactId);
     View.renderNewContact(results);
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;

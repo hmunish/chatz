@@ -70,7 +70,7 @@ class DashboardView extends GlobalView {
       markup += `
       <div>
       <img src="#" alt="Contact" />
-      <div class="user-search-results-details-box" data-id="${i._id}">
+      <div class="user-search-results-details-box" data-emailid="${i.email}" data-id="${i._id}">
         <h2>${i.email}</h2>
         <p>Busy</p>
       </div>
@@ -89,7 +89,8 @@ class DashboardView extends GlobalView {
             "user-search-results-details-box"
           )
         ) {
-          handler(e.target.parentElement.dataset.id);
+          const { emailid, id } = e.target.parentElement.dataset;
+          handler(emailid, id);
         }
       },
       true
@@ -97,11 +98,12 @@ class DashboardView extends GlobalView {
   }
 
   renderNewContact(data) {
+    console.log(data);
     const markup = `
     <div class="contact-details" data-id="${data._id}">
     <img src="/contact-1.614cf4ca.png" alt="">
     <div class="chat-details">
-      <h2>${data.users[0].email}</h2>
+      <h2>${data.users[0]}</h2>
       <p>Travis Barker is a very nice &amp; humble man</p>
     </div>
     <div class="message-details">
