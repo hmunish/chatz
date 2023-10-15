@@ -37,14 +37,17 @@ exports.createChat = async (req, res) => {
       "chatUsers -_id"
     );
 
-    // if (existingChatUsers.chatUsers.find((id) => id == contactId))
-    //   return res
-    //     .status(409)
-    //     .send({ message: "Chat with this user already exist" });
+    if (
+      existingChatUsers.chatUsers.find((emailId) => emailId == contactEmailId)
+    )
+      return res
+        .status(409)
+        .send({ message: "Chat with this user already exist" });
 
     const newChat = new Chat({ users: [req.user.email, contactEmailId] });
 
     await newChat.save();
+
     await Promise.allSettled([
       addChatIdToUser(req.user._id, newChat._id),
       addChatIdToUser(contactId, newChat._id),

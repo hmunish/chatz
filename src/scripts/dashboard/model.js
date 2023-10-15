@@ -51,7 +51,6 @@ export async function createChat(contactEmailId, contactId) {
     const authKey = sanitizeUserInput(
       JSON.parse(localStorage.getItem("chatzSignIn"))
     );
-    console.log(contactId);
     contactEmailId = sanitizeUserInput(contactEmailId);
     contactId = sanitizeUserInput(contactId);
 
@@ -65,7 +64,6 @@ export async function createChat(contactEmailId, contactId) {
         headers: { authKey },
       }
     );
-    console.log(res);
     return res.data;
   } catch (err) {
     throw err;

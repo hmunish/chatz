@@ -1,4 +1,3 @@
-import axios from "axios";
 import View from "./view.js";
 import { state, isSignedIn, searchUsers, createChat } from "./model.js";
 
@@ -6,7 +5,7 @@ async function handleIsSignedIn() {
   try {
     const authorized = await isSignedIn();
     if (!authorized) throw new Error("User not authorized");
-    console.log(state);
+    View.renderChatContacts(state.user);
   } catch (err) {
     View.redirectToLogin();
   }

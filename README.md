@@ -57,3 +57,13 @@ DRY
 Pure Functions
 YAGNI
 KISS
+
+On load join room
+As I submit message the message will be pushed in the database & an event will be released for the specific room
+
+As I recieve submitMessage request I will push the message in specific chat id
+Will emit a message in the contact user email room
+
+function emitServerMessageUpdateMessage
+function submitMessage
+function sendLastMessage

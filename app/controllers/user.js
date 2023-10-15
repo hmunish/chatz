@@ -85,16 +85,11 @@ exports.isSignedIn = async (req, res, next) => {
         options: {
           sort: [{ updatedAt: "-1" }],
         },
-        populate: { path: "users", select: "email" },
       });
 
     if (!isUser) {
       return res.status(401).send({ message: "User not authorized" });
     }
-
-    await chat.findByIdAndUpdate("6526dd37144518191369ecab", {
-      $push: { messages: { userEmail: isUser.email, message: "Test message" } },
-    });
 
     res.status(200).send({ user: isUser, message: "User already authorized" });
   } catch (err) {

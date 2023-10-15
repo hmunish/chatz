@@ -98,13 +98,12 @@ class DashboardView extends GlobalView {
   }
 
   renderNewContact(data) {
-    console.log(data);
     const markup = `
     <div class="contact-details" data-id="${data._id}">
     <img src="/contact-1.614cf4ca.png" alt="">
     <div class="chat-details">
       <h2>${data.users[0]}</h2>
-      <p>Travis Barker is a very nice &amp; humble man</p>
+      <p></p>
     </div>
     <div class="message-details">
       <p class="message-time">16:45</p>
@@ -113,6 +112,32 @@ class DashboardView extends GlobalView {
   </div>
     `;
     this.contactList.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  renderChatContacts(user) {
+    let markup = ``;
+
+    user.chats.forEach((chat) => {
+      console.log(chat);
+      markup += `
+      <div class="contact-details" data-id="${chat._id}">
+    <img src="/contact-1.614cf4ca.png" alt="">
+    <div class="chat-details">
+      <h2>${chat.users[0]}</h2>
+      <p>${
+        chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0]
+          ?.message || ""
+      }</p>
+    </div>
+    <div class="message-details">
+      <p class="message-time">16:45</p>
+      <p class="message-status">✓</p>
+    </div>
+  </div>
+      `;
+    });
+
+    this.contactList.innerHTML = markup;
   }
 
   toggleStartChatBox() {
