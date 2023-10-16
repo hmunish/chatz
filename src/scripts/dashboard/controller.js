@@ -1,18 +1,51 @@
 import View from "./view.js";
-import { socket, state, isSignedIn, searchUsers, createChat } from "./model.js";
+import {
+  socket,
+  state,
+  isSignedIn,
+  searchUsers,
+  createChat,
+  setChatId,
+  addMessage,
+  getCurrentChats,
+  sendMessage,
+  insertNewMessage,
+} from "./model.js";
 
 socket.on("connect", () => {
   console.log("Socket Connected");
   socket.emit("join-group", state.user.email);
 
-  socket.on("group-joined", () => {
-    console.log("Group Joined");
-  });
-
-  socket.on("message", () => {
-    console.log("message recieved");
+  socket.on("message", (chatId, message) => {
+    handleRecievedMessage(chatId, message);
+    console.log("message recieved by: ", message, " on chat id ", chatId);
   });
 });
+
+function handleRecievedMessage(chatId, newMessage) {
+  insertNewMessage(chatId, newMessage);
+
+  View.renderChatContacts(state.user);
+  // Checking if new message is recieved for the currently displayed chat
+  if (chatId === state.chatId) {
+    View.renderChatMessages(getCurrentChats(), state.user.email);
+  } else {
+    View.addNewMessageHighlight(chatId);
+  }
+}
+
+async function handleSendMessage(message) {
+  try {
+    const isNewMessage = await sendMessage(message);
+
+    if (isNewMessage) {
+      View.renderChatMessages(getCurrentChats(), state.user.email);
+      View.renderChatContacts(state.user);
+    }
+  } catch (err) {
+    View.addAppResponse(err.message, "clr-red");
+  }
+}
 
 async function handleIsSignedIn() {
   try {
@@ -45,11 +78,23 @@ async function handleCreateChat(contactEmailId, contactId) {
   }
 }
 
+async function handleLoadChat(chatId) {
+  if (chatId === state.chatId) return;
+  setChatId(chatId);
+  View.renderChatMessages(getCurrentChats(), state.user.email);
+}
+
 async function init() {
   try {
     await handleIsSignedIn();
     View.addHandlerUserSearch(handleUserSearch);
     View.addHandlerStartChat(handleCreateChat);
+    View.addHanlderLoadChat(handleLoadChat);
+    View.addHandlerFormSendMessage(handleSendMessage);
+
+    console.log(state);
+
+    // addMessage("652c34979a86aa82a9472f9f", "tested");
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
     View.addAppResponse(errorMessage, "clr-red");

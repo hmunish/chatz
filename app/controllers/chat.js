@@ -62,3 +62,32 @@ exports.createChat = async (req, res) => {
     res.status(501).send({ message: "Error creating new chat" });
   }
 };
+
+exports.addMessage = async (req, res, next) => {
+  try {
+    const chatId = sanitizeUserInput(req.body.chatId);
+    const message = sanitizeUserInput(req.body.message);
+
+    if (!chatId || !message) {
+      return res.status(400).send({ message: "Invalid request made" });
+    }
+
+    // Adding message to the chat
+    const chat = await Chat.findByIdAndUpdate(chatId, {
+      $push: { messages: { userEmail: req.user.email, message: message } },
+    });
+
+    const { messages } = await Chat.findById(chatId).select("messages");
+
+    chat.users.forEach((emailId) => {
+      if (emailId !== req.user.email) {
+        req.io.to(emailId).emit("message", chatId, messages.slice(-1)[0]);
+      }
+    });
+
+    res.send({ newMessage: messages.slice(-1)[0] });
+  } catch (err) {
+    console.log(err);
+    res.status(501).send({ message: "Error submitting message" });
+  }
+};

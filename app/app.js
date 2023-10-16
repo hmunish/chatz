@@ -18,6 +18,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// Setting IO instance on every incoming request object
 app.use((req, res, next) => {
   req.io = io;
   next();

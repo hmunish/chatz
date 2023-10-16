@@ -63,7 +63,27 @@ As I submit message the message will be pushed in the database & an event will b
 
 As I recieve submitMessage request I will push the message in specific chat id
 Will emit a message in the contact user email room
-
 function emitServerMessageUpdateMessage
 function submitMessage
 function sendLastMessage
+
+contactList.onClick(handler(chatId))
+
+state.user.chat.find(chatId)
+
+loadChat(chat){
+
+}
+
+On request of addMessage ->
+Add message to the database of the current chat id
+release an event to room of the other user for the new message
+
+addMessage(req, res, next) => {
+req.body.chatId
+req.body.message
+add message to chat id
+
+    release event to contactId group with message, chatId
+
+}

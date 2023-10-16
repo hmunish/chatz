@@ -21,6 +21,10 @@ class DashboardView extends GlobalView {
     "div.start-chat-search-results"
   );
 
+  chatBox = document.querySelector("div.chat-box");
+
+  sendMessageForm = document.querySelector("form.send-message");
+
   constructor() {
     super();
     this._addAllHandlers();
@@ -56,10 +60,63 @@ class DashboardView extends GlobalView {
     this.addHandlerStartChat();
   }
 
+  // Method to add handler to send message form submit event
+  addHandlerFormSendMessage(handler) {
+    this.sendMessageForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handler(e.target.message.value);
+      e.target.reset();
+    });
+  }
+
+  addHanlderLoadChat(handler) {
+    this.contactList.addEventListener("click", (e) => {
+      const chatId = e.target.closest(".contact-details")?.dataset.id;
+      if (chatId) {
+        handler(chatId);
+      }
+    });
+  }
+
   addHandlerUserSearch(handler) {
     this.searchUserInput.addEventListener("keyup", (e) => {
       handler(e.target.value);
     });
+  }
+
+  renderChatMessages(chats, myEmailId) {
+    let markup = ``;
+
+    chats[0].messages.forEach((msg) => {
+      if (msg.userEmail === myEmailId) {
+        markup += `
+      <div class="message-holder own-message">
+        <p>${msg.message}</p>
+        <p class="message-time">
+        ${msg.messageSentAt} <span class="message-status">&check;</span>
+        </p>
+      </div>
+        `;
+      } else {
+        markup += `
+        <div class="contact-message-wrapper">
+        <img src="./assets/contact-1.png" alt="" />
+        <div class="message-holder contact-message">
+          <p>${msg.message}</p>
+          <p class="message-time">
+            <span class="message-status"></span> ${msg.messageSentAt.slice(
+              11,
+              16
+            )}
+          </p>
+        </div>
+      </div>
+        `;
+      }
+    });
+
+    this.chatBox.innerHTML = markup;
+    this.chatBox.scrollTop = this.chatBox.scrollHeight;
   }
 
   renderStartChatUserSearch(arr) {
@@ -99,7 +156,6 @@ class DashboardView extends GlobalView {
   }
 
   renderNewContact(data, emailId) {
-    console.log(data);
     const markup = `-
     <div class="contact-details" data-id="${data._id}">
     <img src="/contact-1.614cf4ca.png" alt="">
@@ -121,25 +177,40 @@ class DashboardView extends GlobalView {
 
     user.chats.forEach((chat) => {
       console.log(chat);
+      const lastMessage =
+        chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
       markup += `
       <div class="contact-details" data-id="${chat._id}">
     <img src="/contact-1.614cf4ca.png" alt="">
     <div class="chat-details">
       <h2>${chat.users.filter((email) => email !== user.email)}</h2>
-      <p>${
-        chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0]
-          ?.message || ""
-      }</p>
+      <p>${lastMessage?.message || ""}</p>
     </div>
     <div class="message-details">
-      <p class="message-time">16:45</p>
-      <p class="message-status">✓</p>
+      <p class="message-time">${
+        lastMessage?.messageSentAt.slice(11, 16) || chat.createdAt.slice(11, 16)
+      }</p>
+      <div class="new-message-alert dp-no"></div>
     </div>
   </div>
       `;
     });
 
     this.contactList.innerHTML = markup;
+  }
+
+  addNewMessageHighlight(chatId) {
+    this.contactList
+      .querySelector(`[data-id="${chatId}"]`)
+      .querySelector("div.new-message-alert")
+      .classList.remove("dp-no");
+  }
+
+  removeNewMessageHighlight(chatId) {
+    this.contactList
+      .querySelector(`[data-id="${chatId}"]`)
+      .querySelector("div.new-message-alert")
+      .classList.add("dp-no");
   }
 
   toggleStartChatBox() {
