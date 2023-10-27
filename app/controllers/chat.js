@@ -1,6 +1,9 @@
 const Chat = require("../models/chat");
 const User = require("../models/user");
-const { sanitizeUserInput } = require("../utility/input-validation");
+const {
+  sanitizeUserInput,
+  sanitizeChatMessage,
+} = require("../utility/input-validation");
 
 const addChatIdToUser = async (userId, chatId) => {
   try {
@@ -33,6 +36,14 @@ exports.createChat = async (req, res) => {
       return res.status(400).send({ message: "Invalid request made" });
     }
 
+    // Check if user is trying to create chat with itself
+    if (req.user.email === contactEmailId) {
+      // If yes return response with 400 code
+      return res
+        .status(400)
+        .send({ message: "User cannot create chat with itself" });
+    }
+
     // Check if the current user already has a chat with the requested user
     const existingChatUsers = await User.findById(req.user._id).select(
       "chatUsers -_id"
@@ -56,6 +67,10 @@ exports.createChat = async (req, res) => {
       addUserEmailIdToChatUsers(req.user.email, contactEmailId),
     ]);
     await newChat.populate("users", "email");
+
+    // Emitting newChat event to second user in the chat
+    req.io.to(contactEmailId).emit("newChat", newChat);
+
     res.send(newChat);
   } catch (err) {
     console.log(err);
@@ -66,7 +81,7 @@ exports.createChat = async (req, res) => {
 exports.addMessage = async (req, res, next) => {
   try {
     const chatId = sanitizeUserInput(req.body.chatId);
-    const message = sanitizeUserInput(req.body.message);
+    const message = sanitizeChatMessage(req.body.message);
 
     if (!chatId || !message) {
       return res.status(400).send({ message: "Invalid request made" });

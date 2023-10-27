@@ -1,11 +1,15 @@
 import GlobalView from "../common/global-view";
 
 class DashboardView extends GlobalView {
+  userEmailTitle = document.querySelector("div.header > h1.title");
+
   contactSection = document.querySelector("section.contacts");
 
   contactList = document.querySelector(".contacts-list");
 
   chatSection = document.querySelector("section.chats");
+
+  chatContactDetailsBox = document.querySelector(".chat-contact-details");
 
   backArrow = document.querySelector("img.back-arrow");
 
@@ -71,10 +75,12 @@ class DashboardView extends GlobalView {
 
   addHanlderLoadChat(handler) {
     this.contactList.addEventListener("click", (e) => {
-      const chatId = e.target.closest(".contact-details")?.dataset.id;
-      if (chatId) {
-        handler(chatId);
-      }
+      const contactDetailsBox = e.target.closest(".contact-details");
+      if (!contactDetailsBox) return;
+      const chatId = contactDetailsBox.dataset.id;
+      const contactEmail = contactDetailsBox.querySelector("h2").textContent;
+      this.renderChatContactEmail(contactEmail);
+      handler(chatId);
     });
   }
 
@@ -93,7 +99,10 @@ class DashboardView extends GlobalView {
       <div class="message-holder own-message">
         <p>${msg.message}</p>
         <p class="message-time">
-        ${msg.messageSentAt} <span class="message-status">&check;</span>
+        ${msg.messageSentAt.slice(
+          12,
+          16
+        )} <span class="message-status">&check;</span>
         </p>
       </div>
         `;
@@ -105,7 +114,7 @@ class DashboardView extends GlobalView {
           <p>${msg.message}</p>
           <p class="message-time">
             <span class="message-status"></span> ${msg.messageSentAt.slice(
-              11,
+              12,
               16
             )}
           </p>
@@ -156,7 +165,7 @@ class DashboardView extends GlobalView {
   }
 
   renderNewContact(data, emailId) {
-    const markup = `-
+    const markup = `
     <div class="contact-details" data-id="${data._id}">
     <img src="/contact-1.614cf4ca.png" alt="">
     <div class="chat-details">
@@ -164,8 +173,9 @@ class DashboardView extends GlobalView {
       <p></p>
     </div>
     <div class="message-details">
-      <p class="message-time">16:45</p>
-      <p class="message-status">✓</p>
+    <p class="message-time">${data.createdAt.slice(12, 16)}</p>
+    <p class="message-status"></p>
+    <div class="new-message-alert dp-no"></div>
     </div>
   </div>
     `;
@@ -188,7 +198,7 @@ class DashboardView extends GlobalView {
     </div>
     <div class="message-details">
       <p class="message-time">${
-        lastMessage?.messageSentAt.slice(11, 16) || chat.createdAt.slice(11, 16)
+        lastMessage?.messageSentAt.slice(12, 16) || chat.createdAt.slice(12, 16)
       }</p>
       <div class="new-message-alert dp-no"></div>
     </div>
@@ -197,6 +207,14 @@ class DashboardView extends GlobalView {
     });
 
     this.contactList.innerHTML = markup;
+  }
+
+  renderChatContactEmail(email) {
+    this.chatContactDetailsBox.innerHTML = `<h2>${email}</h2>`;
+  }
+
+  setUserEmailAsTitle(email) {
+    this.userEmailTitle.innerHTML = `${email}`;
   }
 
   addNewMessageHighlight(chatId) {

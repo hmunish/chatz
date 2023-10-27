@@ -83,7 +83,17 @@ addMessage(req, res, next) => {
 req.body.chatId
 req.body.message
 add message to chat id
-
-    release event to contactId group with message, chatId
-
+release event to contactId group with message, chatId
 }
+
+Recieved new message socket event
+add message to the chatId group
+
+render all messages
+
+onSubmit of the form
+take the message, current chatId
+send to database -> recieved new message object push it to the chat id -> if currentChatId != chatId highlight the contact
+-> if current chat id === chatId renderNewMessages
+
+Update newly created chat after creation

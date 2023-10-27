@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sanitizeUserInput } from "../common/utility";
+import { sanitizeChatMessage, sanitizeUserInput } from "../common/utility";
 import { BACKEND_HOST_URL } from "../common/config";
 import { io } from "socket.io-client";
 
@@ -30,13 +30,13 @@ export const insertNewMessage = (chatId, newMessage) => {
 };
 
 axios.defaults.headers.common["authKey"] = sanitizeUserInput(
-  JSON.parse(localStorage.getItem("chatzSignIn"))
+  JSON.parse(localStorage.getItem("chatzSignIn")) || " "
 );
 
 export async function sendMessage(message) {
   try {
     const currentChatId = sanitizeUserInput(state.chatId);
-    const messageCopy = sanitizeUserInput(message);
+    const messageCopy = sanitizeChatMessage(message);
 
     if (!currentChatId || !messageCopy) throw Error("Invalid inputs");
 
@@ -61,7 +61,7 @@ export async function sendMessage(message) {
 export async function isSignedIn() {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem("chatzSignIn"))
+      JSON.parse(localStorage.getItem("chatzSignIn")) || " "
     );
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`);
@@ -115,6 +115,8 @@ export async function createChat(contactEmailId, contactId) {
         headers: { authKey },
       }
     );
+    // Adding the new chat at the beginning of the state.user.chats array
+    state.user.chats.unshift(res.data);
     return res.data;
   } catch (err) {
     throw err;

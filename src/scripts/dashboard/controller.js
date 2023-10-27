@@ -52,6 +52,7 @@ async function handleIsSignedIn() {
     const authorized = await isSignedIn();
     if (!authorized) throw new Error("User not authorized");
     socket.emit("join-group", state.user.email);
+    View.setUserEmailAsTitle(state.user.email);
     View.renderChatContacts(state.user);
   } catch (err) {
     View.redirectToLogin();
