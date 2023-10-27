@@ -20,6 +20,11 @@ socket.on("connect", () => {
     handleRecievedMessage(chatId, message);
     console.log("message recieved by: ", message, " on chat id ", chatId);
   });
+
+  socket.on("newChat", (newChat) => {
+    console.log("New chat recieved");
+    state.user.chats.unshift(newChat);
+  });
 });
 
 function handleRecievedMessage(chatId, newMessage) {
