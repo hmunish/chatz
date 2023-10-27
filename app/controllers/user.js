@@ -81,7 +81,7 @@ exports.isSignedIn = async (req, res, next) => {
       .select('email users')
       .populate({
         path: 'chats',
-        select: 'users messages',
+        select: 'users messages createdAt',
         options: {
           sort: [{ updatedAt: '-1' }],
         },
@@ -103,7 +103,9 @@ exports.isSignedIn = async (req, res, next) => {
 exports.searchUser = async (req, res) => {
   try {
     const searchQuery = sanitizeUserInput(req.body.searchQuery);
-    if (!searchQuery) { return res.status(400).send({ message: 'Invalid request made' }); }
+    if (!searchQuery) {
+      return res.status(400).send({ message: 'Invalid request made' });
+    }
     const users = await User.find(
       { email: new RegExp(searchQuery) },
       'id email',

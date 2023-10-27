@@ -1,14 +1,30 @@
-const mongoose = require('mongoose');
-const path = require('path');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const http = require('http');
+
+const app = express();
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+
+const io = new Server(server);
+
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/user.js');
 const chatRouter = require('./routes/chat.js');
-const sequelize = require('./utility/database.js');
 
-const app = express();
+io.on('connection', (socket) => {
+  socket.on('join-group', (groupId) => {
+    socket.join(groupId);
+  });
+});
+
+// Setting IO instance on every incoming request object
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 // Serving static files from dist folder
 app.use(express.static('dist'));
@@ -35,7 +51,7 @@ mongoose
   .connect(process.env.MONGODB_HOSTNAME)
   .then((res) => {
     console.log('Mongo DB Connected');
-    app.listen(process.env.PORT || 3000);
+    server.listen(process.env.PORT || 3000);
   })
   .catch((err) => {
     console.log(err);

@@ -5,12 +5,25 @@ const { window } = new JSDOM('');
 const DOMPurify = createDOMPurify(window);
 const validator = require('validator');
 
-const sanitizeUserInput = (input, errMsg) => {
+const sanitizeUserInput = (input) => {
   try {
     if (!input) return false;
     let sanitizedInput = DOMPurify.sanitize(input);
     sanitizedInput = validator.escape(input);
     sanitizedInput = sanitizedInput.replace(/ /g, '');
+
+    if (input === sanitizedInput) return sanitizedInput;
+    return false;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const sanitizeChatMessage = (input) => {
+  try {
+    if (!input) return false;
+    let sanitizedInput = DOMPurify.sanitize(input);
+    sanitizedInput = validator.escape(input);
 
     if (input === sanitizedInput) return sanitizedInput;
     return false;
@@ -46,4 +59,4 @@ const isValidInputs = (userDetails, type) => {
   }
 };
 
-module.exports = { isValidInputs, sanitizeUserInput };
+module.exports = { isValidInputs, sanitizeUserInput, sanitizeChatMessage };
