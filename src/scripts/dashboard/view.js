@@ -38,6 +38,10 @@ class DashboardView extends GlobalView {
   _addHandlerSlideContactSection() {
     this.contactList.addEventListener("click", (e) => {
       if (!e.target.parentElement.classList.contains("chat-details")) return;
+      // Removing new message highlighter
+      e.target.parentElement.nextElementSibling
+        .querySelector("div.new-message-alert")
+        .classList.add("dp-no");
       this.renderChat();
     });
   }
@@ -110,7 +114,7 @@ class DashboardView extends GlobalView {
       } else {
         markup += `
         <div class="contact-message-wrapper">
-        <img src="./assets/${contactImage}" alt="" />
+        <img src="${contactImage}" alt="" />
         <div class="message-holder contact-message">
           <p>${msg.message}</p>
           <p class="message-time">
