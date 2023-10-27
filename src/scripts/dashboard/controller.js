@@ -1,4 +1,4 @@
-import View from './view.js';
+import View from "./view.js";
 import {
   socket,
   state,
@@ -10,19 +10,19 @@ import {
   getCurrentChats,
   sendMessage,
   insertNewMessage,
-} from './model.js';
+} from "./model.js";
 
-socket.on('connect', () => {
-  console.log('Socket Connected');
-  socket.emit('join-group', state.user.email);
+socket.on("connect", () => {
+  console.log("Socket Connected");
+  socket.emit("join-group", state.user.email);
 
-  socket.on('message', (chatId, message) => {
+  socket.on("message", (chatId, message) => {
     handleRecievedMessage(chatId, message);
-    console.log('message recieved by: ', message, ' on chat id ', chatId);
+    console.log("message recieved by: ", message, " on chat id ", chatId);
   });
 
-  socket.on('newChat', (newChat) => {
-    console.log('New chat recieved');
+  socket.on("newChat", (newChat) => {
+    console.log("New chat recieved");
     state.user.chats.unshift(newChat);
   });
 });
@@ -48,15 +48,15 @@ async function handleSendMessage(message) {
       View.renderChatContacts(state.user);
     }
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
 async function handleIsSignedIn() {
   try {
     const authorized = await isSignedIn();
-    if (!authorized) throw new Error('User not authorized');
-    socket.emit('join-group', state.user.email);
+    if (!authorized) throw new Error("User not authorized");
+    socket.emit("join-group", state.user.email);
     View.setUserEmailAsTitle(state.user.email);
     View.renderChatContacts(state.user);
   } catch (err) {
@@ -70,17 +70,20 @@ async function handleUserSearch(searchQuery) {
     const results = await searchUsers(searchQuery);
     View.renderStartChatUserSearch(results);
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
 async function handleCreateChat(contactEmailId, contactId) {
   try {
+    View.startLoadingSpinner();
+    View.toggleStartChatBox();
     const results = await createChat(contactEmailId, contactId);
     View.renderNewContact(results, state.user.email);
+    View.stopLoadingSpinner();
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 
@@ -103,7 +106,7 @@ async function init() {
     // addMessage("652c34979a86aa82a9472f9f", "tested");
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 

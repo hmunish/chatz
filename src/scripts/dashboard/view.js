@@ -144,7 +144,7 @@ class DashboardView extends GlobalView {
       <img src="${contactImage}" alt="Contact" />
       <div class="user-search-results-details-box" data-emailid="${i.email}" data-id="${i._id}">
         <h2>${i.email}</h2>
-        <p>Busy</p>
+        <p></p>
       </div>
     </div>
       `;
