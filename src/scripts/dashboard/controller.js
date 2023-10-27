@@ -10,6 +10,7 @@ import {
   getCurrentChats,
   sendMessage,
   insertNewMessage,
+  sortChatNewest,
 } from "./model.js";
 
 socket.on("connect", () => {
@@ -30,6 +31,7 @@ socket.on("connect", () => {
 function handleRecievedMessage(chatId, newMessage) {
   insertNewMessage(chatId, newMessage);
 
+  sortChatNewest();
   View.renderChatContacts(state.user);
   // Checking if new message is recieved for the currently displayed chat
   if (chatId === state.chatId) {
@@ -42,9 +44,9 @@ function handleRecievedMessage(chatId, newMessage) {
 async function handleSendMessage(message) {
   try {
     const isNewMessage = await sendMessage(message);
-
     if (isNewMessage) {
       View.renderChatMessages(getCurrentChats(), state.user.email);
+      sortChatNewest();
       View.renderChatContacts(state.user);
     }
   } catch (err) {

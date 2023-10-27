@@ -191,7 +191,6 @@ class DashboardView extends GlobalView {
     let markup = "";
 
     user.chats.forEach((chat) => {
-      console.log(chat);
       const lastMessage =
         chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
       markup += `

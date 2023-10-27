@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { io } from 'socket.io-client';
-import { sanitizeChatMessage, sanitizeUserInput } from '../common/utility';
-import { BACKEND_HOST_URL } from '../common/config';
+import axios from "axios";
+import { io } from "socket.io-client";
+import { sanitizeChatMessage, sanitizeUserInput } from "../common/utility";
+import { BACKEND_HOST_URL } from "../common/config";
 
 export const socket = io(`${BACKEND_HOST_URL}`);
 
@@ -10,11 +10,24 @@ export const state = {
   chatId: null,
 };
 
+export const sortChatNewest = () => {
+  state.user.chats.sort((chat1, chat2) => {
+    let time1 = new Date(
+      chat1.messages.at(-1)?.messageSentAt || chat1.createdAt
+    ).getTime();
+    let time2 = new Date(
+      chat2.messages.at(-1)?.messageSentAt || chat2.createdAt
+    ).getTime();
+    return time2 - time1;
+  });
+};
+
 export const setChatId = (chatId) => {
   state.chatId = chatId;
 };
 
-export const getCurrentChats = () => state.user.chats.filter((el) => el._id === state.chatId);
+export const getCurrentChats = () =>
+  state.user.chats.filter((el) => el._id === state.chatId);
 
 export const insertNewMessage = (chatId, newMessage) => {
   for (let i = 0; i < state.user.chats.length; i += 1) {
@@ -26,7 +39,7 @@ export const insertNewMessage = (chatId, newMessage) => {
 };
 
 axios.defaults.headers.common.authKey = sanitizeUserInput(
-  JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
+  JSON.parse(localStorage.getItem("chatzSignIn")) || " "
 );
 
 export async function sendMessage(message) {
@@ -34,14 +47,14 @@ export async function sendMessage(message) {
     const currentChatId = sanitizeUserInput(state.chatId);
     const messageCopy = sanitizeChatMessage(message);
 
-    if (!currentChatId || !messageCopy) throw Error('Invalid inputs');
+    if (!currentChatId || !messageCopy) throw Error("Invalid inputs");
 
     const response = await axios.post(`${BACKEND_HOST_URL}/chats/message`, {
       chatId: currentChatId,
       message: messageCopy,
     });
 
-    if (response.status !== 200) throw new Error('Error sending message');
+    if (response.status !== 200) throw new Error("Error sending message");
 
     const { newMessage } = response.data;
 
@@ -57,7 +70,7 @@ export async function sendMessage(message) {
 export async function isSignedIn() {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
+      JSON.parse(localStorage.getItem("chatzSignIn")) || " "
     );
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`);
@@ -74,17 +87,17 @@ export async function isSignedIn() {
 export async function searchUsers(searchQuery) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
+      JSON.parse(localStorage.getItem("chatzSignIn"))
     );
     searchQuery = sanitizeUserInput(searchQuery);
 
-    if (!authKey || !searchQuery) throw Error('Invalid inputs');
+    if (!authKey || !searchQuery) throw Error("Invalid inputs");
     const response = await axios.post(
       `${BACKEND_HOST_URL}/users/search`,
       { searchQuery },
       {
-        headers: { authKey: JSON.parse(localStorage.getItem('chatzSignIn')) },
-      },
+        headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
+      }
     );
     return response.data;
   } catch (err) {
@@ -95,13 +108,13 @@ export async function searchUsers(searchQuery) {
 export async function createChat(contactEmailId, contactId) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
+      JSON.parse(localStorage.getItem("chatzSignIn"))
     );
     contactEmailId = sanitizeUserInput(contactEmailId);
     contactId = sanitizeUserInput(contactId);
 
     if (!authKey || !contactEmailId || !contactId) {
-      throw Error('Invalid inputs');
+      throw Error("Invalid inputs");
     }
 
     const res = await axios.post(
@@ -109,7 +122,7 @@ export async function createChat(contactEmailId, contactId) {
       { contactEmailId, contactId },
       {
         headers: { authKey },
-      },
+      }
     );
     // Adding the new chat at the beginning of the state.user.chats array
     state.user.chats.unshift(res.data);
@@ -122,13 +135,13 @@ export async function createChat(contactEmailId, contactId) {
 export async function addMessage(chatId, message) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
+      JSON.parse(localStorage.getItem("chatzSignIn"))
     );
     chatId = sanitizeUserInput(chatId);
     message = sanitizeUserInput(message);
 
     if (!authKey || !chatId || !message) {
-      throw Error('Invalid inputs');
+      throw Error("Invalid inputs");
     }
 
     const res = await axios.post(
@@ -136,7 +149,7 @@ export async function addMessage(chatId, message) {
       { chatId, message },
       {
         headers: { authKey },
-      },
+      }
     );
     console.log(res);
     return res.data;
