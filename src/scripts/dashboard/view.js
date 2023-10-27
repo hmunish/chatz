@@ -1,33 +1,33 @@
-import GlobalView from "../common/global-view";
+import GlobalView from '../common/global-view';
 
 class DashboardView extends GlobalView {
-  userEmailTitle = document.querySelector("div.header > h1.title");
+  userEmailTitle = document.querySelector('div.header > h1.title');
 
-  contactSection = document.querySelector("section.contacts");
+  contactSection = document.querySelector('section.contacts');
 
-  contactList = document.querySelector(".contacts-list");
+  contactList = document.querySelector('.contacts-list');
 
-  chatSection = document.querySelector("section.chats");
+  chatSection = document.querySelector('section.chats');
 
-  chatContactDetailsBox = document.querySelector(".chat-contact-details");
+  chatContactDetailsBox = document.querySelector('.chat-contact-details');
 
-  backArrow = document.querySelector("img.back-arrow");
+  backArrow = document.querySelector('img.back-arrow');
 
-  startChatBtn = document.querySelector("button.start-chat");
+  startChatBtn = document.querySelector('button.start-chat');
 
-  startChat = document.querySelector("div.start-chat");
+  startChat = document.querySelector('div.start-chat');
 
-  startChatCloseIcon = document.querySelector("#close-select-contact");
+  startChatCloseIcon = document.querySelector('#close-select-contact');
 
-  searchUserInput = document.querySelector("#start-chat-search-contacts");
+  searchUserInput = document.querySelector('#start-chat-search-contacts');
 
   startChatUserSearchResults = document.querySelector(
-    "div.start-chat-search-results"
+    'div.start-chat-search-results',
   );
 
-  chatBox = document.querySelector("div.chat-box");
+  chatBox = document.querySelector('div.chat-box');
 
-  sendMessageForm = document.querySelector("form.send-message");
+  sendMessageForm = document.querySelector('form.send-message');
 
   constructor() {
     super();
@@ -35,25 +35,25 @@ class DashboardView extends GlobalView {
   }
 
   _addHandlerSlideContactSection() {
-    this.contactList.addEventListener("click", (e) => {
-      if (!e.target.parentElement.classList.contains("chat-details")) return;
+    this.contactList.addEventListener('click', (e) => {
+      if (!e.target.parentElement.classList.contains('chat-details')) return;
       this.renderChat();
     });
   }
 
   _addHandlerChatBackArrow() {
-    this.backArrow.addEventListener("click", this.renderChat.bind(this));
+    this.backArrow.addEventListener('click', this.renderChat.bind(this));
   }
 
   _addHandlersStartChatToggle() {
     this.startChatBtn.addEventListener(
-      "click",
-      this.toggleStartChatBox.bind(this)
+      'click',
+      this.toggleStartChatBox.bind(this),
     );
 
     this.startChatCloseIcon.addEventListener(
-      "click",
-      this.toggleStartChatBox.bind(this)
+      'click',
+      this.toggleStartChatBox.bind(this),
     );
   }
 
@@ -66,7 +66,7 @@ class DashboardView extends GlobalView {
 
   // Method to add handler to send message form submit event
   addHandlerFormSendMessage(handler) {
-    this.sendMessageForm.addEventListener("submit", (e) => {
+    this.sendMessageForm.addEventListener('submit', (e) => {
       e.preventDefault();
       handler(e.target.message.value);
       e.target.reset();
@@ -74,24 +74,24 @@ class DashboardView extends GlobalView {
   }
 
   addHanlderLoadChat(handler) {
-    this.contactList.addEventListener("click", (e) => {
-      const contactDetailsBox = e.target.closest(".contact-details");
+    this.contactList.addEventListener('click', (e) => {
+      const contactDetailsBox = e.target.closest('.contact-details');
       if (!contactDetailsBox) return;
       const chatId = contactDetailsBox.dataset.id;
-      const contactEmail = contactDetailsBox.querySelector("h2").textContent;
+      const contactEmail = contactDetailsBox.querySelector('h2').textContent;
       this.renderChatContactEmail(contactEmail);
       handler(chatId);
     });
   }
 
   addHandlerUserSearch(handler) {
-    this.searchUserInput.addEventListener("keyup", (e) => {
+    this.searchUserInput.addEventListener('keyup', (e) => {
       handler(e.target.value);
     });
   }
 
   renderChatMessages(chats, myEmailId) {
-    let markup = ``;
+    let markup = '';
 
     chats[0].messages.forEach((msg) => {
       if (msg.userEmail === myEmailId) {
@@ -100,9 +100,9 @@ class DashboardView extends GlobalView {
         <p>${msg.message}</p>
         <p class="message-time">
         ${msg.messageSentAt.slice(
-          12,
-          16
-        )} <span class="message-status">&check;</span>
+    12,
+    16,
+  )} <span class="message-status">&check;</span>
         </p>
       </div>
         `;
@@ -114,9 +114,9 @@ class DashboardView extends GlobalView {
           <p>${msg.message}</p>
           <p class="message-time">
             <span class="message-status"></span> ${msg.messageSentAt.slice(
-              12,
-              16
-            )}
+    12,
+    16,
+  )}
           </p>
         </div>
       </div>
@@ -132,7 +132,7 @@ class DashboardView extends GlobalView {
     if (arr.length === 0) {
       return this.renderNoResultsFound(this.startChatUserSearchResults);
     }
-    let markup = "";
+    let markup = '';
     arr.forEach((i) => {
       markup += `
       <div>
@@ -149,18 +149,18 @@ class DashboardView extends GlobalView {
 
   addHandlerStartChat(handler) {
     this.startChatUserSearchResults.addEventListener(
-      "click",
+      'click',
       (e) => {
         if (
           e.target.parentElement.classList.contains(
-            "user-search-results-details-box"
+            'user-search-results-details-box',
           )
         ) {
           const { emailid, id } = e.target.parentElement.dataset;
           handler(emailid, id);
         }
       },
-      true
+      true,
     );
   }
 
@@ -179,27 +179,26 @@ class DashboardView extends GlobalView {
     </div>
   </div>
     `;
-    this.contactList.insertAdjacentHTML("afterbegin", markup);
+    this.contactList.insertAdjacentHTML('afterbegin', markup);
   }
 
   renderChatContacts(user) {
-    let markup = "";
+    let markup = '';
 
     user.chats.forEach((chat) => {
       console.log(chat);
-      const lastMessage =
-        chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
+      const lastMessage = chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
       markup += `
       <div class="contact-details" data-id="${chat._id}">
     <img src="/contact-1.614cf4ca.png" alt="">
     <div class="chat-details">
       <h2>${chat.users.filter((email) => email !== user.email)}</h2>
-      <p>${lastMessage?.message || ""}</p>
+      <p>${lastMessage?.message || ''}</p>
     </div>
     <div class="message-details">
       <p class="message-time">${
-        lastMessage?.messageSentAt.slice(12, 16) || chat.createdAt.slice(12, 16)
-      }</p>
+  lastMessage?.messageSentAt.slice(12, 16) || chat.createdAt.slice(12, 16)
+}</p>
       <div class="new-message-alert dp-no"></div>
     </div>
   </div>
@@ -220,31 +219,31 @@ class DashboardView extends GlobalView {
   addNewMessageHighlight(chatId) {
     this.contactList
       .querySelector(`[data-id="${chatId}"]`)
-      .querySelector("div.new-message-alert")
-      .classList.remove("dp-no");
+      .querySelector('div.new-message-alert')
+      .classList.remove('dp-no');
   }
 
   removeNewMessageHighlight(chatId) {
     this.contactList
       .querySelector(`[data-id="${chatId}"]`)
-      .querySelector("div.new-message-alert")
-      .classList.add("dp-no");
+      .querySelector('div.new-message-alert')
+      .classList.add('dp-no');
   }
 
   toggleStartChatBox() {
-    this.startChat.classList.toggle("dp-no");
+    this.startChat.classList.toggle('dp-no');
   }
 
   getDashboardWidth() {
-    return document.querySelector("#dashboard").clientWidth;
+    return document.querySelector('#dashboard').clientWidth;
   }
 
   slideContactSection() {
     const transformProperty = this.contactSection.style.transform;
-    if (transformProperty === "translateX(-150%)") {
-      this.contactSection.style.transform = "translateX(0)";
+    if (transformProperty === 'translateX(-150%)') {
+      this.contactSection.style.transform = 'translateX(0)';
     } else {
-      this.contactSection.style.transform = "translateX(-150%)";
+      this.contactSection.style.transform = 'translateX(-150%)';
     }
   }
 
@@ -255,7 +254,7 @@ class DashboardView extends GlobalView {
   }
 
   redirectToLogin() {
-    window.location.href = "/registration.html";
+    window.location.href = '/registration.html';
   }
 }
 

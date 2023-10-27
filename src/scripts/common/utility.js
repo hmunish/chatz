@@ -1,5 +1,5 @@
-import validator from "validator";
-import DOMPurify from "dompurify";
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 /// //// UTILITY FUNCTIONS STARTS ///////
 
@@ -7,11 +7,11 @@ import DOMPurify from "dompurify";
 export function sanitizeUserInput(input, errMsg, instance) {
   let sanitizedInput = DOMPurify.sanitize(input);
   sanitizedInput = validator.escape(input);
-  sanitizedInput = sanitizedInput.replace(/ /g, "");
+  sanitizedInput = sanitizedInput.replace(/ /g, '');
 
   if (input === sanitizedInput) return sanitizedInput;
 
-  if (instance) instance.addAppResponse(errMsg, "clr-red");
+  if (instance) instance.addAppResponse(errMsg, 'clr-red');
   return false;
 }
 
@@ -22,7 +22,7 @@ export function sanitizeChatMessage(input, errMsg, instance) {
 
   if (input === sanitizedInput) return sanitizedInput;
 
-  if (instance) instance.addAppResponse(errMsg, "clr-red");
+  if (instance) instance.addAppResponse(errMsg, 'clr-red');
   return false;
 }
 
