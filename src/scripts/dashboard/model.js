@@ -58,7 +58,7 @@ export async function isSignedIn() {
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`);
     if (response.status === 200) {
       state.user = response.data.user;
-      console.log(state);
+      state.user.chats = [...state.user.chats, ...state.user.groups];
       return true;
     }
     return false;

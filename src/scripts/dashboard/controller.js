@@ -1,4 +1,4 @@
-import View from './view.js';
+import View from "./view.js";
 import {
   socket,
   state,
@@ -10,20 +10,20 @@ import {
   sendMessage,
   insertNewMessage,
   sortChatNewest,
-} from './model.js';
+} from "./model.js";
 
 // Socket event listeners & handlers
-socket.on('connect', () => {
+socket.on("connect", () => {
   // Emitting event to join group(emailId)
-  socket.emit('join-group', state.user.email);
+  socket.emit("join-group", state.user.email);
 
   // Listening for new message socket event & calling function be executed on new message
-  socket.on('message', (chatId, message) => {
+  socket.on("message", (chatId, message) => {
     handleRecievedMessage(chatId, message);
   });
 
   // Listening for new chat socket event & adding the new chat in the current state chats array
-  socket.on('newChat', (newChat) => {
+  socket.on("newChat", (newChat) => {
     state.user.chats.unshift(newChat);
   });
 });
@@ -51,7 +51,7 @@ async function handleSendMessage(message) {
       View.renderChatContacts(state.user);
     }
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
@@ -59,9 +59,10 @@ async function handleSendMessage(message) {
 async function handleIsSignedIn() {
   try {
     const authorized = await isSignedIn();
-    if (!authorized) throw new Error('User not authorized');
-    socket.emit('join-group', state.user.email);
+    if (!authorized) throw new Error("User not authorized");
+    socket.emit("join-group", state.user.email);
     View.setUserEmailAsTitle(state.user.email);
+    sortChatNewest();
     View.renderChatContacts(state.user);
   } catch (err) {
     View.redirectToLogin();
@@ -75,7 +76,7 @@ async function handleUserSearch(searchQuery) {
     const results = await searchUsers(searchQuery);
     View.renderStartChatUserSearch(results);
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
@@ -89,7 +90,7 @@ async function handleCreateChat(contactEmailId, contactId) {
     View.stopLoadingSpinner();
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 
@@ -110,7 +111,7 @@ async function init() {
     View.addHandlerFormSendMessage(handleSendMessage);
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 
