@@ -1,3 +1,4 @@
+import contactImage from '../../assets/contact-1.png';
 import GlobalView from '../common/global-view';
 
 class DashboardView extends GlobalView {
@@ -37,6 +38,10 @@ class DashboardView extends GlobalView {
   _addHandlerSlideContactSection() {
     this.contactList.addEventListener('click', (e) => {
       if (!e.target.parentElement.classList.contains('chat-details')) return;
+      // Removing new message highlighter
+      e.target.parentElement.nextElementSibling
+        .querySelector('div.new-message-alert')
+        .classList.add('dp-no');
       this.renderChat();
     });
   }
@@ -94,29 +99,27 @@ class DashboardView extends GlobalView {
     let markup = '';
 
     chats[0].messages.forEach((msg) => {
+      const time = new Date(msg.messageSentAt).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
       if (msg.userEmail === myEmailId) {
         markup += `
       <div class="message-holder own-message">
         <p>${msg.message}</p>
         <p class="message-time">
-        ${msg.messageSentAt.slice(
-    12,
-    16,
-  )} <span class="message-status">&check;</span>
+        ${time} <span class="message-status">&check;</span>
         </p>
       </div>
         `;
       } else {
         markup += `
         <div class="contact-message-wrapper">
-        <img src="./assets/contact-1.png" alt="" />
+        <img src="${contactImage}" alt="" />
         <div class="message-holder contact-message">
           <p>${msg.message}</p>
           <p class="message-time">
-            <span class="message-status"></span> ${msg.messageSentAt.slice(
-    12,
-    16,
-  )}
+            <span class="message-status"></span> ${time}
           </p>
         </div>
       </div>
@@ -136,10 +139,10 @@ class DashboardView extends GlobalView {
     arr.forEach((i) => {
       markup += `
       <div>
-      <img src="#" alt="Contact" />
+      <img src="${contactImage}" alt="Contact" />
       <div class="user-search-results-details-box" data-emailid="${i.email}" data-id="${i._id}">
         <h2>${i.email}</h2>
-        <p>Busy</p>
+        <p></p>
       </div>
     </div>
       `;
@@ -165,15 +168,19 @@ class DashboardView extends GlobalView {
   }
 
   renderNewContact(data, emailId) {
+    const time = new Date(data.createdAt).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
     const markup = `
     <div class="contact-details" data-id="${data._id}">
-    <img src="/contact-1.614cf4ca.png" alt="">
+    <img src="${contactImage}" alt="">
     <div class="chat-details">
       <h2>${data.users.filter((email) => email !== emailId)}</h2>
       <p></p>
     </div>
     <div class="message-details">
-    <p class="message-time">${data.createdAt.slice(12, 16)}</p>
+    <p class="message-time">${time}</p>
     <p class="message-status"></p>
     <div class="new-message-alert dp-no"></div>
     </div>
@@ -186,19 +193,19 @@ class DashboardView extends GlobalView {
     let markup = '';
 
     user.chats.forEach((chat) => {
-      console.log(chat);
       const lastMessage = chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
+      const time = (
+        new Date(lastMessage?.messageSentAt) || new Date(chat.createdAt)
+      ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       markup += `
       <div class="contact-details" data-id="${chat._id}">
-    <img src="/contact-1.614cf4ca.png" alt="">
+    <img src="${contactImage}" alt="">
     <div class="chat-details">
       <h2>${chat.users.filter((email) => email !== user.email)}</h2>
       <p>${lastMessage?.message || ''}</p>
     </div>
     <div class="message-details">
-      <p class="message-time">${
-  lastMessage?.messageSentAt.slice(12, 16) || chat.createdAt.slice(12, 16)
-}</p>
+      <p class="message-time">${time}</p>
       <div class="new-message-alert dp-no"></div>
     </div>
   </div>

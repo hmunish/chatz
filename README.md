@@ -95,5 +95,3 @@ onSubmit of the form
 take the message, current chatId
 send to database -> recieved new message object push it to the chat id -> if currentChatId != chatId highlight the contact
 -> if current chat id === chatId renderNewMessages
-
-Update newly created chat after creation

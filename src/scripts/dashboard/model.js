@@ -5,17 +5,34 @@ import { BACKEND_HOST_URL } from '../common/config';
 
 export const socket = io(`${BACKEND_HOST_URL}`);
 
+// State for the chat app
 export const state = {
   user: {},
   chatId: null,
 };
 
+// function to set current chat id for the state
 export const setChatId = (chatId) => {
   state.chatId = chatId;
 };
 
+// function to get current chats by current chat id from state
 export const getCurrentChats = () => state.user.chats.filter((el) => el._id === state.chatId);
 
+// function to sort chats by in ascending by dates
+export const sortChatNewest = () => {
+  state.user.chats.sort((chat1, chat2) => {
+    const time1 = new Date(
+      chat1.messages.at(-1)?.messageSentAt || chat1.createdAt,
+    ).getTime();
+    const time2 = new Date(
+      chat2.messages.at(-1)?.messageSentAt || chat2.createdAt,
+    ).getTime();
+    return time2 - time1;
+  });
+};
+
+// function to insert new message in the chat by given chatId
 export const insertNewMessage = (chatId, newMessage) => {
   for (let i = 0; i < state.user.chats.length; i += 1) {
     if (state.user.chats[i]._id === chatId) {
@@ -25,10 +42,30 @@ export const insertNewMessage = (chatId, newMessage) => {
   }
 };
 
+// setting global axios headers authKey for authorizing user by json web token
 axios.defaults.headers.common.authKey = sanitizeUserInput(
   JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
 );
 
+// function to verify if user is signed in
+export async function isSignedIn() {
+  try {
+    const authKey = sanitizeUserInput(
+      JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
+    );
+    if (!authKey) return false;
+    const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`);
+    if (response.status === 200) {
+      state.user = response.data.user;
+      return true;
+    }
+    return false;
+  } catch (err) {
+    return false;
+  }
+}
+
+// function to send message
 export async function sendMessage(message) {
   try {
     const currentChatId = sanitizeUserInput(state.chatId);
@@ -54,23 +91,7 @@ export async function sendMessage(message) {
   }
 }
 
-export async function isSignedIn() {
-  try {
-    const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
-    );
-    if (!authKey) return false;
-    const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`);
-    if (response.status === 200) {
-      state.user = response.data.user;
-      return true;
-    }
-    return false;
-  } catch (err) {
-    return false;
-  }
-}
-
+// function to search all users
 export async function searchUsers(searchQuery) {
   try {
     const authKey = sanitizeUserInput(
@@ -92,6 +113,7 @@ export async function searchUsers(searchQuery) {
   }
 }
 
+// function to create a new chat
 export async function createChat(contactEmailId, contactId) {
   try {
     const authKey = sanitizeUserInput(
@@ -119,28 +141,29 @@ export async function createChat(contactEmailId, contactId) {
   }
 }
 
-export async function addMessage(chatId, message) {
-  try {
-    const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem('chatzSignIn')),
-    );
-    chatId = sanitizeUserInput(chatId);
-    message = sanitizeUserInput(message);
+// duplicate function
 
-    if (!authKey || !chatId || !message) {
-      throw Error('Invalid inputs');
-    }
+// export async function addMessage(chatId, message) {
+//   try {
+//     const authKey = sanitizeUserInput(
+//       JSON.parse(localStorage.getItem("chatzSignIn"))
+//     );
+//     chatId = sanitizeUserInput(chatId);
+//     message = sanitizeUserInput(message);
 
-    const res = await axios.post(
-      `${BACKEND_HOST_URL}/chats/message`,
-      { chatId, message },
-      {
-        headers: { authKey },
-      },
-    );
-    console.log(res);
-    return res.data;
-  } catch (err) {
-    throw err;
-  }
-}
+//     if (!authKey || !chatId || !message) {
+//       throw Error("Invalid inputs");
+//     }
+
+//     const res = await axios.post(
+//       `${BACKEND_HOST_URL}/chats/message`,
+//       { chatId, message },
+//       {
+//         headers: { authKey },
+//       }
+//     );
+//     return res.data;
+//   } catch (err) {
+//     throw err;
+//   }
+// }
