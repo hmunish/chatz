@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
@@ -28,7 +28,7 @@ const chatSchema = new Schema(
       ],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model('chat', chatSchema);
+module.exports = mongoose.model("chat", chatSchema);

@@ -99,15 +99,16 @@ class DashboardView extends GlobalView {
     let markup = "";
 
     chats[0].messages.forEach((msg) => {
+      const time = new Date(msg.messageSentAt).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
       if (msg.userEmail === myEmailId) {
         markup += `
       <div class="message-holder own-message">
         <p>${msg.message}</p>
         <p class="message-time">
-        ${msg.messageSentAt.slice(
-          12,
-          16
-        )} <span class="message-status">&check;</span>
+        ${time} <span class="message-status">&check;</span>
         </p>
       </div>
         `;
@@ -118,10 +119,7 @@ class DashboardView extends GlobalView {
         <div class="message-holder contact-message">
           <p>${msg.message}</p>
           <p class="message-time">
-            <span class="message-status"></span> ${msg.messageSentAt.slice(
-              12,
-              16
-            )}
+            <span class="message-status"></span> ${time}
           </p>
         </div>
       </div>
@@ -170,6 +168,10 @@ class DashboardView extends GlobalView {
   }
 
   renderNewContact(data, emailId) {
+    const time = new Date(data.createdAt).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     const markup = `
     <div class="contact-details" data-id="${data._id}">
     <img src="${contactImage}" alt="">
@@ -178,7 +180,7 @@ class DashboardView extends GlobalView {
       <p></p>
     </div>
     <div class="message-details">
-    <p class="message-time">${data.createdAt.slice(12, 16)}</p>
+    <p class="message-time">${time}</p>
     <p class="message-status"></p>
     <div class="new-message-alert dp-no"></div>
     </div>
@@ -193,6 +195,9 @@ class DashboardView extends GlobalView {
     user.chats.forEach((chat) => {
       const lastMessage =
         chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
+      const time = (
+        new Date(lastMessage?.messageSentAt) || new Date(chat.createdAt)
+      ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       markup += `
       <div class="contact-details" data-id="${chat._id}">
     <img src="${contactImage}" alt="">
@@ -201,9 +206,7 @@ class DashboardView extends GlobalView {
       <p>${lastMessage?.message || ""}</p>
     </div>
     <div class="message-details">
-      <p class="message-time">${
-        lastMessage?.messageSentAt.slice(12, 16) || chat.createdAt.slice(12, 16)
-      }</p>
+      <p class="message-time">${time}</p>
       <div class="new-message-alert dp-no"></div>
     </div>
   </div>
