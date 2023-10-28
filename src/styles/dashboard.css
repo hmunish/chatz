@@ -8,11 +8,51 @@ section.sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 0;
+  position: fixed;
+  background-color: var(--bg-color-5);
+  z-index: 5;
 }
 
 img.sidebar {
   cursor: pointer;
+}
+
+div.sidebar-buttons {
+  width: 42px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+button.start-chat,
+button.create-group {
+  width: 42px;
+  min-height: 42px;
+  border-radius: 16px;
+  border: none;
+  background-color: var(--green-color) !important;
+  color: #fff;
+  font-size: 23px;
+  transform: translateY(-100%);
+}
+
+button.create-group > img {
+  width: 18px;
+  height: 18px;
+}
+
+section.sidebar > .wrapper {
+  width: 42px;
+  display: flex;
+  flex-direction: column;
+}
+
+section.sidebar > .wrapper > button {
+  height: 42px;
+  background: none;
+  border: none;
 }
 
 #dashboard {
@@ -32,6 +72,7 @@ section.contacts {
   transition: transform 0.5s;
   position: relative;
   z-index: 3;
+  margin-left: 54px;
 }
 
 section.contacts > .header {
@@ -148,17 +189,6 @@ div.new-message-alert {
   border-radius: 50%;
   background-color: var(--green-color);
   align-self: flex-end;
-}
-
-button.start-chat {
-  width: 50px;
-  min-height: 50px;
-  border-radius: 50%;
-  border: none;
-  background-color: var(--green-color);
-  color: #fff;
-  font-size: 23px;
-  margin-bottom: 15px;
 }
 
 div.start-chat,
