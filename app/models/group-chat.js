@@ -4,12 +4,20 @@ const { Schema } = mongoose;
 
 const groupChatSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     members: {
       type: [String],
       required: true,
     },
     admins: {
       type: [String],
+      required: true,
+    },
+    createdByUser: {
+      type: String,
       required: true,
     },
     messages: {
