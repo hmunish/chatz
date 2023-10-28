@@ -75,10 +75,19 @@ export async function sendMessage(message) {
 
     if (!currentChatId || !messageCopy) throw Error("Invalid inputs");
 
-    const response = await axios.post(`${BACKEND_HOST_URL}/chats/message`, {
-      chatId: currentChatId,
-      message: messageCopy,
-    });
+    let response;
+
+    if (state.user.groups.find((group) => group._id === currentChatId)) {
+      response = await axios.post(`${BACKEND_HOST_URL}/groups/message`, {
+        groupId: currentChatId,
+        message: messageCopy,
+      });
+    } else {
+      response = await axios.post(`${BACKEND_HOST_URL}/chats/message`, {
+        chatId: currentChatId,
+        message: messageCopy,
+      });
+    }
 
     if (response.status !== 200) throw new Error("Error sending message");
 

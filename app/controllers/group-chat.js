@@ -50,3 +50,38 @@ exports.createGroup = async (req, res) => {
     res.status(501).send({ message: "Error creating new group" });
   }
 };
+
+exports.addMessage = async (req, res) => {
+  try {
+    const groupId = sanitizeUserInput(req.body.groupId);
+    const message = sanitizeText(req.body.message);
+
+    if (!groupId || !message) {
+      return res.status(400).send({ message: "Invalid request made" });
+    }
+
+    // Adding message to the chat
+    const group = await groupChat.findByIdAndUpdate(groupId, {
+      $push: { messages: { userEmail: req.user.email, message } },
+    });
+
+    const { messages } = await groupChat.findById(groupId).select("messages");
+
+    group.members.forEach((emailId) => {
+      if (emailId !== req.user.email) {
+        req.io.to(emailId).emit("message", groupId, messages.slice(-1)[0]);
+      }
+    });
+
+    group.admins.forEach((emailId) => {
+      if (emailId !== req.user.email) {
+        req.io.to(emailId).emit("message", groupId, messages.slice(-1)[0]);
+      }
+    });
+
+    res.send({ newMessage: messages.slice(-1)[0] });
+  } catch (err) {
+    console.log(err);
+    res.status(501).send({ message: "Error submitting message" });
+  }
+};
