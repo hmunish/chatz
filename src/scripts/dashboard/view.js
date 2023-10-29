@@ -4,6 +4,8 @@ import GlobalView from "../common/global-view";
 class DashboardView extends GlobalView {
   userEmailTitle = document.querySelector("div.header > h1.title");
 
+  sidebar = document.querySelector("section.sidebar");
+
   contactSection = document.querySelector("section.contacts");
 
   contactList = document.querySelector(".contacts-list");
@@ -250,6 +252,10 @@ class DashboardView extends GlobalView {
     return document.querySelector("#dashboard").clientWidth;
   }
 
+  toggleSidebar() {
+    this.sidebar.classList.toggle("dp-no");
+  }
+
   slideContactSection() {
     const transformProperty = this.contactSection.style.transform;
     if (transformProperty === "translateX(-150%)") {
@@ -262,6 +268,7 @@ class DashboardView extends GlobalView {
   renderChat() {
     if (this.getDashboardWidth() < 1000) {
       this.slideContactSection();
+      this.toggleSidebar();
     }
   }
 
