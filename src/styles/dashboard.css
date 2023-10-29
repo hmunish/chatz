@@ -193,7 +193,7 @@ div.new-message-alert {
 }
 
 div.start-chat,
-div.set-dp-name {
+div.create-group {
   width: 350px;
   height: 350px;
   border-radius: 11px;
@@ -211,12 +211,12 @@ div.set-dp-name {
   gap: 10px;
 }
 
-div.set-dp-name {
+div.create-group {
   height: 150px;
 }
 
 #start-chat-header-wrapper,
-#set-dp-name-header-wrapper {
+#create-group-header-wrapper {
   width: 100%;
   height: 50px;
   padding: 15px;
@@ -229,13 +229,32 @@ div.set-dp-name {
   border-top-left-radius: 11px;
 }
 
+form.create-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+}
+
+#create-group-btn {
+  align-self: flex-end;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--green-color);
+  color: var(--white-color);
+  padding: 7px;
+  margin-right: 11px;
+  cursor: pointer;
+}
+
 #close-select-contact,
-#close-set-dp-name {
+#close-create-group {
   font-weight: bolder;
 }
 
 #start-chat-search-contacts,
-#set-dp-name-text-input {
+#create-group-text-input {
   width: 90%;
   background-color: var(--white-color);
   border: none;
