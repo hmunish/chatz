@@ -103,7 +103,7 @@ export async function sendMessage(message) {
 }
 
 // function to search all users
-export async function searchUsers(searchQuery) {
+export async function searchUsers(searchQuery, groupId = null) {
   try {
     const authKey = sanitizeUserInput(
       JSON.parse(localStorage.getItem("chatzSignIn"))
@@ -118,6 +118,20 @@ export async function searchUsers(searchQuery) {
         headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
       }
     );
+
+    if (groupId) {
+      const groupMembers = state.user.groups.find(
+        (group) => group._id === groupId
+      )?.members;
+      const availableMembers = response.data.filter((user) => {
+        return !(
+          groupMembers.filter((member) => member.email === user.email).length >
+          0
+        );
+      });
+      return availableMembers;
+    }
+
     return response.data;
   } catch (err) {
     throw err;
@@ -152,29 +166,47 @@ export async function createChat(contactEmailId, contactId) {
   }
 }
 
-// duplicate function
+// function to create new group
 
-// export async function addMessage(chatId, message) {
-//   try {
-//     const authKey = sanitizeUserInput(
-//       JSON.parse(localStorage.getItem("chatzSignIn"))
-//     );
-//     chatId = sanitizeUserInput(chatId);
-//     message = sanitizeUserInput(message);
+export async function createNewGroup(groupName) {
+  // Input validation
+  try {
+    if (!groupName) throw new Error("Group Name cannot be empty");
+    const sanitizedGroupName = sanitizeChatMessage(groupName);
+    if (!sanitizedGroupName) throw new Error("Invalid group name");
+    // Create new group
+    const response = await axios.post(`${BACKEND_HOST_URL}/groups/create`, {
+      groupName: sanitizedGroupName,
+    });
+    // Adding the new group in current user state
+    state.user.chats.unshift(response.data);
+    state.user.groups.unshift(response.data);
+    return true;
+  } catch (err) {
+    throw err;
+  }
+}
 
-//     if (!authKey || !chatId || !message) {
-//       throw Error("Invalid inputs");
-//     }
+// function to add group memeber
+export async function addGroupMember(contactEmailId) {
+  try {
+    const authKey = sanitizeUserInput(
+      JSON.parse(localStorage.getItem("chatzSignIn"))
+    );
+    contactEmailId = sanitizeUserInput(contactEmailId);
 
-//     const res = await axios.post(
-//       `${BACKEND_HOST_URL}/chats/message`,
-//       { chatId, message },
-//       {
-//         headers: { authKey },
-//       }
-//     );
-//     return res.data;
-//   } catch (err) {
-//     throw err;
-//   }
-// }
+    if (!authKey || !contactEmailId) {
+      throw Error("Invalid inputs");
+    }
+
+    const res = await axios.post(`${BACKEND_HOST_URL}/groups/member`, {
+      contactEmailId,
+      groupId: state.chatId,
+    });
+    // Adding the new chat at the beginning of the state.user.chats array
+    // state.user.chats.unshift(res.data);
+    console.log(res);
+  } catch (err) {
+    throw err;
+  }
+}

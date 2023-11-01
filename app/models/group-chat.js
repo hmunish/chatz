@@ -9,11 +9,19 @@ const groupChatSchema = new Schema(
       required: true,
     },
     members: {
-      type: [String],
-      required: true,
-    },
-    admins: {
-      type: [String],
+      type: [
+        {
+          email: {
+            type: String,
+            required: true,
+          },
+          isAdmin: {
+            type: Boolean,
+            required: true,
+            default: false,
+          },
+        },
+      ],
       required: true,
     },
     createdByUser: {

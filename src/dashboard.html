@@ -39,7 +39,7 @@
           </div> -->
         </div>
       </div>
-      <div class="create-group">
+      <div class="create-group dp-no">
         <div id="create-group-header-wrapper">
           <p id="close-create-group" class="icon">X</p>
           <p>Create Group</p>
@@ -49,9 +49,31 @@
             type="text"
             placeholder="Please enter your group name"
             id="create-group-text-input"
+            name="newGroupName"
           />
           <input type="submit" value="Create" id="create-group-btn" />
         </form>
+      </div>
+      <div class="add-group-members">
+        <div id="add-group-members-header-wrapper">
+          <p id="close-add-group-members-modal" class="icon">X</p>
+          <p>Group Name</p>
+        </div>
+        <input
+          type="search"
+          placeholder="Add Members"
+          id="add-group-members-search-contacts"
+          autocomplete="off"
+        />
+        <div class="add-group-members-search-results">
+          <div>
+            <img src="./assets/contact-1.png" alt="" />
+            <div>
+              <h2>Travis Barker</h2>
+              <p>Busy</p>
+            </div>
+          </div>
+        </div>
       </div>
       <section class="sidebar">
         <img class="sidebar" src="./assets/contact-1.png" alt="DP" />
@@ -67,7 +89,9 @@
           <button>
             <img src="./assets/settings-icon.png" alt="Settings" />
           </button>
-          <button><img src="./assets/signout-icon.png" alt="Signout" /></button>
+          <button id="signout">
+            <img src="./assets/signout-icon.png" alt="Signout" />
+          </button>
         </div>
       </section>
       <section class="contacts">

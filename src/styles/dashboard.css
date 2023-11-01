@@ -193,7 +193,8 @@ div.new-message-alert {
 }
 
 div.start-chat,
-div.create-group {
+div.create-group,
+div.add-group-members {
   width: 350px;
   height: 350px;
   border-radius: 11px;
@@ -216,7 +217,8 @@ div.create-group {
 }
 
 #start-chat-header-wrapper,
-#create-group-header-wrapper {
+#create-group-header-wrapper,
+#add-group-members-header-wrapper {
   width: 100%;
   height: 50px;
   padding: 15px;
@@ -249,11 +251,13 @@ form.create-group {
 }
 
 #close-select-contact,
-#close-create-group {
+#close-create-group,
+#close-add-group-members-modal {
   font-weight: bolder;
 }
 
 #start-chat-search-contacts,
+#add-group-members-search-contacts,
 #create-group-text-input {
   width: 90%;
   background-color: var(--white-color);
@@ -262,13 +266,17 @@ form.create-group {
   border-radius: 11px;
 }
 
-div.start-chat-search-results {
+div.start-chat-search-results,
+div.add-group-members-search-results,
+div.create-group-search-results {
   width: 100%;
   flex-grow: 2;
   overflow-y: scroll;
 }
 
-div.start-chat-search-results > div {
+div.start-chat-search-results > div,
+div.add-group-members-search-results > div,
+div.create-group-search-results > div {
   width: 100%;
   height: 50px;
   max-height: 50px;
@@ -280,7 +288,9 @@ div.start-chat-search-results > div {
   border-bottom: 1px solid var(--bg-color-3);
 }
 
-div.start-chat-search-results > div > div {
+div.start-chat-search-results > div > div,
+div.add-group-members-search-results > div > div,
+div.create-group-search-results > div > div {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -289,11 +299,15 @@ div.start-chat-search-results > div > div {
   cursor: pointer;
 }
 
-div.start-chat-search-results > div > div > * {
+div.start-chat-search-results > div > div > *,
+div.add-group-members-search-results > div > div > *,
+div.create-group-search-results > div > div > * {
   font-size: 14px;
 }
 
-div.start-chat-search-results > div > div > p {
+div.start-chat-search-results > div > div > p,
+div.add-group-members-search-results > div > p,
+div.create-group-search-results > div > div > p {
   color: var(--text-light-color);
 }
 
