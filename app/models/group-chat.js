@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
@@ -48,7 +48,7 @@ const groupChatSchema = new Schema(
       ],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model("group-chat", groupChatSchema);
+module.exports = mongoose.model('group-chat', groupChatSchema);

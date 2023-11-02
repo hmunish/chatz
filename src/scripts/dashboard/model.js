@@ -1,7 +1,7 @@
-import axios from "axios";
-import { io } from "socket.io-client";
-import { sanitizeChatMessage, sanitizeUserInput } from "../common/utility";
-import { BACKEND_HOST_URL } from "../common/config";
+import axios from 'axios';
+import { io } from 'socket.io-client';
+import { sanitizeChatMessage, sanitizeUserInput } from '../common/utility';
+import { BACKEND_HOST_URL } from '../common/config';
 
 export const socket = io(`${BACKEND_HOST_URL}`);
 
@@ -17,17 +17,16 @@ export const setChatId = (chatId) => {
 };
 
 // function to get current chats by current chat id from state
-export const getCurrentChats = () =>
-  state.user.chats.filter((el) => el._id === state.chatId);
+export const getCurrentChats = () => state.user.chats.filter((el) => el._id === state.chatId);
 
 // function to sort chats by in ascending by dates
 export const sortChatNewest = () => {
   state.user.chats.sort((chat1, chat2) => {
     const time1 = new Date(
-      chat1.messages.at(-1)?.messageSentAt || chat1.createdAt
+      chat1.messages.at(-1)?.messageSentAt || chat1.createdAt,
     ).getTime();
     const time2 = new Date(
-      chat2.messages.at(-1)?.messageSentAt || chat2.createdAt
+      chat2.messages.at(-1)?.messageSentAt || chat2.createdAt,
     ).getTime();
     return time2 - time1;
   });
@@ -52,14 +51,14 @@ export const insertMemberDetailsToGroup = (groupId, contactDetails) => {
 
 // setting global axios headers authKey for authorizing user by json web token
 axios.defaults.headers.common.authKey = sanitizeUserInput(
-  JSON.parse(localStorage.getItem("chatzSignIn")) || " "
+  JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
 );
 
 // function to verify if user is signed in
 export async function isSignedIn() {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem("chatzSignIn")) || " "
+      JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
     );
     if (!authKey) return false;
     const response = await axios.get(`${BACKEND_HOST_URL}/users/isSignedIn`);
@@ -80,7 +79,7 @@ export async function sendMessage(message) {
     const currentChatId = sanitizeUserInput(state.chatId);
     const messageCopy = sanitizeChatMessage(message);
 
-    if (!currentChatId || !messageCopy) throw Error("Invalid inputs");
+    if (!currentChatId || !messageCopy) throw Error('Invalid inputs');
 
     let response;
 
@@ -96,7 +95,7 @@ export async function sendMessage(message) {
       });
     }
 
-    if (response.status !== 200) throw new Error("Error sending message");
+    if (response.status !== 200) throw new Error('Error sending message');
 
     const { newMessage } = response.data;
 
@@ -113,29 +112,27 @@ export async function sendMessage(message) {
 export async function searchUsers(searchQuery, groupId = null) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem("chatzSignIn"))
+      JSON.parse(localStorage.getItem('chatzSignIn')),
     );
     searchQuery = sanitizeUserInput(searchQuery);
 
-    if (!authKey || !searchQuery) throw Error("Invalid inputs");
+    if (!authKey || !searchQuery) throw Error('Invalid inputs');
     const response = await axios.post(
       `${BACKEND_HOST_URL}/users/search`,
       { searchQuery },
       {
-        headers: { authKey: JSON.parse(localStorage.getItem("chatzSignIn")) },
-      }
+        headers: { authKey: JSON.parse(localStorage.getItem('chatzSignIn')) },
+      },
     );
 
     if (groupId) {
       const groupMembers = state.user.groups.find(
-        (group) => group._id === groupId
+        (group) => group._id === groupId,
       )?.members;
-      const availableMembers = response.data.filter((user) => {
-        return !(
-          groupMembers.filter((member) => member.email === user.email).length >
-          0
-        );
-      });
+      const availableMembers = response.data.filter((user) => !(
+        groupMembers.filter((member) => member.email === user.email).length
+          > 0
+      ));
       return availableMembers;
     }
 
@@ -149,13 +146,13 @@ export async function searchUsers(searchQuery, groupId = null) {
 export async function createChat(contactEmailId, contactId) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem("chatzSignIn"))
+      JSON.parse(localStorage.getItem('chatzSignIn')),
     );
     contactEmailId = sanitizeUserInput(contactEmailId);
     contactId = sanitizeUserInput(contactId);
 
     if (!authKey || !contactEmailId || !contactId) {
-      throw Error("Invalid inputs");
+      throw Error('Invalid inputs');
     }
 
     const res = await axios.post(
@@ -163,7 +160,7 @@ export async function createChat(contactEmailId, contactId) {
       { contactEmailId, contactId },
       {
         headers: { authKey },
-      }
+      },
     );
     // Adding the new chat at the beginning of the state.user.chats array
     state.user.chats.unshift(res.data);
@@ -178,9 +175,9 @@ export async function createChat(contactEmailId, contactId) {
 export async function createNewGroup(groupName) {
   // Input validation
   try {
-    if (!groupName) throw new Error("Group Name cannot be empty");
+    if (!groupName) throw new Error('Group Name cannot be empty');
     const sanitizedGroupName = sanitizeChatMessage(groupName);
-    if (!sanitizedGroupName) throw new Error("Invalid group name");
+    if (!sanitizedGroupName) throw new Error('Invalid group name');
     // Create new group
     const response = await axios.post(`${BACKEND_HOST_URL}/groups/create`, {
       groupName: sanitizedGroupName,
@@ -198,12 +195,12 @@ export async function createNewGroup(groupName) {
 export async function addGroupMember(contactEmailId) {
   try {
     const authKey = sanitizeUserInput(
-      JSON.parse(localStorage.getItem("chatzSignIn"))
+      JSON.parse(localStorage.getItem('chatzSignIn')),
     );
     contactEmailId = sanitizeUserInput(contactEmailId);
 
     if (!authKey || !contactEmailId) {
-      throw Error("Invalid inputs");
+      throw Error('Invalid inputs');
     }
 
     const res = await axios.post(`${BACKEND_HOST_URL}/groups/member`, {

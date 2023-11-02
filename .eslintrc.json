@@ -20,6 +20,7 @@
     "no-useless-catch": "off",
     "no-underscore-dangle": "off",
     "class-methods-use-this": "off",
+    "new-cap": "off",
     "import/extensions": [
       1,
       {
