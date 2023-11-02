@@ -39,21 +39,78 @@
           </div> -->
         </div>
       </div>
-
-      <div class="set-dp-name dp-no">
-        <div id="set-dp-name-header-wrapper">
-          <p id="close-set-dp-name" class="icon">X</p>
-          <p>Set display name</p>
+      <div class="create-group dp-no">
+        <div id="create-group-header-wrapper">
+          <p id="close-create-group" class="icon">X</p>
+          <p>Create Group</p>
+        </div>
+        <form class="create-group">
+          <input
+            type="text"
+            placeholder="Please enter your group name"
+            id="create-group-text-input"
+            name="newGroupName"
+          />
+          <input type="submit" value="Create" id="create-group-btn" />
+        </form>
+      </div>
+      <div class="add-group-members dp-no">
+        <div id="add-group-members-header-wrapper">
+          <p id="close-add-group-members-modal" class="icon">X</p>
+          <p>Add Members</p>
         </div>
         <input
-          type="text"
-          placeholder="Please enter your display name"
-          id="set-dp-name-text-input"
+          type="search"
+          placeholder="Add Members"
+          id="add-group-members-search-contacts"
+          autocomplete="off"
         />
+        <div class="add-group-members-search-results">
+          <!-- <div>
+            <img src="./assets/contact-1.png" alt="" />
+            <div>
+              <h2>Travis Barker</h2>
+              <p>Busy</p>
+            </div>
+          </div> -->
+        </div>
       </div>
-      <!-- <section class="sidebar">
+      <div class="contact-details-modal dp-no">
+        <div id="contact-details-modal-header-wrapper">
+          <p id="close-contact-details-modal" class="icon">X</p>
+          <p>Chat Details</p>
+        </div>
+        <div class="contact-details-modal-members-results">
+          <!-- <div>
+            <img src="./assets/contact-1.png" alt="" />
+            <div>
+              <h2>Travis Barker</h2>
+              <p>Busy</p>
+            </div>
+            <p class="admin-highlight">Admin</p>
+          </div> -->
+        </div>
+        <button id="add-group-member">Add Members</button>
+      </div>
+      <section class="sidebar">
         <img class="sidebar" src="./assets/contact-1.png" alt="DP" />
-      </section> -->
+        <div class="sidebar-buttons">
+          <button type="button" class="start-chat">
+            <img src="./assets/new-chat-icon.png" />
+          </button>
+          <button type="button" class="create-group">
+            <img src="./assets/chat-room-icon.png" />
+          </button>
+        </div>
+        <div class="wrapper">
+          <button>
+            <img src="./assets/settings-icon.png" alt="Settings" />
+          </button>
+          <button id="signout">
+            <img src="./assets/signout-icon.png" alt="Signout" />
+          </button>
+        </div>
+      </section>
       <section class="contacts">
         <div class="header">
           <h1 class="title">Messages</h1>
@@ -78,7 +135,6 @@
             </div>
           </div> -->
         </div>
-        <button type="button" class="start-chat">+</button>
       </section>
       <section class="chats">
         <div class="header">

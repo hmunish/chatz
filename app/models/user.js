@@ -27,6 +27,12 @@ const userSchema = new Schema(
       required: true,
       default: [],
     },
+    groups: {
+      type: [Schema.Types.ObjectId],
+      required: true,
+      ref: 'group-chat',
+      default: [],
+    },
   },
   { timestamps: true },
 );

@@ -10,6 +10,9 @@ import {
   sendMessage,
   insertNewMessage,
   sortChatNewest,
+  createNewGroup,
+  addGroupMember,
+  insertMemberDetailsToGroup,
 } from './model.js';
 
 // Socket event listeners & handlers
@@ -19,12 +22,27 @@ socket.on('connect', () => {
 
   // Listening for new message socket event & calling function be executed on new message
   socket.on('message', (chatId, message) => {
+    console.log('New message recieved: ', chatId, message);
     handleRecievedMessage(chatId, message);
   });
 
   // Listening for new chat socket event & adding the new chat in the current state chats array
   socket.on('newChat', (newChat) => {
     state.user.chats.unshift(newChat);
+  });
+
+  // Listening for new group socket event &
+  // adding the new group in the current state chats & groups array
+  socket.on('newGroupAdded', (group) => {
+    state.user.chats.unshift(group);
+    state.user.groups.unshift(group);
+  });
+
+  // Listening for new group member added socket event &
+  // adding the new memeber in state group members array
+  socket.on('groupMemberAdded', (groupId, contactDetails) => {
+    insertMemberDetailsToGroup(groupId, contactDetails);
+    View.renderGroupMembers(getCurrentChats()[0].members);
   });
 });
 
@@ -62,6 +80,7 @@ async function handleIsSignedIn() {
     if (!authorized) throw new Error('User not authorized');
     socket.emit('join-group', state.user.email);
     View.setUserEmailAsTitle(state.user.email);
+    sortChatNewest();
     View.renderChatContacts(state.user);
   } catch (err) {
     View.redirectToLogin();
@@ -100,6 +119,50 @@ async function handleLoadChat(chatId) {
   View.renderChatMessages(getCurrentChats(), state.user.email);
 }
 
+// function to handle new group creation
+async function handleCreateGroup(groupName) {
+  try {
+    View.startLoadingSpinner();
+    const response = await createNewGroup(groupName);
+    if (response) {
+      sortChatNewest();
+      View.renderChatContacts(state.user);
+      View.toggleCreateGroupModal();
+      View.stopLoadingSpinner();
+    }
+  } catch (err) {
+    View.addAppResponse(err?.response?.data.message || err.message, 'clr-red');
+  }
+}
+
+async function handleAddGroupMembersSearch(searchQuery) {
+  try {
+    if (!searchQuery) return View.renderAddGroupMemberUserSearch([]);
+    const results = await searchUsers(searchQuery, state.chatId);
+    View.renderAddGroupMemberUserSearch(results);
+  } catch (err) {
+    View.addAppResponse(err.message, 'clr-red');
+  }
+}
+
+// function to handle new chat creation
+async function handleAddGroupMember(contactEmailId) {
+  try {
+    View.startLoadingSpinner();
+    await addGroupMember(contactEmailId);
+    View.addAppResponse('Member added to the group');
+  } catch (err) {
+    const errorMessage = err.response?.data.message || err.message;
+    View.addAppResponse(errorMessage, 'clr-red');
+  }
+}
+
+// function to load contact details modal
+function handleLoadContactDetailsModal() {
+  View.toggleContactDetailsModal();
+  View.renderGroupMembers(getCurrentChats()[0]?.members);
+}
+
 // Initial function to be called on app start
 async function init() {
   try {
@@ -108,6 +171,10 @@ async function init() {
     View.addHandlerStartChat(handleCreateChat);
     View.addHanlderLoadChat(handleLoadChat);
     View.addHandlerFormSendMessage(handleSendMessage);
+    View.addHandlerCreateGroup(handleCreateGroup);
+    View.addHandlerAddGroupMembersUserSearch(handleAddGroupMembersSearch);
+    View.addHandlerAddGroupMember(handleAddGroupMember);
+    View.addHandlerContactDetailModalToggle(handleLoadContactDetailsModal);
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
     View.addAppResponse(errorMessage, 'clr-red');

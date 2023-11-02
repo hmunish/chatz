@@ -13,6 +13,7 @@ const io = new Server(server);
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/user.js');
 const chatRouter = require('./routes/chat.js');
+const groupChatRouter = require('./routes/group-chat.js');
 
 io.on('connection', (socket) => {
   socket.on('join-group', (groupId) => {
@@ -41,6 +42,9 @@ app.use('/users', userRouter);
 
 // Chats router
 app.use('/chats', chatRouter);
+
+// Groups router
+app.use('/groups', groupChatRouter);
 
 // Responding with 404 not found error if no route matched by the request
 app.use('/', (req, res) => {

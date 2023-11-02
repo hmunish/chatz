@@ -2,7 +2,7 @@ const Chat = require('../models/chat');
 const User = require('../models/user');
 const {
   sanitizeUserInput,
-  sanitizeChatMessage,
+  sanitizeText,
 } = require('../utility/input-validation');
 
 const addChatIdToUser = async (userId, chatId) => {
@@ -81,7 +81,7 @@ exports.createChat = async (req, res) => {
 exports.addMessage = async (req, res, next) => {
   try {
     const chatId = sanitizeUserInput(req.body.chatId);
-    const message = sanitizeChatMessage(req.body.message);
+    const message = sanitizeText(req.body.message);
 
     if (!chatId || !message) {
       return res.status(400).send({ message: 'Invalid request made' });

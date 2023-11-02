@@ -78,13 +78,10 @@ exports.isSignedIn = async (req, res, next) => {
     const user = jwt.verify(token, process.env.JWT_PWD);
 
     const isUser = await User.findOne({ email: user.email })
-      .select('email users')
+      .select('email users groups')
       .populate({
-        path: 'chats',
-        select: 'users messages createdAt',
-        options: {
-          sort: [{ updatedAt: '-1' }],
-        },
+        path: 'chats groups',
+        select: 'users messages createdAt admins members name',
       });
 
     if (!isUser) {

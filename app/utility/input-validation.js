@@ -19,7 +19,7 @@ const sanitizeUserInput = (input) => {
   }
 };
 
-const sanitizeChatMessage = (input) => {
+const sanitizeText = (input) => {
   try {
     if (!input) return false;
     let sanitizedInput = DOMPurify.sanitize(input);
@@ -59,4 +59,4 @@ const isValidInputs = (userDetails, type) => {
   }
 };
 
-module.exports = { isValidInputs, sanitizeUserInput, sanitizeChatMessage };
+module.exports = { isValidInputs, sanitizeUserInput, sanitizeText };

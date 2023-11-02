@@ -4,6 +4,8 @@ import GlobalView from '../common/global-view';
 class DashboardView extends GlobalView {
   userEmailTitle = document.querySelector('div.header > h1.title');
 
+  sidebar = document.querySelector('section.sidebar');
+
   contactSection = document.querySelector('section.contacts');
 
   contactList = document.querySelector('.contacts-list');
@@ -20,15 +22,53 @@ class DashboardView extends GlobalView {
 
   startChatCloseIcon = document.querySelector('#close-select-contact');
 
+  createGroupBtn = document.querySelector('button.create-group');
+
+  createGroupModal = document.querySelector('div.create-group');
+
+  createGroupCloseIcon = document.querySelector('#close-create-group');
+
+  addGroupMemberCloseIcon = document.querySelector(
+    '#close-add-group-members-modal',
+  );
+
+  createGroupForm = document.querySelector('form.create-group');
+
   searchUserInput = document.querySelector('#start-chat-search-contacts');
 
   startChatUserSearchResults = document.querySelector(
     'div.start-chat-search-results',
   );
 
+  addGroupMemberBtn = document.querySelector('#add-group-member');
+
+  addGroupMemberModal = document.querySelector('div.add-group-members');
+
+  addGroupMembersSearchInput = document.querySelector(
+    '#add-group-members-search-contacts',
+  );
+
+  addGroupMembersUserSearchResults = document.querySelector(
+    '.add-group-members-search-results',
+  );
+
+  contactDetailIcon = document.querySelector('#details-contact');
+
+  contactDetailModal = document.querySelector('div.contact-details-modal');
+
+  contactDetailModalCloseIcon = document.querySelector(
+    '#close-contact-details-modal',
+  );
+
+  groupMemberList = document.querySelector(
+    'div.contact-details-modal-members-results',
+  );
+
   chatBox = document.querySelector('div.chat-box');
 
   sendMessageForm = document.querySelector('form.send-message');
+
+  signoutBtn = document.querySelector('button#signout');
 
   constructor() {
     super();
@@ -62,11 +102,56 @@ class DashboardView extends GlobalView {
     );
   }
 
+  _addHandlerCreateGroupToggle() {
+    this.createGroupBtn.addEventListener(
+      'click',
+      this.toggleCreateGroupModal.bind(this),
+    );
+    this.createGroupCloseIcon.addEventListener(
+      'click',
+      this.toggleCreateGroupModal.bind(this),
+    );
+  }
+
+  _addHandlerAddGroupMemberToggle() {
+    this.addGroupMemberBtn.addEventListener('click', () => {
+      this.toggleAddGroupMemberModal();
+      this.toggleContactDetailsModal();
+    });
+
+    this.addGroupMemberCloseIcon.addEventListener('click', () => {
+      this.toggleAddGroupMemberModal();
+      this.toggleContactDetailsModal();
+    });
+  }
+
+  _addHandlerCloseContactDetailModal() {
+    this.contactDetailModalCloseIcon.addEventListener(
+      'click',
+      this.toggleContactDetailsModal.bind(this),
+    );
+  }
+
+  _addHandlerSignout() {
+    this.signoutBtn.addEventListener('click', this.signout.bind(this));
+  }
+
   _addAllHandlers() {
     this._addHandlerSlideContactSection();
     this._addHandlerChatBackArrow();
     this._addHandlersStartChatToggle();
+    this._addHandlerCreateGroupToggle();
+    this._addHandlerAddGroupMemberToggle();
+    this._addHandlerCloseContactDetailModal();
+    this._addHandlerSignout();
     this.addHandlerStartChat();
+  }
+
+  addHandlerCreateGroup(handler) {
+    this.createGroupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handler(e.target.newGroupName.value);
+    });
   }
 
   // Method to add handler to send message form submit event
@@ -91,6 +176,16 @@ class DashboardView extends GlobalView {
 
   addHandlerUserSearch(handler) {
     this.searchUserInput.addEventListener('keyup', (e) => {
+      handler(e.target.value);
+    });
+  }
+
+  addHandlerContactDetailModalToggle(handler) {
+    this.contactDetailIcon.addEventListener('click', handler);
+  }
+
+  addHandlerAddGroupMembersUserSearch(handler) {
+    this.addGroupMembersSearchInput.addEventListener('keyup', (e) => {
       handler(e.target.value);
     });
   }
@@ -150,8 +245,44 @@ class DashboardView extends GlobalView {
     });
   }
 
+  renderAddGroupMemberUserSearch(arr) {
+    if (arr.length === 0) {
+      return this.renderNoResultsFound(this.addGroupMembersUserSearchResults);
+    }
+    let markup = '';
+    arr.forEach((i) => {
+      markup += `
+      <div>
+      <img src="${contactImage}" alt="Contact" />
+      <div class="user-search-results-details-box" data-emailid="${i.email}" data-id="${i._id}">
+        <h2>${i.email}</h2>
+        <p></p>
+      </div>
+    </div>
+      `;
+      this.addGroupMembersUserSearchResults.innerHTML = markup;
+    });
+  }
+
   addHandlerStartChat(handler) {
     this.startChatUserSearchResults.addEventListener(
+      'click',
+      (e) => {
+        if (
+          e.target.parentElement.classList.contains(
+            'user-search-results-details-box',
+          )
+        ) {
+          const { emailid, id } = e.target.parentElement.dataset;
+          handler(emailid, id);
+        }
+      },
+      true,
+    );
+  }
+
+  addHandlerAddGroupMember(handler) {
+    this.addGroupMembersUserSearchResults.addEventListener(
       'click',
       (e) => {
         if (
@@ -195,13 +326,17 @@ class DashboardView extends GlobalView {
     user.chats.forEach((chat) => {
       const lastMessage = chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
       const time = (
-        new Date(lastMessage?.messageSentAt) || new Date(chat.createdAt)
+        lastMessage
+          ? new Date(lastMessage.messageSentAt)
+          : new Date(chat.createdAt)
       ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       markup += `
       <div class="contact-details" data-id="${chat._id}">
     <img src="${contactImage}" alt="">
     <div class="chat-details">
-      <h2>${chat.users.filter((email) => email !== user.email)}</h2>
+      <h2>${
+  chat.name || chat.users.filter((email) => email !== user.email)
+}</h2>
       <p>${lastMessage?.message || ''}</p>
     </div>
     <div class="message-details">
@@ -237,12 +372,63 @@ class DashboardView extends GlobalView {
       .classList.add('dp-no');
   }
 
+  renderGroupMembers(members) {
+    let markup = '';
+    if (!members) {
+      this.hideAddMemberButton();
+      markup = '<p style="padding: 15px">No Details</p>';
+      this.groupMemberList.innerHTML = markup;
+      return;
+    }
+    members.forEach((member) => {
+      const isAdmin = member.isAdmin
+        ? '<p class="admin-highlight">Admin</p>'
+        : '';
+      markup += `
+        <div ${member._id}>
+        <img src="${contactImage}" alt="Contact" />
+        <div>
+          <h2>${member.email}</h2>
+        </div>
+        ${isAdmin}
+      </div>
+        `;
+    });
+
+    this.groupMemberList.innerHTML = markup;
+    this.showAddMemberButton();
+  }
+
+  hideAddMemberButton() {
+    this.addGroupMemberBtn.classList.add('dp-no');
+  }
+
+  showAddMemberButton() {
+    this.addGroupMemberBtn.classList.remove('dp-no');
+  }
+
+  toggleCreateGroupModal() {
+    this.createGroupModal.classList.toggle('dp-no');
+  }
+
   toggleStartChatBox() {
     this.startChat.classList.toggle('dp-no');
   }
 
+  toggleContactDetailsModal() {
+    return this.contactDetailModal.classList.toggle('dp-no');
+  }
+
+  toggleAddGroupMemberModal() {
+    this.addGroupMemberModal.classList.toggle('dp-no');
+  }
+
   getDashboardWidth() {
     return document.querySelector('#dashboard').clientWidth;
+  }
+
+  toggleSidebar() {
+    this.sidebar.classList.toggle('dp-no');
   }
 
   slideContactSection() {
@@ -257,7 +443,13 @@ class DashboardView extends GlobalView {
   renderChat() {
     if (this.getDashboardWidth() < 1000) {
       this.slideContactSection();
+      this.toggleSidebar();
     }
+  }
+
+  signout() {
+    localStorage.removeItem('chatzSignIn');
+    this.redirectToLogin();
   }
 
   redirectToLogin() {
