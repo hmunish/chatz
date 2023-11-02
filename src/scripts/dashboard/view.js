@@ -28,6 +28,10 @@ class DashboardView extends GlobalView {
 
   createGroupCloseIcon = document.querySelector("#close-create-group");
 
+  addGroupMemberCloseIcon = document.querySelector(
+    "#close-add-group-members-modal"
+  );
+
   createGroupForm = document.querySelector("form.create-group");
 
   searchUserInput = document.querySelector("#start-chat-search-contacts");
@@ -36,12 +40,28 @@ class DashboardView extends GlobalView {
     "div.start-chat-search-results"
   );
 
+  addGroupMemberBtn = document.querySelector("#add-group-member");
+
+  addGroupMemberModal = document.querySelector("div.add-group-members");
+
   addGroupMembersSearchInput = document.querySelector(
     "#add-group-members-search-contacts"
   );
 
   addGroupMembersUserSearchResults = document.querySelector(
     ".add-group-members-search-results"
+  );
+
+  contactDetailIcon = document.querySelector("#details-contact");
+
+  contactDetailModal = document.querySelector("div.contact-details-modal");
+
+  contactDetailModalCloseIcon = document.querySelector(
+    "#close-contact-details-modal"
+  );
+
+  groupMemberList = document.querySelector(
+    "div.contact-details-modal-members-results"
   );
 
   chatBox = document.querySelector("div.chat-box");
@@ -93,6 +113,25 @@ class DashboardView extends GlobalView {
     );
   }
 
+  _addHandlerAddGroupMemberToggle() {
+    this.addGroupMemberBtn.addEventListener("click", () => {
+      this.toggleAddGroupMemberModal();
+      this.toggleContactDetailsModal();
+    });
+
+    this.addGroupMemberCloseIcon.addEventListener("click", () => {
+      this.toggleAddGroupMemberModal();
+      this.toggleContactDetailsModal();
+    });
+  }
+
+  _addHandlerCloseContactDetailModal() {
+    this.contactDetailModalCloseIcon.addEventListener(
+      "click",
+      this.toggleContactDetailsModal.bind(this)
+    );
+  }
+
   _addHandlerSignout() {
     this.signoutBtn.addEventListener("click", this.signout.bind(this));
   }
@@ -102,6 +141,8 @@ class DashboardView extends GlobalView {
     this._addHandlerChatBackArrow();
     this._addHandlersStartChatToggle();
     this._addHandlerCreateGroupToggle();
+    this._addHandlerAddGroupMemberToggle();
+    this._addHandlerCloseContactDetailModal();
     this._addHandlerSignout();
     this.addHandlerStartChat();
   }
@@ -137,6 +178,10 @@ class DashboardView extends GlobalView {
     this.searchUserInput.addEventListener("keyup", (e) => {
       handler(e.target.value);
     });
+  }
+
+  addHandlerContactDetailModalToggle(handler) {
+    this.contactDetailIcon.addEventListener("click", handler);
   }
 
   addHandlerAddGroupMembersUserSearch(handler) {
@@ -328,12 +373,52 @@ class DashboardView extends GlobalView {
       .classList.add("dp-no");
   }
 
+  renderGroupMembers(members) {
+    let markup = ``;
+    if (!members) {
+      this.hideAddMemberButton();
+      markup = '<p style="padding: 15px">No Details</p>';
+    } else {
+      members.forEach((member) => {
+        const isAdmin = member.isAdmin
+          ? '<p class="admin-highlight">Admin</p>'
+          : "";
+        markup += `
+        <div ${member._id}>
+        <img src="${contactImage}" alt="Contact" />
+        <div>
+          <h2>${member.email}</h2>
+        </div>
+        ${isAdmin}
+      </div>
+        `;
+      });
+    }
+    this.groupMemberList.innerHTML = markup;
+    this.showAddMemberButton();
+  }
+
+  hideAddMemberButton() {
+    this.addGroupMemberBtn.classList.add("dp-no");
+  }
+
+  showAddMemberButton() {
+    this.addGroupMemberBtn.classList.remove("dp-no");
+  }
   toggleCreateGroupModal() {
     this.createGroupModal.classList.toggle("dp-no");
   }
 
   toggleStartChatBox() {
     this.startChat.classList.toggle("dp-no");
+  }
+
+  toggleContactDetailsModal() {
+    return this.contactDetailModal.classList.toggle("dp-no");
+  }
+
+  toggleAddGroupMemberModal() {
+    this.addGroupMemberModal.classList.toggle("dp-no");
   }
 
   getDashboardWidth() {

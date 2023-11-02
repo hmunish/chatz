@@ -194,7 +194,8 @@ div.new-message-alert {
 
 div.start-chat,
 div.create-group,
-div.add-group-members {
+div.add-group-members,
+div.contact-details-modal {
   width: 350px;
   height: 350px;
   border-radius: 11px;
@@ -218,7 +219,8 @@ div.create-group {
 
 #start-chat-header-wrapper,
 #create-group-header-wrapper,
-#add-group-members-header-wrapper {
+#add-group-members-header-wrapper,
+#contact-details-modal-header-wrapper {
   width: 100%;
   height: 50px;
   padding: 15px;
@@ -239,7 +241,8 @@ form.create-group {
   gap: 11px;
 }
 
-#create-group-btn {
+#create-group-btn,
+#add-group-member {
   align-self: flex-end;
   border: none;
   border-radius: 8px;
@@ -252,7 +255,8 @@ form.create-group {
 
 #close-select-contact,
 #close-create-group,
-#close-add-group-members-modal {
+#close-add-group-members-modal,
+#close-contact-details-modal {
   font-weight: bolder;
 }
 
@@ -268,7 +272,8 @@ form.create-group {
 
 div.start-chat-search-results,
 div.add-group-members-search-results,
-div.create-group-search-results {
+div.create-group-search-results,
+div.contact-details-modal-members-results {
   width: 100%;
   flex-grow: 2;
   overflow-y: scroll;
@@ -276,7 +281,8 @@ div.create-group-search-results {
 
 div.start-chat-search-results > div,
 div.add-group-members-search-results > div,
-div.create-group-search-results > div {
+div.create-group-search-results > div,
+div.contact-details-modal-members-results > div {
   width: 100%;
   height: 50px;
   max-height: 50px;
@@ -290,7 +296,8 @@ div.create-group-search-results > div {
 
 div.start-chat-search-results > div > div,
 div.add-group-members-search-results > div > div,
-div.create-group-search-results > div > div {
+div.create-group-search-results > div > div,
+div.contact-details-modal-members-results > div > div {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -301,14 +308,24 @@ div.create-group-search-results > div > div {
 
 div.start-chat-search-results > div > div > *,
 div.add-group-members-search-results > div > div > *,
-div.create-group-search-results > div > div > * {
+div.create-group-search-results > div > div > *,
+div.contact-details-modal-members-results > div > div > * {
   font-size: 14px;
 }
 
 div.start-chat-search-results > div > div > p,
 div.add-group-members-search-results > div > p,
-div.create-group-search-results > div > div > p {
+div.create-group-search-results > div > div > p,
+div.contact-details-modal-members-results > div > div > p {
   color: var(--text-light-color);
+}
+
+.admin-highlight {
+  padding: 3px;
+  background: var(--bg-color-2);
+  color: var(--green-color);
+  border-radius: 8px;
+  font-size: 0.7rem;
 }
 
 /* Chat section starts */

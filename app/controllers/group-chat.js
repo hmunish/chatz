@@ -16,10 +16,11 @@ const addGroupIdToUser = async (userId, groupId) => {
 
 const addGroupIdToUserByEmail = async (email, groupId) => {
   try {
-    await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       { email: email },
       { $push: { groups: groupId } }
-    );
+    ).select("email");
+    return user;
   } catch (err) {
     throw err;
   }
@@ -139,10 +140,12 @@ exports.addMember = async (req, res) => {
 
     // Adding the member in the group and
     // Adding group id in members groups array
-    await Promise.all([
+    const result = await Promise.all([
       addMemberEmailToGroup(groupId, contactEmailId),
       addGroupIdToUserByEmail(contactEmailId, groupId),
     ]);
+
+    const addedContactDetails = result[1];
 
     const updatedGroup = await groupChat.findById(groupId);
 
@@ -151,7 +154,9 @@ exports.addMember = async (req, res) => {
 
     // Emitting socket event for new member added to other users
     isGroup.members.forEach((member) => {
-      req.io.to(member.email).emit("groupMemberAdded", groupId, contactEmailId);
+      req.io
+        .to(member.email)
+        .emit("groupMemberAdded", groupId, addedContactDetails);
     });
     // Responding with 200 OK
     res.status(200).send({ message: "Member added successfully" });

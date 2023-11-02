@@ -43,6 +43,13 @@ export const insertNewMessage = (chatId, newMessage) => {
   }
 };
 
+// function to add new group member details to groups array
+export const insertMemberDetailsToGroup = (groupId, contactDetails) => {
+  state.user.chats.forEach((chat) => {
+    if (chat._id === groupId) chat.members.push(contactDetails);
+  });
+};
+
 // setting global axios headers authKey for authorizing user by json web token
 axios.defaults.headers.common.authKey = sanitizeUserInput(
   JSON.parse(localStorage.getItem("chatzSignIn")) || " "
@@ -203,9 +210,7 @@ export async function addGroupMember(contactEmailId) {
       contactEmailId,
       groupId: state.chatId,
     });
-    // Adding the new chat at the beginning of the state.user.chats array
-    // state.user.chats.unshift(res.data);
-    console.log(res);
+    return res;
   } catch (err) {
     throw err;
   }
