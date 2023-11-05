@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
@@ -24,11 +24,14 @@ const chatSchema = new Schema(
             required: true,
             default: Date.now,
           },
+          isFile: {
+            type: Boolean,
+          },
         },
       ],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model('chat', chatSchema);
+module.exports = mongoose.model("chat", chatSchema);

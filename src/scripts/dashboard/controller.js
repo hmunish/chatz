@@ -1,4 +1,4 @@
-import View from './view.js';
+import View from "./view.js";
 import {
   socket,
   state,
@@ -13,34 +13,34 @@ import {
   createNewGroup,
   addGroupMember,
   insertMemberDetailsToGroup,
-} from './model.js';
+} from "./model.js";
 
 // Socket event listeners & handlers
-socket.on('connect', () => {
+socket.on("connect", () => {
   // Emitting event to join group(emailId)
-  socket.emit('join-group', state.user.email);
+  socket.emit("join-group", state.user.email);
 
   // Listening for new message socket event & calling function be executed on new message
-  socket.on('message', (chatId, message) => {
-    console.log('New message recieved: ', chatId, message);
+  socket.on("message", (chatId, message) => {
+    console.log("New message recieved: ", chatId, message);
     handleRecievedMessage(chatId, message);
   });
 
   // Listening for new chat socket event & adding the new chat in the current state chats array
-  socket.on('newChat', (newChat) => {
+  socket.on("newChat", (newChat) => {
     state.user.chats.unshift(newChat);
   });
 
   // Listening for new group socket event &
   // adding the new group in the current state chats & groups array
-  socket.on('newGroupAdded', (group) => {
+  socket.on("newGroupAdded", (group) => {
     state.user.chats.unshift(group);
     state.user.groups.unshift(group);
   });
 
   // Listening for new group member added socket event &
   // adding the new memeber in state group members array
-  socket.on('groupMemberAdded', (groupId, contactDetails) => {
+  socket.on("groupMemberAdded", (groupId, contactDetails) => {
     insertMemberDetailsToGroup(groupId, contactDetails);
     View.renderGroupMembers(getCurrentChats()[0].members);
   });
@@ -60,16 +60,18 @@ function handleRecievedMessage(chatId, newMessage) {
 }
 
 // function to handle sending new message
-async function handleSendMessage(message) {
+async function handleSendMessage(form) {
   try {
-    const isNewMessage = await sendMessage(message);
+    View.startLoadingSpinner();
+    const isNewMessage = await sendMessage(form);
     if (isNewMessage) {
       View.renderChatMessages(getCurrentChats(), state.user.email);
       sortChatNewest();
       View.renderChatContacts(state.user);
+      View.stopLoadingSpinner();
     }
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
@@ -77,8 +79,8 @@ async function handleSendMessage(message) {
 async function handleIsSignedIn() {
   try {
     const authorized = await isSignedIn();
-    if (!authorized) throw new Error('User not authorized');
-    socket.emit('join-group', state.user.email);
+    if (!authorized) throw new Error("User not authorized");
+    socket.emit("join-group", state.user.email);
     View.setUserEmailAsTitle(state.user.email);
     sortChatNewest();
     View.renderChatContacts(state.user);
@@ -94,7 +96,7 @@ async function handleUserSearch(searchQuery) {
     const results = await searchUsers(searchQuery);
     View.renderStartChatUserSearch(results);
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
@@ -108,7 +110,7 @@ async function handleCreateChat(contactEmailId, contactId) {
     View.stopLoadingSpinner();
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 
@@ -131,7 +133,7 @@ async function handleCreateGroup(groupName) {
       View.stopLoadingSpinner();
     }
   } catch (err) {
-    View.addAppResponse(err?.response?.data.message || err.message, 'clr-red');
+    View.addAppResponse(err?.response?.data.message || err.message, "clr-red");
   }
 }
 
@@ -141,7 +143,7 @@ async function handleAddGroupMembersSearch(searchQuery) {
     const results = await searchUsers(searchQuery, state.chatId);
     View.renderAddGroupMemberUserSearch(results);
   } catch (err) {
-    View.addAppResponse(err.message, 'clr-red');
+    View.addAppResponse(err.message, "clr-red");
   }
 }
 
@@ -150,10 +152,10 @@ async function handleAddGroupMember(contactEmailId) {
   try {
     View.startLoadingSpinner();
     await addGroupMember(contactEmailId);
-    View.addAppResponse('Member added to the group');
+    View.addAppResponse("Member added to the group");
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 
@@ -177,7 +179,7 @@ async function init() {
     View.addHandlerContactDetailModalToggle(handleLoadContactDetailsModal);
   } catch (err) {
     const errorMessage = err.response?.data.message || err.message;
-    View.addAppResponse(errorMessage, 'clr-red');
+    View.addAppResponse(errorMessage, "clr-red");
   }
 }
 
