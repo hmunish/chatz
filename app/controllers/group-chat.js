@@ -1,34 +1,33 @@
-const groupChat = require("../models/group-chat");
-const User = require("../models/user");
-const mime = require("mime");
+const mime = require('mime');
 
+const formidable = require('formidable');
+const fs = require('fs');
+const AWS = require('aws-sdk');
 const {
   sanitizeUserInput,
   sanitizeText,
-} = require("../utility/input-validation");
-
-const formidable = require("formidable");
-const fs = require("fs");
-const AWS = require("aws-sdk");
-require("dotenv").config();
+} = require('../utility/input-validation');
+const User = require('../models/user');
+const groupChat = require('../models/group-chat');
+require('dotenv').config();
 
 const uploadToS3 = (data, filename) => {
-  const mime_type = mime.getType(filename);
-  const BUCKET_NAME = "chatz-media";
-  const IAM_ACCESS_KEY = process.env.IAM_ACCESS_KEY;
-  const IAM_SECRET_KEY = process.env.IAM_SECRET_KEY;
+  const mimeType = mime.getType(filename);
+  const BUCKET_NAME = 'chatz-media';
+  const { IAM_ACCESS_KEY } = process.env;
+  const { IAM_SECRET_KEY } = process.env;
 
-  let s3bucket = new AWS.S3({
+  const s3bucket = new AWS.S3({
     accessKeyId: IAM_ACCESS_KEY,
     secretAccessKey: IAM_SECRET_KEY,
   });
 
-  var params = {
+  const params = {
     Bucket: BUCKET_NAME,
     Key: filename,
     Body: data,
-    ContentType: mime_type,
-    ACL: "public-read",
+    ContentType: mimeType,
+    ACL: 'public-read',
   };
   return new Promise((resolve, reject) => {
     s3bucket.upload(params, (err, s3Response) => {
@@ -54,8 +53,8 @@ const addGroupIdToUserByEmail = async (email, groupId) => {
   try {
     const user = await User.findOneAndUpdate(
       { email },
-      { $push: { groups: groupId } }
-    ).select("email");
+      { $push: { groups: groupId } },
+    ).select('email');
     return user;
   } catch (err) {
     throw err;
@@ -77,7 +76,7 @@ exports.createGroup = async (req, res) => {
     const groupName = sanitizeText(req.body.groupName);
 
     if (!groupName) {
-      return res.status(400).send({ message: "Invalid request made" });
+      return res.status(400).send({ message: 'Invalid request made' });
     }
 
     // Checking if user already has created group with same name
@@ -90,7 +89,7 @@ exports.createGroup = async (req, res) => {
       // If yes return response with 400 code
       return res
         .status(400)
-        .send({ message: "Group with this name already exists" });
+        .send({ message: 'Group with this name already exists' });
     }
 
     // Creating new group
@@ -105,7 +104,7 @@ exports.createGroup = async (req, res) => {
     res.send(newGroup);
   } catch (err) {
     console.log(err);
-    res.status(501).send({ message: "Error creating new group" });
+    res.status(501).send({ message: 'Error creating new group' });
   }
 };
 
@@ -115,7 +114,7 @@ exports.addMessage = async (req, res) => {
     const message = sanitizeText(req.body.message);
 
     if (!groupId || !message) {
-      return res.status(400).send({ message: "Invalid request made" });
+      return res.status(400).send({ message: 'Invalid request made' });
     }
 
     // Adding message to the chat
@@ -123,18 +122,18 @@ exports.addMessage = async (req, res) => {
       $push: { messages: { userEmail: req.user.email, message } },
     });
 
-    const { messages } = await groupChat.findById(groupId).select("messages");
+    const { messages } = await groupChat.findById(groupId).select('messages');
 
     group.members.forEach((member) => {
       if (member.email !== req.user.email) {
-        req.io.to(member.email).emit("message", groupId, messages.slice(-1)[0]);
+        req.io.to(member.email).emit('message', groupId, messages.slice(-1)[0]);
       }
     });
 
     res.send({ newMessage: messages.slice(-1)[0] });
   } catch (err) {
     console.log(err);
-    res.status(501).send({ message: "Error submitting message" });
+    res.status(501).send({ message: 'Error submitting message' });
   }
 };
 
@@ -144,7 +143,7 @@ exports.addMember = async (req, res) => {
     const contactEmailId = sanitizeText(req.body.contactEmailId);
 
     if (!groupId || !contactEmailId) {
-      return res.status(400).send({ message: "Invalid request made" });
+      return res.status(400).send({ message: 'Invalid request made' });
     }
 
     // Checking if the group already exist
@@ -157,24 +156,24 @@ exports.addMember = async (req, res) => {
 
     // Checking if the current user is the admin of the group
     const isAdmin = isGroup.members.find(
-      (member) => member.email === req.user.email
+      (member) => member.email === req.user.email,
     );
 
     // If the user is not admin return with response 201
     if (!isAdmin) {
-      return res.status(201).send({ message: "Only admins can add members" });
+      return res.status(201).send({ message: 'Only admins can add members' });
     }
 
     // Checking if the given member already exist in the group
     const isMember = isGroup.members.find(
-      (member) => member.email === contactEmailId
+      (member) => member.email === contactEmailId,
     );
 
     // If member already exist return with 400 error
     if (isMember) {
       return res
         .status(400)
-        .send({ message: "User already exist in the group" });
+        .send({ message: 'User already exist in the group' });
     }
 
     // Adding the member in the group and
@@ -189,30 +188,30 @@ exports.addMember = async (req, res) => {
     const updatedGroup = await groupChat.findById(groupId);
 
     // Emitting socket event of add new group to added user
-    req.io.to(contactEmailId).emit("newGroupAdded", updatedGroup);
+    req.io.to(contactEmailId).emit('newGroupAdded', updatedGroup);
 
     // Emitting socket event for new member added to other users
     isGroup.members.forEach((member) => {
       req.io
         .to(member.email)
-        .emit("groupMemberAdded", groupId, addedContactDetails);
+        .emit('groupMemberAdded', groupId, addedContactDetails);
     });
     // Responding with 200 OK
-    res.status(200).send({ message: "Member added successfully" });
+    res.status(200).send({ message: 'Member added successfully' });
   } catch (err) {
     console.log(err);
-    res.status(501).send({ message: "Error adding member" });
+    res.status(501).send({ message: 'Error adding member' });
   }
 };
 
 exports.addFileMessage = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
-    let fileBlob,
-      uploadFileName,
-      formFields = {};
+    let fileBlob;
+    let uploadFileName;
+    const formFields = {};
 
-    form.on("file", (field, file) => {
+    form.on('file', (field, file) => {
       const filePath = file.filepath;
       uploadFileName = `${req.user.id}-${new Date().getTime()}-${
         file.originalFilename
@@ -225,14 +224,14 @@ exports.addFileMessage = async (req, res) => {
       });
     });
 
-    form.on("field", (field, value) => {
+    form.on('field', (field, value) => {
       formFields[field] = value;
     });
 
-    form.on("end", async () => {
+    form.on('end', async () => {
       const groupId = sanitizeUserInput(formFields.groupId);
       if (!groupId) {
-        return res.status(400).send({ message: "Invalid request made" });
+        return res.status(400).send({ message: 'Invalid request made' });
       }
 
       const uploadedFileUrl = await uploadToS3(fileBlob, uploadFileName);
@@ -248,11 +247,11 @@ exports.addFileMessage = async (req, res) => {
         },
       });
 
-      const { messages } = await groupChat.findById(groupId).select("messages");
+      const { messages } = await groupChat.findById(groupId).select('messages');
 
       group.members.forEach((emailId) => {
         if (emailId !== req.user.email) {
-          req.io.to(emailId).emit("message", groupId, messages.slice(-1)[0]);
+          req.io.to(emailId).emit('message', groupId, messages.slice(-1)[0]);
         }
       });
 
@@ -262,6 +261,6 @@ exports.addFileMessage = async (req, res) => {
     form.parse(req);
   } catch (err) {
     console.log(err);
-    res.status(501).send({ message: "Error submitting message" });
+    res.status(501).send({ message: 'Error submitting message' });
   }
 };
