@@ -8,7 +8,11 @@ const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: ["https://chatz-p118.onrender.com"],
+  },
+});
 
 const bodyParser = require("body-parser");
 const userRouter = require("./routes/user.js");
