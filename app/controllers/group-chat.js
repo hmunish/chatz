@@ -1,5 +1,6 @@
 const groupChat = require("../models/group-chat");
 const User = require("../models/user");
+const mime = require("mime");
 
 const {
   sanitizeUserInput,
@@ -12,6 +13,7 @@ const AWS = require("aws-sdk");
 require("dotenv").config();
 
 const uploadToS3 = (data, filename) => {
+  const mime_type = mime.getType(filename);
   const BUCKET_NAME = "chatz-media";
   const IAM_ACCESS_KEY = process.env.IAM_ACCESS_KEY;
   const IAM_SECRET_KEY = process.env.IAM_SECRET_KEY;
@@ -25,6 +27,7 @@ const uploadToS3 = (data, filename) => {
     Bucket: BUCKET_NAME,
     Key: filename,
     Body: data,
+    ContentType: mime_type,
     ACL: "public-read",
   };
   return new Promise((resolve, reject) => {
@@ -211,7 +214,7 @@ exports.addFileMessage = async (req, res) => {
 
     form.on("file", (field, file) => {
       const filePath = file.filepath;
-      uploadFileName = `${req.user.id}-${new Date().toISOString()}-${
+      uploadFileName = `${req.user.id}-${new Date().getTime()}-${
         file.originalFilename
       }`;
       fileBlob = fs.readFileSync(filePath);
@@ -231,6 +234,7 @@ exports.addFileMessage = async (req, res) => {
       if (!groupId) {
         return res.status(400).send({ message: "Invalid request made" });
       }
+
       const uploadedFileUrl = await uploadToS3(fileBlob, uploadFileName);
 
       // Adding message to the chat

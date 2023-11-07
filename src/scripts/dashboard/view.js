@@ -1,4 +1,5 @@
 import contactImage from "../../assets/contact-1.png";
+import downloadImage from "../../assets/download-icon.png";
 import GlobalView from "../common/global-view";
 
 class DashboardView extends GlobalView {
@@ -75,6 +76,8 @@ class DashboardView extends GlobalView {
   attachFileBtn = document.querySelector("img.attach-file");
 
   signoutBtn = document.querySelector("button#signout");
+
+  fileMessageFrame = document.querySelector(".fileMessageFrame");
 
   constructor() {
     super();
@@ -218,10 +221,14 @@ class DashboardView extends GlobalView {
         hour: "2-digit",
         minute: "2-digit",
       });
+
+      let messageMarkup = !msg.isFile
+        ? `<p>${msg.message}</p>`
+        : `<iframe src='${msg.message}' id=${msg._id} scrolling="no" allowfullscreen="" frameborder="0"></iframe> <button class='downloadFileBtn' onclick = downloadUrl('${msg.message}')><img src='${downloadImage}'/></button>`;
       if (msg.userEmail === myEmailId) {
         markup += `
       <div class="message-holder own-message">
-        <p>${msg.message}</p>
+        ${messageMarkup}
         <p class="message-time">
         ${time} <span class="message-status">&check;</span>
         </p>
@@ -232,7 +239,7 @@ class DashboardView extends GlobalView {
         <div class="contact-message-wrapper">
         <img src="${contactImage}" alt="" />
         <div class="message-holder contact-message">
-          <p>${msg.message}</p>
+          ${messageMarkup}
           <p class="message-time">
             <span class="message-status"></span> ${time}
           </p>

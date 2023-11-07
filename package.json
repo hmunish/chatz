@@ -37,6 +37,7 @@
     "formidable": "^3.5.1",
     "jsdom": "^22.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mime": "^3.0.0",
     "mongoose": "^7.6.0",
     "mysql2": "^3.6.1",
     "sequelize": "^6.33.0",

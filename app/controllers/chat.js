@@ -9,8 +9,10 @@ const {
 const fs = require("fs");
 const AWS = require("aws-sdk");
 require("dotenv").config();
+const mime = require("mime");
 
 const uploadToS3 = (data, filename) => {
+  const mime_type = mime.getType(filename);
   const BUCKET_NAME = "chatz-media";
   const IAM_ACCESS_KEY = process.env.IAM_ACCESS_KEY;
   const IAM_SECRET_KEY = process.env.IAM_SECRET_KEY;
@@ -24,6 +26,7 @@ const uploadToS3 = (data, filename) => {
     Bucket: BUCKET_NAME,
     Key: filename,
     Body: data,
+    ContentType: mime_type,
     ACL: "public-read",
   };
   return new Promise((resolve, reject) => {
@@ -149,7 +152,9 @@ exports.addFileMessage = async (req, res) => {
 
     form.on("file", (field, file) => {
       const filePath = file.filepath;
-      uploadFileName = `${req.user.id}-${new Date()}-${file.originalFilename}`;
+      uploadFileName = `${req.user.id}-${new Date().getTime()}-${
+        file.originalFilename
+      }`;
       fileBlob = fs.readFileSync(filePath);
       fs.unlink(filePath, (err) => {
         if (err) {
