@@ -51,6 +51,7 @@ app.use('/', (req, res) => {
   res.status(404).redirect('404.html');
 });
 
+// Setting up database connection with MongoDB server using mongoose ORM
 mongoose
   .connect(process.env.MONGODB_HOSTNAME)
   .then((res) => {
@@ -60,12 +61,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-// sequelize
-//   .sync()
-//   .then(() => {
-//     app.listen(process.env.PORT || 3000);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });

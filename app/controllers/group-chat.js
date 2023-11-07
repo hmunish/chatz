@@ -1,10 +1,45 @@
-const groupChat = require('../models/group-chat');
-const User = require('../models/user');
+const mime = require('mime');
 
+const formidable = require('formidable');
+const fs = require('fs');
+const AWS = require('aws-sdk');
 const {
   sanitizeUserInput,
   sanitizeText,
 } = require('../utility/input-validation');
+const User = require('../models/user');
+const groupChat = require('../models/group-chat');
+require('dotenv').config();
+
+const uploadToS3 = (data, filename) => {
+  const mimeType = mime.getType(filename);
+  const BUCKET_NAME = 'chatz-media';
+  const { IAM_ACCESS_KEY } = process.env;
+  const { IAM_SECRET_KEY } = process.env;
+
+  const s3bucket = new AWS.S3({
+    accessKeyId: IAM_ACCESS_KEY,
+    secretAccessKey: IAM_SECRET_KEY,
+  });
+
+  const params = {
+    Bucket: BUCKET_NAME,
+    Key: filename,
+    Body: data,
+    ContentType: mimeType,
+    ACL: 'public-read',
+  };
+  return new Promise((resolve, reject) => {
+    s3bucket.upload(params, (err, s3Response) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(s3Response.Location);
+      }
+    });
+  });
+};
 
 const addGroupIdToUser = async (userId, groupId) => {
   try {
@@ -166,5 +201,66 @@ exports.addMember = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(501).send({ message: 'Error adding member' });
+  }
+};
+
+exports.addFileMessage = async (req, res) => {
+  try {
+    const form = new formidable.IncomingForm();
+    let fileBlob;
+    let uploadFileName;
+    const formFields = {};
+
+    form.on('file', (field, file) => {
+      const filePath = file.filepath;
+      uploadFileName = `${req.user.id}-${new Date().getTime()}-${
+        file.originalFilename
+      }`;
+      fileBlob = fs.readFileSync(filePath);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    });
+
+    form.on('field', (field, value) => {
+      formFields[field] = value;
+    });
+
+    form.on('end', async () => {
+      const groupId = sanitizeUserInput(formFields.groupId);
+      if (!groupId) {
+        return res.status(400).send({ message: 'Invalid request made' });
+      }
+
+      const uploadedFileUrl = await uploadToS3(fileBlob, uploadFileName);
+
+      // Adding message to the chat
+      const group = await groupChat.findByIdAndUpdate(groupId, {
+        $push: {
+          messages: {
+            userEmail: req.user.email,
+            message: uploadedFileUrl,
+            isFile: true,
+          },
+        },
+      });
+
+      const { messages } = await groupChat.findById(groupId).select('messages');
+
+      group.members.forEach((emailId) => {
+        if (emailId !== req.user.email) {
+          req.io.to(emailId).emit('message', groupId, messages.slice(-1)[0]);
+        }
+      });
+
+      res.send({ newMessage: messages.slice(-1)[0] });
+    });
+
+    form.parse(req);
+  } catch (err) {
+    console.log(err);
+    res.status(501).send({ message: 'Error submitting message' });
   }
 };

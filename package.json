@@ -26,6 +26,7 @@
     "stylelint-scss": "^3.21.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.1488.0",
     "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
@@ -33,8 +34,10 @@
     "dompurify": "^3.0.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "formidable": "^3.5.1",
     "jsdom": "^22.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mime": "^3.0.0",
     "mongoose": "^7.6.0",
     "mysql2": "^3.6.1",
     "sequelize": "^6.33.0",

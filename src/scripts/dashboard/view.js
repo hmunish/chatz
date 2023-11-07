@@ -1,4 +1,5 @@
 import contactImage from '../../assets/contact-1.png';
+import downloadImage from '../../assets/download-icon.png';
 import GlobalView from '../common/global-view';
 
 class DashboardView extends GlobalView {
@@ -68,7 +69,15 @@ class DashboardView extends GlobalView {
 
   sendMessageForm = document.querySelector('form.send-message');
 
+  messageInput = document.querySelector('input[name=message]');
+
+  messageFileInput = document.querySelector('input.attach-file');
+
+  attachFileBtn = document.querySelector('img.attach-file');
+
   signoutBtn = document.querySelector('button#signout');
+
+  fileMessageFrame = document.querySelector('.fileMessageFrame');
 
   constructor() {
     super();
@@ -136,6 +145,18 @@ class DashboardView extends GlobalView {
     this.signoutBtn.addEventListener('click', this.signout.bind(this));
   }
 
+  _addHandlerShowUploadFile() {
+    this.attachFileBtn.addEventListener('click', () => {
+      this.messageFileInput.click();
+    });
+  }
+
+  _addHandlerOnFileUpload() {
+    this.messageFileInput.addEventListener('change', (e) => {
+      this.messageInput.value = `FILE:- ${e.target.value}`;
+    });
+  }
+
   _addAllHandlers() {
     this._addHandlerSlideContactSection();
     this._addHandlerChatBackArrow();
@@ -144,6 +165,8 @@ class DashboardView extends GlobalView {
     this._addHandlerAddGroupMemberToggle();
     this._addHandlerCloseContactDetailModal();
     this._addHandlerSignout();
+    this._addHandlerShowUploadFile();
+    this._addHandlerOnFileUpload();
     this.addHandlerStartChat();
   }
 
@@ -158,7 +181,7 @@ class DashboardView extends GlobalView {
   addHandlerFormSendMessage(handler) {
     this.sendMessageForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      handler(e.target.message.value);
+      handler(e.target);
       e.target.reset();
     });
   }
@@ -198,10 +221,14 @@ class DashboardView extends GlobalView {
         hour: '2-digit',
         minute: '2-digit',
       });
+
+      const messageMarkup = !msg.isFile
+        ? `<p>${msg.message}</p>`
+        : `<iframe src='${msg.message}' id=${msg._id} scrolling="no" allowfullscreen="" frameborder="0"></iframe> <button class='downloadFileBtn' onclick = downloadUrl('${msg.message}')><img src='${downloadImage}'/></button>`;
       if (msg.userEmail === myEmailId) {
         markup += `
       <div class="message-holder own-message">
-        <p>${msg.message}</p>
+        ${messageMarkup}
         <p class="message-time">
         ${time} <span class="message-status">&check;</span>
         </p>
@@ -212,7 +239,7 @@ class DashboardView extends GlobalView {
         <div class="contact-message-wrapper">
         <img src="${contactImage}" alt="" />
         <div class="message-holder contact-message">
-          <p>${msg.message}</p>
+          ${messageMarkup}
           <p class="message-time">
             <span class="message-status"></span> ${time}
           </p>

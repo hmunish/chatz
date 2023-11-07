@@ -24,6 +24,9 @@ const chatSchema = new Schema(
             required: true,
             default: Date.now,
           },
+          isFile: {
+            type: Boolean,
+          },
         },
       ],
     },

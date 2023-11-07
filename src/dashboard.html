@@ -177,12 +177,11 @@
           </div> -->
         </div>
         <form class="send-message">
-          <input type="file" hidden class="attach-file" />
+          <input type="file" hidden class="attach-file" name="attachedFile" />
           <img
             src="./assets/attach-file.png"
             alt="Attach file"
             class="attach-file"
-            name="attachedFile"
           />
           <input
             type="text"
@@ -194,5 +193,26 @@
         </form>
       </section>
     </main>
+
+    <iframe class="dp-no fileMessageFrame"></iframe>
+
+    <script>
+      function downloadUrl(url) {
+        var filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = "blob";
+        xhr.onload = function () {
+          var a = document.createElement("a");
+          a.href = window.URL.createObjectURL(xhr.response); // xhr.response is a blob
+          a.download = filename; // Set the file name.
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        };
+        xhr.open("GET", url);
+        xhr.send();
+      }
+    </script>
   </body>
 </html>

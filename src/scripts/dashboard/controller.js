@@ -60,13 +60,15 @@ function handleRecievedMessage(chatId, newMessage) {
 }
 
 // function to handle sending new message
-async function handleSendMessage(message) {
+async function handleSendMessage(form) {
   try {
-    const isNewMessage = await sendMessage(message);
+    View.startLoadingSpinner();
+    const isNewMessage = await sendMessage(form);
     if (isNewMessage) {
       View.renderChatMessages(getCurrentChats(), state.user.email);
       sortChatNewest();
       View.renderChatContacts(state.user);
+      View.stopLoadingSpinner();
     }
   } catch (err) {
     View.addAppResponse(err.message, 'clr-red');

@@ -74,10 +74,39 @@ export async function isSignedIn() {
 }
 
 // function to send message
-export async function sendMessage(message) {
+export async function sendMessage(form) {
   try {
     const currentChatId = sanitizeUserInput(state.chatId);
-    const messageCopy = sanitizeChatMessage(message);
+
+    if (form.attachedFile.value) {
+      const formData = new FormData(form);
+
+      let response;
+
+      if (state.user.groups.find((group) => group._id === currentChatId)) {
+        formData.append('groupId', currentChatId);
+        response = await axios.post(
+          `${BACKEND_HOST_URL}/groups/fileMessage`,
+          formData,
+        );
+      } else {
+        formData.append('chatId', currentChatId);
+        response = await axios.post(
+          `${BACKEND_HOST_URL}/chats/fileMessage`,
+          formData,
+        );
+      }
+
+      if (response.status !== 200) throw new Error('Error sending message');
+
+      const { newMessage } = response.data;
+
+      // Adding new message in the chat object
+      insertNewMessage(currentChatId, newMessage);
+
+      return true;
+    }
+    const messageCopy = sanitizeChatMessage(form.message.value);
 
     if (!currentChatId || !messageCopy) throw Error('Invalid inputs');
 
@@ -129,10 +158,12 @@ export async function searchUsers(searchQuery, groupId = null) {
       const groupMembers = state.user.groups.find(
         (group) => group._id === groupId,
       )?.members;
-      const availableMembers = response.data.filter((user) => !(
-        groupMembers.filter((member) => member.email === user.email).length
-          > 0
-      ));
+      const availableMembers = response.data.filter(
+        (user) => !(
+          groupMembers.filter((member) => member.email === user.email)
+            .length > 0
+        ),
+      );
       return availableMembers;
     }
 

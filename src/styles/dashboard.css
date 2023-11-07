@@ -466,6 +466,14 @@ div.chat-box {
   text-align: left;
 }
 
+.fileMessage {
+  border: none;
+}
+
+.downloadFileBtn {
+  border: none;
+}
+
 form.send-message {
   width: 100%;
   min-height: 36px;
@@ -491,11 +499,14 @@ form.send-message > input[type="submit"] {
   color: var(--green-color);
   font-size: 14px;
   font-weight: 700;
+  padding: 0 15px;
+  cursor: pointer;
 }
 
 img.attach-file {
   height: 15px;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 /* Chat section ends */
