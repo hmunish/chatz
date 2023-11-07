@@ -249,9 +249,11 @@ exports.addFileMessage = async (req, res) => {
 
       const { messages } = await groupChat.findById(groupId).select('messages');
 
-      group.members.forEach((emailId) => {
-        if (emailId !== req.user.email) {
-          req.io.to(emailId).emit('message', groupId, messages.slice(-1)[0]);
+      group.members.forEach((member) => {
+        if (member.email !== req.user.email) {
+          req.io
+            .to(member.email)
+            .emit('message', groupId, messages.slice(-1)[0]);
         }
       });
 
