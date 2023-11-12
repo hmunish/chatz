@@ -168,7 +168,6 @@ exports.addFileMessage = async (req, res) => {
     });
 
     form.on('end', async () => {
-      console.log(formFields);
       const chatId = sanitizeUserInput(formFields.chatId);
       if (!chatId) {
         return res.status(400).send({ message: 'Invalid request made' });
