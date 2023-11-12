@@ -213,10 +213,13 @@ class DashboardView extends GlobalView {
     });
   }
 
-  renderChatMessages(chats, myEmailId) {
+  renderChatMessages(chats, myEmailId, isNewMessage = false) {
     let markup = '';
+    const messages = isNewMessage
+      ? chats[0].messages.slice(-1)
+      : chats[0].messages;
 
-    chats[0].messages.forEach((msg) => {
+    messages.forEach((msg) => {
       const time = new Date(msg.messageSentAt).toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
@@ -224,7 +227,7 @@ class DashboardView extends GlobalView {
 
       const messageMarkup = !msg.isFile
         ? `<p>${msg.message}</p>`
-        : `<iframe src='${msg.message}' id=${msg._id} scrolling="no" allowfullscreen="" frameborder="0"></iframe> <button class='downloadFileBtn' onclick = downloadUrl('${msg.message}')><img src='${downloadImage}'/></button>`;
+        : `<iframe src='${msg.message}' id=${msg._id} scrolling="no" allowfullscreen="" frameborder="0" class='file-message'></iframe> <button class='downloadFileBtn' onclick = downloadUrl('${msg.message}')><img src='${downloadImage}'/></button>`;
       if (msg.userEmail === myEmailId) {
         markup += `
       <div class="message-holder own-message">
@@ -249,7 +252,8 @@ class DashboardView extends GlobalView {
       }
     });
 
-    this.chatBox.innerHTML = markup;
+    if (isNewMessage) this.chatBox.insertAdjacentHTML('beforeend', markup);
+    else this.chatBox.innerHTML = markup;
     this.chatBox.scrollTop = this.chatBox.scrollHeight;
   }
 
@@ -352,11 +356,22 @@ class DashboardView extends GlobalView {
 
     user.chats.forEach((chat) => {
       const lastMessage = chat.messages[chat.messages.length > 0 ? chat.messages.length - 1 : 0];
-      const time = (
-        lastMessage
-          ? new Date(lastMessage.messageSentAt)
-          : new Date(chat.createdAt)
-      ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const today = new Date(
+        new Date().toLocaleDateString('en-US', {
+          timeZone: Date.getTimezoneOffset,
+        }),
+      );
+      let time = lastMessage
+        ? new Date(lastMessage.messageSentAt)
+        : new Date(chat.createdAt);
+
+      // Converting message date to time format if it is sent today or date format
+      time = time < today
+        ? time.toLocaleDateString('en-US', {
+          timeZone: Date.getTimezoneOffset,
+        })
+        : time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
       markup += `
       <div class="contact-details" data-id="${chat._id}">
     <img src="${contactImage}" alt="">
