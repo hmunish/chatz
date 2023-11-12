@@ -53,7 +53,7 @@ function handleRecievedMessage(chatId, newMessage) {
   View.renderChatContacts(state.user);
   // Checking if new message is recieved for the currently displayed chat
   if (chatId === state.chatId) {
-    View.renderChatMessages(getCurrentChats(), state.user.email);
+    View.renderChatMessages(getCurrentChats(), state.user.email, true);
   } else {
     View.addNewMessageHighlight(chatId);
   }
@@ -65,7 +65,7 @@ async function handleSendMessage(form) {
     View.startLoadingSpinner();
     const isNewMessage = await sendMessage(form);
     if (isNewMessage) {
-      View.renderChatMessages(getCurrentChats(), state.user.email);
+      View.renderChatMessages(getCurrentChats(), state.user.email, true);
       sortChatNewest();
       View.renderChatContacts(state.user);
       View.stopLoadingSpinner();

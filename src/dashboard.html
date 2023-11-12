@@ -198,6 +198,8 @@
 
     <script>
       function downloadUrl(url) {
+        const loadingSpinner = document.querySelector("#loading-spinner");
+        loadingSpinner.classList.remove("dp-no");
         var filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
         var xhr = new XMLHttpRequest();
         xhr.responseType = "blob";
@@ -209,6 +211,7 @@
           document.body.appendChild(a);
           a.click();
           a.remove();
+          loadingSpinner.classList.add("dp-no");
         };
         xhr.open("GET", url);
         xhr.send();

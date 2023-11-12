@@ -466,8 +466,9 @@ div.chat-box {
   text-align: left;
 }
 
-.fileMessage {
+.file-message {
   border: none;
+  width: 100%;
 }
 
 .downloadFileBtn {
