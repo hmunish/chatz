@@ -56,7 +56,7 @@ mongoose
   .connect(process.env.MONGODB_HOSTNAME)
   .then((res) => {
     console.log('Mongo DB Connected');
-    server.listen(process.env.PORT || 3000);
+    server.listen(3000);
   })
   .catch((err) => {
     console.log(err);
