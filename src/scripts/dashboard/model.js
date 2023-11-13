@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import { sanitizeChatMessage, sanitizeUserInput } from '../common/utility';
 import { BACKEND_HOST_URL } from '../common/config';
 
-export const socket = io(`${BACKEND_HOST_URL}`);
+export const socket = io(`${BACKEND_HOST_URL}:80`);
 
 // State for the chat app
 export const state = {
