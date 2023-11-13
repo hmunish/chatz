@@ -10,7 +10,7 @@ const { Server } = require('socket.io');
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://13.51.165.137/',
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
