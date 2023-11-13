@@ -34,7 +34,7 @@ app.use(express.static('dist'));
 // And allowing requests only from the application url
 app.use(
   cors({
-    origin: 'http://ec2-13-51-165-137.eu-north-1.compute.amazonaws.com',
+    origin: process.env.HOSTNAME,
     methods: ['GET', 'POST'],
   }),
 );
