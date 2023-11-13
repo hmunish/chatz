@@ -8,7 +8,12 @@ const app = express();
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://13.51.165.137/',
+    methods: ['GET', 'POST'],
+  },
+});
 
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/user.js');
