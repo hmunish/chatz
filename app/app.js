@@ -61,7 +61,7 @@ mongoose
   .connect(process.env.MONGODB_HOSTNAME)
   .then((res) => {
     console.log('Mongo DB Connected');
-    server.listen(80);
+    server.listen(3000);
   })
   .catch((err) => {
     console.log(err);
