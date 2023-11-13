@@ -34,7 +34,7 @@ app.use(express.static('dist'));
 // And allowing requests only from the application url
 app.use(
   cors({
-    origin: process.env.HOSTNAME,
+    origin: '*',
     methods: ['GET', 'POST'],
   }),
 );
