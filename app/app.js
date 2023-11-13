@@ -32,7 +32,12 @@ app.use(express.static('dist'));
 
 // Using cors package to communicate between cross origin requests
 // And allowing requests only from the application url
-app.use(cors({ origin: 'http://localhost', methods: ['GET', 'POST'] }));
+app.use(
+  cors({
+    origin: 'http://ec2-13-51-165-137.eu-north-1.compute.amazonaws.com',
+    methods: ['GET', 'POST'],
+  }),
+);
 
 // Using body parser to parse incoming json body
 app.use(bodyParser.json());
