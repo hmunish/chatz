@@ -13,6 +13,7 @@ import {
   createNewGroup,
   addGroupMember,
   insertMemberDetailsToGroup,
+  searchContacts,
 } from './model.js';
 
 // Socket event listeners & handlers
@@ -167,6 +168,19 @@ function handleLoadContactDetailsModal() {
   View.renderGroupMembers(getCurrentChats()[0]?.members);
 }
 
+// function to handle contacts search
+function handleSearchContact(query) {
+  state.user.isContactSearch = false;
+  if (!query) {
+    return View.renderChatContacts(state.user);
+  }
+  const chats = searchContacts(query);
+  const stateCopy = JSON.parse(JSON.stringify(state));
+  stateCopy.user.chats = chats;
+  View.renderChatContacts(stateCopy.user);
+  state.user.isContactSearch = true;
+}
+
 // Initial function to be called on app start
 async function init() {
   try {
@@ -174,6 +188,7 @@ async function init() {
     View.addHandlerUserSearch(handleUserSearch);
     View.addHandlerStartChat(handleCreateChat);
     View.addHanlderLoadChat(handleLoadChat);
+    View.addHandlerSearchContacts(handleSearchContact);
     View.addHandlerFormSendMessage(handleSendMessage);
     View.addHandlerCreateGroup(handleCreateGroup);
     View.addHandlerAddGroupMembersUserSearch(handleAddGroupMembersSearch);
