@@ -9,6 +9,8 @@ class DashboardView extends GlobalView {
 
   contactSection = document.querySelector('section.contacts');
 
+  searchContactInput = document.querySelector('#search-contact');
+
   contactList = document.querySelector('.contacts-list');
 
   chatSection = document.querySelector('section.chats');
@@ -329,6 +331,12 @@ class DashboardView extends GlobalView {
     );
   }
 
+  addHandlerSearchContacts(handler) {
+    this.searchContactInput.addEventListener('keyup', (e) => {
+      handler(e.target.value);
+    });
+  }
+
   renderNewContact(data, emailId) {
     const time = new Date(data.createdAt).toLocaleTimeString([], {
       hour: '2-digit',
@@ -352,6 +360,7 @@ class DashboardView extends GlobalView {
   }
 
   renderChatContacts(user) {
+    if (user.isContactSearch) return;
     let markup = '';
 
     user.chats.forEach((chat) => {
