@@ -78,12 +78,14 @@ async function handleSendMessage(form) {
 // function to verify is user is signed in
 async function handleIsSignedIn() {
   try {
+    View.startLoadingSpinner();
     const authorized = await isSignedIn();
     if (!authorized) throw new Error('User not authorized');
     socket.emit('join-group', state.user.email);
     View.setUserEmailAsTitle(state.user.email);
     sortChatNewest();
     View.renderChatContacts(state.user);
+    View.stopLoadingSpinner();
   } catch (err) {
     View.redirectToLogin();
   }
