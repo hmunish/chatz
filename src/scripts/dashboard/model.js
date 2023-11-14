@@ -23,10 +23,10 @@ export const getCurrentChats = () => state.user.chats.filter((el) => el._id === 
 export const sortChatNewest = () => {
   state.user.chats.sort((chat1, chat2) => {
     const time1 = new Date(
-      chat1.messages.at(-1)?.messageSentAt || chat1.createdAt,
+      chat1.messages.slice(-1)[0]?.messageSentAt || chat1.createdAt,
     ).getTime();
     const time2 = new Date(
-      chat2.messages.at(-1)?.messageSentAt || chat2.createdAt,
+      chat2.messages.slice(-1)[0]?.messageSentAt || chat2.createdAt,
     ).getTime();
     return time2 - time1;
   });
