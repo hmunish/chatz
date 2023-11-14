@@ -10,7 +10,8 @@ const { Server } = require('socket.io');
 
 const io = new Server(5000, {
   cors: {
-    origin: [process.env.HOSTNAME],
+    origin: '*',
+    methods: ['GET', 'POST'],
   },
 });
 
