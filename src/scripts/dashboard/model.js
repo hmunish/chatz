@@ -49,6 +49,19 @@ export const insertMemberDetailsToGroup = (groupId, contactDetails) => {
   });
 };
 
+// function to filter contacts with search query
+export const searchContacts = (query) => {
+  const stateChatsCopy = JSON.parse(JSON.stringify(state.user.chats));
+  const filteredContacts = stateChatsCopy.filter((chat) => {
+    const name = chat.name?.toLowerCase();
+    const email = chat.users
+      ?.filter((email) => email !== state.user.email)
+      ?.pop();
+    return name?.includes(query) || email?.includes(query);
+  });
+  return filteredContacts;
+};
+
 // setting global axios headers authKey for authorizing user by json web token
 axios.defaults.headers.common.authKey = sanitizeUserInput(
   JSON.parse(localStorage.getItem('chatzSignIn')) || ' ',
