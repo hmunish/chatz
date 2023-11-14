@@ -41,7 +41,7 @@ app.use(express.static('dist'));
 // Using cors package to communicate between cross origin requests
 // And allowing requests only from the application url
 app.use(
-  cors({ origin: 'https://chatz-p118.onrender.com/', methods: ['GET', 'POST'] }),
+  cors({ origin: 'https://chatz-p118.onrender.com', methods: ['GET', 'POST'] }),
 );
 
 // Using body parser to parse incoming json body
