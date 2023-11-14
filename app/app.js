@@ -12,14 +12,12 @@ const app = express();
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 
-// const io = new Server(5000, {
-//   cors: {
-//     origin: "*",
-//     methods: ["GET", "POST"],
-//   },
-// });
-
-const io = new Server(server);
+const io = new Server(5000, {
+  cors: {
+    origin: process.env.HOSTNAME,
+    methods: ['GET', 'POST'],
+  },
+});
 
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/user.js');
