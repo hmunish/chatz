@@ -23,12 +23,8 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.28.1",
     "hint": "^7.1.10",
-<<<<<<< HEAD
-    "parcel": "^2.10.2",
-=======
     "jest": "^29.7.0",
     "parcel": "^2.9.3",
->>>>>>> develop
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^21.0.0",
     "stylelint-csstree-validator": "^1.9.0",
