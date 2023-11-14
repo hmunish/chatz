@@ -22,7 +22,6 @@ socket.on('connect', () => {
 
   // Listening for new message socket event & calling function be executed on new message
   socket.on('message', (chatId, message) => {
-    console.log('New message recieved: ', chatId, message);
     handleRecievedMessage(chatId, message);
   });
 
@@ -84,7 +83,6 @@ async function handleIsSignedIn() {
     View.setUserEmailAsTitle(state.user.email);
     sortChatNewest();
     View.renderChatContacts(state.user);
-    console.log(state);
   } catch (err) {
     View.redirectToLogin();
   }

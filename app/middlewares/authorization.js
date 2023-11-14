@@ -22,7 +22,6 @@ exports.authorization = async (req, res, next) => {
     req.user = isUser;
     next();
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error authorizing user' });
   }
 };
