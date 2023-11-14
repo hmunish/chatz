@@ -21,20 +21,17 @@
   - [Install](#install)
   - [Usage](#usage)
   - [Run tests](#run-tests)
-  - [Deployment](#deployment)
 - [👥 Authors](#authors)
 - [🔭 Future Features](#future-features)
 - [🤝 Contributing](#contributing)
 - [⭐️ Show your support](#support)
-- [🙏 Acknowledgements](#acknowledgements)
-- [❓ FAQ (OPTIONAL)](#faq)
 - [📝 License](#license)
 
 <!-- PROJECT DESCRIPTION -->
 
 # 📖 Chatz <a name="about-project"></a>
 
-**Chatz** is a real time chatting application with multiple contacts & groups. It supports real time messaging, file sharing, group chat, etc...
+**Chatz** is a real time chatting application with multiple contacts & groups at the same time. It supports features like real time messaging, file sharing, group chat, etc. It uses socket.io library for creating socket connections to the server, AWS S3 for uploading & sharing files. Express framework is used to create API endpoints for the backend with mongoose ORM to perform mongoDB database queries.
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -68,8 +65,6 @@
 
 ### Key Features <a name="key-features"></a>
 
-> Describe between 1-3 key features of the application.
-
 - **Real time messaging**
 - **Group chats**
 - **File sharing**
@@ -79,8 +74,6 @@
 <!-- LIVE DEMO -->
 
 ## 🚀 Live Demo <a name="live-demo"></a>
-
-> Add a link to your deployed project.
 
 - [AWS Live Demo Link](http://16.171.112.12/dashboard.html)
 - [Render Live Demo Link](https://chatz-p118.onrender.com/dashboard.html)
