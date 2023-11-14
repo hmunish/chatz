@@ -1,6 +1,10 @@
+const fs = require('fs');
+const path = require('path');
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const mongoose = require('mongoose');
 const http = require('http');
 
@@ -36,12 +40,46 @@ app.use(express.static('dist'));
 
 // Using cors package to communicate between cross origin requests
 // And allowing requests only from the application url
-app.use(
-  cors({ origin: 'https://chatz-p118.onrender.com', methods: ['GET', 'POST'] }),
-);
+app.use(cors({ origin: process.env.HOSTNAME, methods: ['GET', 'POST'] }));
 
 // Using body parser to parse incoming json body
 app.use(bodyParser.json());
+
+// create a write stream for error logs (in append mode)
+const errorLogStream = fs.createWriteStream(
+  path.join(__dirname, 'logs/error.log'),
+  {
+    flags: 'a',
+  },
+);
+
+// setup the logger for error
+app.use(
+  morgan('combined', {
+    skip(req, res) {
+      return res.statusCode < 400;
+    },
+    stream: errorLogStream,
+  }),
+);
+
+// create a write stream for success logs (in append mode)
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'logs/access.log'),
+  {
+    flags: 'a',
+  },
+);
+
+// setup the logger for success logs
+app.use(
+  morgan('combined', {
+    skip(req, res) {
+      return res.statusCode > 400;
+    },
+    stream: accessLogStream,
+  }),
+);
 
 // Users router
 app.use('/users', userRouter);
@@ -61,9 +99,6 @@ app.use('/', (req, res) => {
 mongoose
   .connect(process.env.MONGODB_HOSTNAME)
   .then((res) => {
-    console.log('Mongo DB Connected');
     server.listen(process.env.PORT || 3000);
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => {});

@@ -22,7 +22,6 @@ socket.on('connect', () => {
 
   // Listening for new message socket event & calling function be executed on new message
   socket.on('message', (chatId, message) => {
-    console.log('New message recieved: ', chatId, message);
     handleRecievedMessage(chatId, message);
   });
 
@@ -62,6 +61,7 @@ function handleRecievedMessage(chatId, newMessage) {
 // function to handle sending new message
 async function handleSendMessage(form) {
   try {
+    if (!state.chatId) throw Error('Please select a contact to send message');
     View.startLoadingSpinner();
     const isNewMessage = await sendMessage(form);
     if (isNewMessage) {
@@ -84,7 +84,6 @@ async function handleIsSignedIn() {
     View.setUserEmailAsTitle(state.user.email);
     sortChatNewest();
     View.renderChatContacts(state.user);
-    console.log(state);
   } catch (err) {
     View.redirectToLogin();
   }

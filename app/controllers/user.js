@@ -90,7 +90,6 @@ exports.isSignedIn = async (req, res, next) => {
 
     res.status(200).send({ user: isUser, message: 'User already authorized' });
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error authorizing user' });
   }
 };
@@ -109,7 +108,6 @@ exports.searchUser = async (req, res) => {
     );
     return res.send(users);
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error searching user' });
   }
 };
