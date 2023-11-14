@@ -1,1 +1,1 @@
-exports.BACKEND_HOST_URL = 'http://13.51.165.137';
+exports.BACKEND_HOST_URL = 'http://16.171.112.12';
