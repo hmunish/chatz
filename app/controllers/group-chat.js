@@ -32,7 +32,6 @@ const uploadToS3 = (data, filename) => {
   return new Promise((resolve, reject) => {
     s3bucket.upload(params, (err, s3Response) => {
       if (err) {
-        console.log(err);
         reject(err);
       } else {
         resolve(s3Response.Location);
@@ -103,7 +102,6 @@ exports.createGroup = async (req, res) => {
 
     res.send(newGroup);
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error creating new group' });
   }
 };
@@ -132,7 +130,6 @@ exports.addMessage = async (req, res) => {
 
     res.send({ newMessage: messages.slice(-1)[0] });
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error submitting message' });
   }
 };
@@ -199,7 +196,6 @@ exports.addMember = async (req, res) => {
     // Responding with 200 OK
     res.status(200).send({ message: 'Member added successfully' });
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error adding member' });
   }
 };
@@ -262,7 +258,6 @@ exports.addFileMessage = async (req, res) => {
 
     form.parse(req);
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error submitting message' });
   }
 };
