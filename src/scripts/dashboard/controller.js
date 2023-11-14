@@ -84,6 +84,7 @@ async function handleIsSignedIn() {
     View.setUserEmailAsTitle(state.user.email);
     sortChatNewest();
     View.renderChatContacts(state.user);
+    console.log(state);
   } catch (err) {
     View.redirectToLogin();
   }
