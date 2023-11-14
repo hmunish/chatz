@@ -146,7 +146,7 @@ option.contacts-sort {
 
 @media screen and (max-width: 600px) {
   .contact-details {
-    padding-right: 5%;
+    padding-right: 10%;
   }
 }
 
