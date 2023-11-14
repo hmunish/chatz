@@ -41,20 +41,6 @@ app.use(cors({ origin: process.env.HOSTNAME, methods: ['GET', 'POST'] }));
 // Using body parser to parse incoming json body
 app.use(bodyParser.json());
 
-// Users router
-app.use('/users', userRouter);
-
-// Chats router
-app.use('/chats', chatRouter);
-
-// Groups router
-app.use('/groups', groupChatRouter);
-
-// Responding with 404 not found error if no route matched by the request
-app.use('/', (req, res) => {
-  res.status(404).redirect('404.html');
-});
-
 // create a write stream for error logs (in append mode)
 const errorLogStream = fs.createWriteStream(
   path.join(__dirname, 'logs/error.log'),
@@ -90,6 +76,20 @@ app.use(
     stream: accessLogStream,
   }),
 );
+
+// Users router
+app.use('/users', userRouter);
+
+// Chats router
+app.use('/chats', chatRouter);
+
+// Groups router
+app.use('/groups', groupChatRouter);
+
+// Responding with 404 not found error if no route matched by the request
+app.use('/', (req, res) => {
+  res.status(404).redirect('404.html');
+});
 
 // Setting up database connection with MongoDB server using mongoose ORM
 mongoose
