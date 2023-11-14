@@ -142,8 +142,12 @@ option.contacts-sort {
   height: 36px;
   display: flex;
   align-items: center;
+}
 
-  /* background-color: brown; */
+@media screen and (max-width: 600px) {
+  .contact-details {
+    padding-right: 5%;
+  }
 }
 
 .contact-details > * {
