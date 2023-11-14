@@ -197,7 +197,7 @@
     <iframe class="dp-no fileMessageFrame"></iframe>
 
     <script>
-      function downloadUrl(url) {
+      window.downloadUrl = (url) => {
         const loadingSpinner = document.querySelector("#loading-spinner");
         loadingSpinner.classList.remove("dp-no");
         var filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
@@ -215,7 +215,7 @@
         };
         xhr.open("GET", url);
         xhr.send();
-      }
+      };
     </script>
   </body>
 </html>
