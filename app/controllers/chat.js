@@ -32,7 +32,6 @@ const uploadToS3 = (data, filename) => {
   return new Promise((resolve, reject) => {
     s3bucket.upload(params, (err, s3Response) => {
       if (err) {
-        console.log(err);
         reject(err);
       } else {
         resolve(s3Response.Location);
@@ -109,7 +108,6 @@ exports.createChat = async (req, res) => {
 
     res.send(newChat);
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error creating new chat' });
   }
 };
@@ -138,7 +136,6 @@ exports.addMessage = async (req, res, next) => {
 
     res.send({ newMessage: messages.slice(-1)[0] });
   } catch (err) {
-    console.log(err);
     res.status(501).send({ message: 'Error submitting message' });
   }
 };
