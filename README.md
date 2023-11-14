@@ -31,7 +31,7 @@
 
 # 📖 Chatz <a name="about-project"></a>
 
-**Chatz** is a real time chatting application with multiple contacts & groups at the same time. It supports features like real time messaging, file sharing, group chat, etc. It uses socket.io library for creating socket connections to the server, AWS S3 for uploading & sharing files. Express framework is used to create API endpoints for the backend with mongoose ORM to perform mongoDB database queries.
+**Chatz** is a real time chatting application with features to chat with multiple contacts & groups at the same time. It supports features like real time messaging, file sharing, group chat, etc. It uses socket.io library for creating socket connections to the server, AWS S3 for uploading & sharing files.
 
 ## 🛠 Built With <a name="built-with"></a>
 
